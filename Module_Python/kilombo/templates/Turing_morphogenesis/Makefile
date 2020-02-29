@@ -4,7 +4,7 @@
 # configured below, these needs to be adapted to the system.
 
 #list of c files in this project
-SOURCES=morphogenesis.c util.c
+SOURCES=morphogenesis.c util.c json_state.c
 
 #name of the executable file
 EXECUTABLE=morphogenesis

@@ -8,6 +8,9 @@
 REGISTER_USERDATA(USERDATA)
 
 #ifdef SIMULATOR
+
+
+
 #else
 #include <avr/io.h>  // for microcontroller register defs
 
@@ -1102,6 +1105,12 @@ extern char* (*callback_botinfo) (void);
 int16_t circle_barrier(double x, double y, double * dx, double * dy);
 char *botinfo(void);
 
+//#ifdef SIMULATOR
+
+#include <jansson.h>
+json_t *json_state();
+
+//#endif
 
 int main(void)
 {
@@ -1114,7 +1123,8 @@ int main(void)
 #ifdef SIMULATOR
   SET_CALLBACK(botinfo, botinfo);
   SET_CALLBACK(reset, setup);
- #endif
+
+#endif
 
 #ifndef KILOBOT
   callback_botinfo = botinfo;
@@ -1127,6 +1137,9 @@ int main(void)
 
   kilo_start(setup, loop);
 
+#ifdef SIMULATOR
+  SET_CALLBACK(json_state, json_state);
+#endif
   return 0;
 }
 
