@@ -14,6 +14,17 @@ import math
 
 print(cv2.__version__)
 
+def returnUVList() :
+    nodes = []
+    fp = 'endstate.json'
+    with open(fp) as json_file:
+        data = json.load(json_file)
+        for state in data['bot_states'] :
+            u = state['state'].get('u')
+            v = state['state'].get('v')
+            nodes.append((u, v))
+    
+
 def countTuringSpots(show = False, colorTresh = 2, periTresh = 100) :
     nodes = []
     fp = 'endstate.json'
