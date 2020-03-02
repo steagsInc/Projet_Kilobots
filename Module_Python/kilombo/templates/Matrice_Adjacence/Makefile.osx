@@ -4,29 +4,29 @@
 # configured below, these needs to be adapted to the system.
 
 #list of c files in this project
-SOURCES=morphogenesis.c util.c json_state.c
+SOURCES=edge.c
 
 #name of the executable file
-EXECUTABLE=morphogenesis
+EXECUTABLE=edge
 
 # Path to the official kilolib, used for real bots only
 # Set it here, or as an environment variable in the shell:
-#      export KILOLIB=/your/path/  
+#      export KILOHEADERS=/your/path/  
 #
-KILOHEADERS=$(KILOLIB_PATH)
+#KILOHEADERS=
 
-# path of userdata.h distributed with the simulator but also needed
-# when compiling the user program for the real kilobot (avr-gcc has different default paths)
+# path of kilombo.h distributed with the simulator but needed
+# when compiling the user program
 SIMHEADERS=/usr/local/include
 
 #path to kilolib.a in the official kilolib, needed for real bots only
 KILOLIB    =$(KILOHEADERS)/build/kilolib.a
 
 #compilation flags for simulated version
-SIM_CFLAGS = -c -g -O2 -Wall -std=c99  #-I$(KILOHEADERS)
+SIM_CFLAGS = -framework cocoa -c -g -O2 -Wall -std=c99 
 
 #linking flags for simulated version
-SIM_LFLAGS = -lsim -lSDL -lm -ljansson
+SIM_LFLAGS = -framework cocoa -lsim -lSDLmain -lSDL -lm -ljansson
 
 # linking flags to compile headless
 # SIM_LFLAGS = -lheadless  -lm -ljansson
@@ -48,6 +48,9 @@ clean :
 	rm *.o $(EXECUTABLE) *.elf *.hex
 
 # # # # # # # # # # The following should be generic and not need changes # # # # # # # # # # # # # 
+
+# all: $(EXECUTABLE).hex $(EXECUTABLE)
+all:  $(EXECUTABLE)
 
 # compiling for the real bot
 #
@@ -91,7 +94,6 @@ $(EXECUTABLE).elf: $(SOURCES) $(KILOLIB)
 # $< first item of right-hand side of :
 
 
-
 # From here on, we compile for the simulator
 # 
 
@@ -108,5 +110,6 @@ OBJECTS=$(SOURCES:.c=.o)
 
 $(EXECUTABLE): $(OBJECTS) $(SIMLIB) 
 	$(SIM_CC)  $(SIM_LFLAGS) -o $@  $(OBJECTS) 
+
 
 

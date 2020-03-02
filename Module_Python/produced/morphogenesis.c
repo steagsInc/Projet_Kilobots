@@ -8,6 +8,9 @@
 REGISTER_USERDATA(USERDATA)
 
 #ifdef SIMULATOR
+
+
+
 #else
 #include <avr/io.h>  // for microcontroller register defs
 
@@ -27,19 +30,19 @@ REGISTER_USERDATA(USERDATA)
 #define R2 120                  // For probabilistic purposes
 
 //Model_Parameter
-#define A_VAL 0.08
-#define B_VAL -0.08
-#define C_VAL 0.03
-#define D_VAL 0.03
-#define E_VAL 0.1
-#define F_VAL 0.12
-#define G_VAL 0.06
-#define D_u 0.5
-#define D_v 10
-#define LINEAR_R 160
-#define SYNTH_U_MAX 0.23
-#define SYNTH_V_MAX 0.5
-#define DT 0.00005
+#define A_VAL -0.84205606
+#define B_VAL -1.28435864
+#define C_VAL 0.45581783
+#define D_VAL 0.02999999
+#define E_VAL 0.10000000
+#define F_VAL 0.11999999
+#define G_VAL 0.05999999
+#define D_u 0.50000000
+#define D_v 10.00000000
+#define LINEAR_R 160.00000000
+#define SYNTH_U_MAX 0.23000000
+#define SYNTH_V_MAX 0.50000000
+#define DT 0.00005000
 //End_Parameters
 
 /*
@@ -572,6 +575,8 @@ void process_message()
   uint16_t ID;
 
   uint8_t *data = RB_front().msg.data;
+
+
   ID = data[0] | (data[1] << 8);
   uint8_t d = estimate_distance(&RB_front().dist);
 
@@ -1102,6 +1107,12 @@ extern char* (*callback_botinfo) (void);
 int16_t circle_barrier(double x, double y, double * dx, double * dy);
 char *botinfo(void);
 
+//#ifdef SIMULATOR
+
+#include <jansson.h>
+json_t *json_state();
+
+//#endif
 
 int main(void)
 {
@@ -1114,7 +1125,8 @@ int main(void)
 #ifdef SIMULATOR
   SET_CALLBACK(botinfo, botinfo);
   SET_CALLBACK(reset, setup);
- #endif
+
+#endif
 
 #ifndef KILOBOT
   callback_botinfo = botinfo;
@@ -1127,6 +1139,9 @@ int main(void)
 
   kilo_start(setup, loop);
 
+#ifdef SIMULATOR
+  SET_CALLBACK(json_state, json_state);
+#endif
   return 0;
 }
 

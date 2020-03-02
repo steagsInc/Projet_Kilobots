@@ -575,6 +575,8 @@ void process_message()
   uint16_t ID;
 
   uint8_t *data = RB_front().msg.data;
+
+
   ID = data[0] | (data[1] << 8);
   uint8_t d = estimate_distance(&RB_front().dist);
 

@@ -1,7 +1,7 @@
 {
     "botName" : "turing",
     "randSeed" : 23,
-    "nBots" : 500,
+    "nBots" : 35,
     "formation": "pile",
     "timeStep" : 0.0416666,
     "simulationTime" : 10000,

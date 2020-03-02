@@ -1,10 +1,10 @@
 {
     "botName" : "turing",
     "randSeed" : 23,
-    "nBots" : 500,
+    "nBots" : 150,
     "formation": "pile",
     "timeStep" : 0.0416666,
-    "simulationTime" : 100,
+    "simulationTime" : 100000,
     "showCommsRadius" : 0,
     "showComms" : 0,
     "distributePercent" : 0.40,
@@ -18,5 +18,5 @@
     "commsRadius": 120,
     "msgSuccessRate": 0.7,
     "stepsPerFrame" : 1000,
-    "GUI" : 0
+    "GUI" : 1
 }

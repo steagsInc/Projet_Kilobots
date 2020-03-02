@@ -4,18 +4,18 @@
 # configured below, these needs to be adapted to the system.
 
 #list of c files in this project
-SOURCES=morphogenesis.c util.c json_state.c
+SOURCES=edge.c 
 
 #name of the executable file
-EXECUTABLE=morphogenesis
+EXECUTABLE=edge
 
 # Path to the official kilolib, used for real bots only
 # Set it here, or as an environment variable in the shell:
-#      export KILOLIB=/your/path/  
+#      export KILOHEADERS=/your/path/  
 #
-KILOHEADERS=$(KILOLIB_PATH)
+#KILOHEADERS=
 
-# path of userdata.h distributed with the simulator but also needed
+# path of kilombo.h distributed with the simulator but also needed
 # when compiling the user program for the real kilobot (avr-gcc has different default paths)
 SIMHEADERS=/usr/local/include
 

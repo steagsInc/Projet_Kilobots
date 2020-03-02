@@ -17,14 +17,15 @@ def lire_params(save=False):
         for i in r[1:-1]:
             t = (i[1:].split(" "))
             param_dict[t[0]] = float(t[1])
+        os.chdir("../../..")
         if(save):
-            os.chdir("../../..")
             file2 = open("produced/init.json", "w")
             file2.write(json.dumps(param_dict, sort_keys=True))
     return param_dict
 
 
 def write_params(P):
+    print("Chemon courant avant bug : ",os.getcwd())
     lire_params(True)
     params = open("produced/init.json", "r")
     D = json.load(params)
@@ -52,5 +53,5 @@ def read_results():
     bots = D["bot_states"]
     return bots,ticks
 
-execute_simulation()
-print(read_results())
+#execute_simulation()
+#print(read_results())

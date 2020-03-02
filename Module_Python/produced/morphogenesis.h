@@ -36,7 +36,7 @@ typedef struct {
   uint8_t N_Neighbors;                  // Number of neighbors of this neighbor
   int delta_dist;                       // Difference in distance with respect to the previous moment that this neighbor was updated
 
-  float molecules_concentration[2];     // Concentration of molecules U and V of this neighbor, respectively
+  double molecules_concentration[2];     // Concentration of molecules U and V of this neighbor, respectively
 
   uint32_t timestamp;                   // kilo_ticks when this neighbor was updated
 
@@ -59,7 +59,7 @@ typedef struct
   uint8_t move_type;                    // Type of motion sent to the robot: STOP, LEFT, RIGHT, STRAIGHT (defined in utils.h)
   uint8_t last_turn;                    // Last direction of movement (left or right)
 
-  float molecules_concentration[2];     // Concentration of molecules U and V, respectively           
+  double molecules_concentration[2];     // Concentration of molecules U and V, respectively
 
   uint32_t counter;                     // Counter to wait until there aren't any more neighbors moving
 
