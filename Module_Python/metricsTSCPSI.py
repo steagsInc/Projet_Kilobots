@@ -66,7 +66,7 @@ def countTuringSpots(show = False, colorTresh = 2, periTresh = 100) :
     # Finding Contours 
     # Use a copy of the image e.g. edged.copy() 
     # since findContours alters the image 
-    contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) #, offset = (100, 10)) 
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE) #, offset = (100, 10)) 
     if show :
         cv2.imshow('Canny Edges After Contouring', edged) 
         cv2.waitKey(0)
@@ -84,8 +84,17 @@ def countTuringSpots(show = False, colorTresh = 2, periTresh = 100) :
     for i in range(len(contours)) :
         perimeter = cv2.arcLength(contours[i],True)
         
-        if perimeter > periTresh :
-            turingSpots.append(contours[i])
+        #pour empecher de compter un donut de Turing comme deux spots
+        
+                 
+        if perimeter > periTresh:
+            nodonut = True
+            for j in range(len(contours)) :
+                if cv2.pointPolygonTest(contours[j], (contours[i][0][0][0], contours[i][0][0][1]), False) >= 0 and i < j:
+                    nodonut = False
+                    print("contour " + str(i) + " refusé car inclu")   
+            if nodonut :        
+                turingSpots.append(contours[i])
             
     print("Number of Turing Spots found = " + str(len(turingSpots)))  
       
@@ -296,5 +305,5 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
 
 
 #print("shapeIndex : " + str(shapeIndex()))
-#print("countTuringSpots : " + str(countTuringSpots()))
-print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
+print("countTuringSpots : " + str(countTuringSpots(show = True)))
+#print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
