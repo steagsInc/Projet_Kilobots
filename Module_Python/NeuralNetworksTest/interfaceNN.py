@@ -81,8 +81,7 @@ def testAccuracy(w,borne = 10,nb_bot_max = 50):
         tests.append(c.sum() / c.shape[0])
     tests = np.array(tests)
     print("Moyenne en tests : ",tests.mean())
-    print("Weights en entrée : ",w)
-    return -tests.mean()
+    return -tests.mean() + np.sum(w)
 
 
 if (__name__=="__main__"):
