@@ -391,6 +391,8 @@ void update_prediction() {
 
     for(i = 0; i < mydata->N_Neighbors; i++) {
 
+       //printf("%f\n", mydata->neighbors[i].prediction);
+
         s = s + mydata->neighbors[i].prediction;
 
     }
