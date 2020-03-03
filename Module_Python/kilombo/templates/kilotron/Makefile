@@ -4,14 +4,14 @@
 # configured below, these needs to be adapted to the system.
 
 #list of c files in this project
-SOURCES=morphogenesis.c util.c json_state.c
+SOURCES=kilotron.c util.c json_state.c perceptron/matmul.c perceptron/Layer.c perceptron/perceptron.c
 
 #name of the executable file
-EXECUTABLE=morphogenesis
+EXECUTABLE=kilotron
 
 # Path to the official kilolib, used for real bots only
 # Set it here, or as an environment variable in the shell:
-#      export KILOLIB=/your/path/  
+#      export KILOLIB=/your/path/
 #
 KILOHEADERS=$(KILOLIB_PATH)
 
@@ -47,7 +47,7 @@ all: sim hex
 clean :
 	rm *.o $(EXECUTABLE) *.elf *.hex
 
-# # # # # # # # # # The following should be generic and not need changes # # # # # # # # # # # # # 
+# # # # # # # # # # The following should be generic and not need changes # # # # # # # # # # # # #
 
 # compiling for the real bot
 #
@@ -68,7 +68,7 @@ CFLAGS += -Wl,-u,vfprintf -lprintf_flt -lm
 ASFLAGS = $(CFLAGS)
 
 FLASH = -R .eeprom -R .fuse -R .lock -R .signature
-EEPROM = -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0  
+EEPROM = -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0
 
 %.lss: %.elf
 	$(AVROD) -d -S $< > $@
@@ -80,10 +80,10 @@ EEPROM = -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lm
 	$(AVROC) -O ihex $(EEPROM) $< $@
 
 %.bin: %.elf
-	$(AVROC) -O binary $(FLASH) $< $@ 
+	$(AVROC) -O binary $(FLASH) $< $@
 
 $(EXECUTABLE).elf: $(SOURCES) $(KILOLIB)
-	$(CC) $(CFLAGS) -o $@ $^ 
+	$(CC) $(CFLAGS) -o $@ $^
 
 # make syntax:
 # $@ left-hand side of :
@@ -93,7 +93,7 @@ $(EXECUTABLE).elf: $(SOURCES) $(KILOLIB)
 
 
 # From here on, we compile for the simulator
-# 
+#
 
 #which c compiler to use. gcc works well.
 SIM_CC=gcc
@@ -106,7 +106,5 @@ OBJECTS=$(SOURCES:.c=.o)
 .c.o:
 	$(SIM_CC) $(SIM_CFLAGS) $< -o $@
 
-$(EXECUTABLE): $(OBJECTS) $(SIMLIB) 
-	$(SIM_CC)  $(SIM_LFLAGS) -o $@  $(OBJECTS) 
-
-
+$(EXECUTABLE): $(OBJECTS) $(SIMLIB)
+	$(SIM_CC)  $(SIM_LFLAGS) -o $@  $(OBJECTS)

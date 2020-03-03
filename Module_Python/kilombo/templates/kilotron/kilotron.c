@@ -4,7 +4,6 @@
 
 #include "kilotron.h"
 #include "util.h"
-#include "perceptron/perceptron.h"
 #include "perceptron/matmul.h"
 
 REGISTER_USERDATA(USERDATA)
@@ -27,7 +26,7 @@ REGISTER_USERDATA(USERDATA)
 #define POLAR_TH 4.0            // Threshold to become polarized
 #define EDGE_TH 0.8             // Ratio between the average number of neighbors of the robot and the average number of neighbors' neighbors for edge detection
 #define WAIT_BEFORE_MOVE 27000  // kilo_ticks to wait before moving. 75000 for simulation, 27000 for real robots (about 10 minutes)
-#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area 
+#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area
 #define DIST_CRIT 45            // Distance that a robot is considered to be close
 #define R2 120                  // For probabilistic purposes
 
@@ -39,16 +38,13 @@ REGISTER_USERDATA(USERDATA)
 #define E_VAL 0.1
 #define F_VAL 0.12
 #define G_VAL 0.06
-#define D_u 0.5   
+#define D_u 0.5
 #define D_v 10
 #define LINEAR_R 160
 #define SYNTH_U_MAX 0.23
 #define SYNTH_V_MAX 0.5
 #define DT 0.00005
 //End_Parameters
-
-//PERCEPTRON
-#define shape {3,3,3,1}
 
 /*
  * Message rx callback function. It pushes message to ring buffer.
@@ -322,7 +318,7 @@ float calc_apprx_running_avg(float old_avg, float num, float alpha){
 
 
 /*
- * Concentration of U and V is updated based on the linear model for reaction-diffusion 
+ * Concentration of U and V is updated based on the linear model for reaction-diffusion
  */
 void regulation_linear_model(){
 
@@ -358,7 +354,7 @@ void regulation_linear_model(){
 
 
 	float synth_u_max = SYNTH_U_MAX;
-	float synth_v_max = SYNTH_V_MAX; 
+	float synth_v_max = SYNTH_V_MAX;
 
     // These variables will have f(u,v) and g(u,v) eventually
 	float synth_rate_u;
@@ -381,8 +377,8 @@ void regulation_linear_model(){
 	dG[0] = linear_R * synth_rate_u + D[0] * lap[0];
 	dG[1] = linear_R * synth_rate_v + D[1] * lap[1];
 
-	// Update of the concentration 
-	float dt = DT; 
+	// Update of the concentration
+	float dt = DT;
 	mydata->molecules_concentration[0] += dt * dG[0];
 	mydata->molecules_concentration[1] += dt * dG[1];
 }
@@ -405,7 +401,7 @@ void update_prediction() {
 
 void prediction_color() {
 
-    set_color(RGB(3*(1-mydata->prediction),0,3*(mydata->prediction)));
+    set_color(RGB((int)(255*(1-mydata->prediction)),0,(int)(255*(mydata->prediction))));
 
 }
 
@@ -470,7 +466,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 
 		if(mydata->neighbors[i].molecules_concentration[0] > POLAR_TH){
 			count++;
-			
+
 		}
 
 		if(count == n){
@@ -485,7 +481,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 }
 
 
-/* 
+/*
  * It processes a received message at the front of the ring buffer.
  * It goes through the list of neighbors. If the message is from a bot
  * already in the list, it updates the information, otherwise
@@ -581,9 +577,9 @@ void process_message()
     float **x = mat_init(3,1);
   x[0][0] = mydata->neighbors[i].molecules_concentration[0];
   x[1][0] = mydata->neighbors[i].molecules_concentration[1];
-  x[2][0] = data[8]};
+  x[2][0] = data[8];
 
-    mydata->neighbors[i].prediction=predict(mydata->perceptron,x);
+    mydata->neighbors[i].prediction=predict(mydata->perceptron,x)[0][0];
 
 }
 
@@ -597,7 +593,7 @@ void process_message()
 void receive_inputs()
 {
 
-    // Processes al messages received since the last time the bot read them (removed after reading)    
+    // Processes al messages received since the last time the bot read them (removed after reading)
     while (!RB_empty()) {
         process_message();
         RB_popfront();
@@ -615,7 +611,7 @@ void receive_inputs()
 }
 
 
-/* 
+/*
  * Goes through the list of neighbors and removes entries older than a threshold, currently 2 seconds.
  */
 void purgeNeighbors(void)
@@ -643,7 +639,7 @@ void setup_message(void)
 
   mydata->transmit_msg.data[2] = mydata->N_Neighbors; //2: number of neighbors
   mydata->transmit_msg.data[7] = get_bot_state(); // 7: state of the robot
-  mydata->transmit_msg.data[8] = mydata->prediction
+  mydata->transmit_msg.data[8] = mydata->prediction;
 
   int i;
 
@@ -657,7 +653,7 @@ void setup_message(void)
   int exp_real;
   long fl;
 
-   
+
   for (i = 0; i < 2; i++){
 
 	  fl = *(long*)&mydata->molecules_concentration[i];
@@ -727,9 +723,6 @@ void setup() {
     // Initialisation
     mydata->N_Neighbors = 0;
 
-    // Not moving
-    set_move_type(STOP);
-
     // In WAIT state
     set_bot_state(WAIT);
 
@@ -741,7 +734,9 @@ void setup() {
     mydata->running_avg_Ns = 0;
 
     //PERCEPTRON
+    int shape[4] = {3,3,3,1};
     mydata->perceptron = new_perceptron(shape,4);
+    load_weights(mydata->perceptron,"weights.txt");
 
     // The message is initialized
     setup_message();
@@ -749,7 +744,7 @@ void setup() {
 
 
 /*
- * Loop function that the kilobots execute continuously. 
+ * Loop function that the kilobots execute continuously.
  *   - It processes messages, and updates neighbors tables and N, NN running averages
  *   - If robot not in state ORBIT or FOLLOW and has neighbors, run Turing patterning
  */
@@ -763,7 +758,7 @@ void loop(){
 
         regulation_linear_model();
         update_prediction();
-       
+
     }
 
     prediction_color();
@@ -772,12 +767,6 @@ void loop(){
 	if(kilo_ticks == 250){
 		mydata->running_avg_Ns = mydata->N_Neighbors;
 		mydata->running_avg_NNs = calc_avg_NNs();
-	}
-
-    
-    // The morphogenesis will start after these kilo_ticks
-	if(kilo_ticks > WAIT_BEFORE_MOVE){
-		edge_flow();
 	}
 
     // Unique, local ID

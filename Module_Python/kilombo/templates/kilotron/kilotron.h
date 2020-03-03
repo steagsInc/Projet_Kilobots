@@ -61,7 +61,7 @@ typedef struct
   uint8_t move_type;                    // Type of motion sent to the robot: STOP, LEFT, RIGHT, STRAIGHT (defined in utils.h)
   uint8_t last_turn;                    // Last direction of movement (left or right)
 
-  float molecules_concentration[2];     // Concentration of molecules U and V, respectively           
+  float molecules_concentration[2];     // Concentration of molecules U and V, respectively
 
   uint32_t counter;                     // Counter to wait until there aren't any more neighbors moving
 

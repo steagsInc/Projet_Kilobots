@@ -32,8 +32,10 @@ float **predict(Perceptron *perc,float **input){
         a = compute_layer(perc->layers[i], a);
     }
 
-    printf("prediction : ");
-    displayMat(a,1,1);
+    //printf("prediction : ");
+    //displayMat(a,1,1);
+
+    return a;
 
 }
 
@@ -41,5 +43,76 @@ void set_layer(Perceptron *perc,int layer_nb,float **weights,float **bias){
 
     perc->layers[layer_nb]->weights= weights;
     perc->layers[layer_nb]->bias=bias;
+
+}
+
+void read_weights (const char* file_name)
+{
+  FILE* file = fopen (file_name, "r");
+  float i = 0;
+
+  fscanf (file, "%f\n", &i);
+  while (!feof (file))
+    {
+      printf ("%f\n", i);
+      fscanf (file, "%f\n", &i);
+    }
+  fclose (file);
+}
+
+void write_weights(Perceptron *perc,char* file_name){
+    FILE* file = fopen (file_name, "w");
+
+    int l,i,j;
+
+    for(l=0;l<perc->nb_layers;l++){
+
+        for(i=0;i<perc->layers[l]->nb_neurons;i++){
+          for(j=0;j<perc->layers[l]->nb_input;j++){
+
+              fprintf(file, "%f\n",perc->layers[l]->weights[i][j]);
+
+          }
+        }
+
+        for(i=0;i<perc->layers[l]->nb_neurons;i++){
+            fprintf(file, "%f\n",perc->layers[l]->bias[i][0]);
+        }
+
+    }
+
+    fclose (file);
+
+}
+
+void load_weights(Perceptron *perc,char* file_name){
+    FILE* file = fopen (file_name, "r");
+
+    int l,i,j;
+    float w = 0;
+
+    printf("LOADING");
+
+    for(l=0;l<perc->nb_layers;l++){
+
+        for(i=0;i<perc->layers[l]->nb_neurons;i++){
+          for(j=0;j<perc->layers[l]->nb_input;j++){
+
+              fscanf (file, "%f\n", &w);
+              perc->layers[l]->weights[i][j] = w;
+
+          }
+        }
+
+        for(i=0;i<perc->layers[l]->nb_neurons;i++){
+
+            fscanf (file, "%f\n", &w);
+            perc->layers[l]->bias[i][0] = w;
+
+        }
+
+    }
+
+    fclose (file);
 
 }

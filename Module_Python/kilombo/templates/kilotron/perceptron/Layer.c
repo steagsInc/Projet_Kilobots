@@ -19,7 +19,7 @@ Layer *new_layer(int nb_input, int nb_neurons){
     layer->weights=mat_gen_random(nb_neurons,nb_input);
     displayMat(layer->weights,nb_neurons,nb_input);
     layer->bias=mat_gen_random(nb_neurons,1);
-    displayList(layer->bias,nb_neurons);
+    displayMat(layer->bias,nb_neurons,1);
 
     return layer;
 
@@ -27,8 +27,8 @@ Layer *new_layer(int nb_input, int nb_neurons){
 
 void display_layer(Layer *layer){
     printf("layer %d x %d\n",layer->nb_input,layer->nb_neurons);
-    displayMat(layer->weights,layer->nb_input,layer->nb_neurons);
-    displayList(layer->bias,layer->nb_input);
+    displayMat(layer->weights,layer->nb_neurons,layer->nb_input);
+    displayMat(layer->bias,layer->nb_neurons,1);
 }
 
 void activation_mat(float **mat,int nb_rows,int nb_cols){
@@ -50,4 +50,3 @@ float **compute_layer(Layer *layer,float **input){
 
     return res2;
 }
-

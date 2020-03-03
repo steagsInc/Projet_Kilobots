@@ -6,7 +6,7 @@
 #include <jansson.h>
 #include <stdio.h>
 #include <string.h>
-#include "morphogenesis.h"
+#include "kilotron.h"
 
 json_t *json_state()
 {
