@@ -7,7 +7,7 @@ os.chdir('..')
 path_weights = "kilombo/templates/kilotron/weights.txt"
 path_kilotron = "kilombo/templates/kilotron"
 
-concordance = ["pile","line"]
+concordance = ["circle","pile"]
 
 
 def readWeights():
@@ -64,14 +64,14 @@ def simulatePerceptron(topology,number):
     os.system("./kilotron")
     os.chdir("../../..")
 
-def testAccuracy(w,borne = 10,nb_bot_max = 50):
+def testAccuracy(w,borne = 10,nb_bot_max = 10):
     tests = []
     writeWeights(w)
     for i in range(0,borne):
         if(i%2 == 0):
-            topology = "pile"
+            topology = "circle"
         else:
-            topology = "line"
+            topology = "pile"
         setTopology(topology,nb_bot_max)
         simulatePerceptron(topology,nb_bot_max)
         y_p = getPredictions()
@@ -89,4 +89,3 @@ if (__name__=="__main__"):
     res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=1000).result
     best_w = res[0]
     print("Meilleur résultat : ",best_w)
-
