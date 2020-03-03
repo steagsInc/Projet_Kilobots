@@ -46,7 +46,7 @@ def getPredictions():
         d = json.load(fp)
         y_pred = np.zeros(len(d["bot_states"]))
         for i in range(len(d["bot_states"])):
-            y_pred[i] = d["bot_states"][i]["state"]["p"]
+            y_pred[i] = 1 if d["bot_states"][i]["state"]["p"]>0.5 else 0
     os.chdir("../../..")
     return y_pred
 
@@ -80,12 +80,14 @@ def testAccuracy(w,borne = 10,nb_bot_max = 50):
         c = np.array(c)
         tests.append(c.sum() / c.shape[0])
     tests = np.array(tests)
+    print("Moyenne en tests : ",tests.mean())
+    print("Weights en entrée : ",w)
     return -tests.mean()
 
 
 if (__name__=="__main__"):
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=10).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=1000).result
     best_w = res[0]
     print("Meilleur résultat : ",best_w)
 
