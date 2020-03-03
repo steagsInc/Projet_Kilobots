@@ -91,7 +91,7 @@ void load_weights(Perceptron *perc,char* file_name){
     int l,i,j;
     float w = 0;
 
-    printf("LOADING");
+    //printf("LOADING");
 
     for(l=0;l<perc->nb_layers;l++){
 

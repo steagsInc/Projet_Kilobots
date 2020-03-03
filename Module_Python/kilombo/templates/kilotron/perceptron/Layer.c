@@ -12,14 +12,14 @@ Layer *new_layer(int nb_input, int nb_neurons){
 
     Layer *layer = (Layer*)malloc(sizeof(Layer));
 
-    printf("layer %d x %d\n",nb_input,nb_neurons);
+    //printf("layer %d x %d\n",nb_input,nb_neurons);
 
     layer->nb_input=nb_input;
     layer->nb_neurons=nb_neurons;
     layer->weights=mat_gen_random(nb_neurons,nb_input);
-    displayMat(layer->weights,nb_neurons,nb_input);
+    //displayMat(layer->weights,nb_neurons,nb_input);
     layer->bias=mat_gen_random(nb_neurons,1);
-    displayMat(layer->bias,nb_neurons,1);
+    //displayMat(layer->bias,nb_neurons,1);
 
     return layer;
 
