@@ -401,8 +401,6 @@ void update_prediction() {
 
 void prediction_color() {
 
-    printf("%f\n", mydata->prediction);
-
     set_color(RGB((int)(255*(1-mydata->prediction)),0,(int)(255*(mydata->prediction))));
 
 }
