@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.h
+
+/cygdrive/c/Users/steag/CLionProjects/untitled/main.c
+stdio.h
+-
+matmul.h
+/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.h
+time.h
+-
+stdlib.h
+-
+perceptron.h
+/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.h
+
+/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.h
+
+/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.h
+Layer.h
+/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.h
+
