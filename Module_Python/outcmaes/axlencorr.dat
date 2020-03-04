@@ -1,3 +1,2 @@
-% # columns="iteration, evaluation, min max(neg(.)) min(pos(.)) max correlation, correlation matrix principle axes lengths  (sorted square roots of eigenvalues of correlation matrix)", seed=447558, Wed Mar  4 00:46:33 2020
-1 13 -0.013219029195898919 -1.6955160754722985e-05 3.0850663278872186e-05 0.013833424328238938 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-1 13 -0.013219029195898919 -1.6955160754722985e-05 3.0850663278872186e-05 0.013833424328238938 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+% # columns="iteration, evaluation, min max(neg(.)) min(pos(.)) max correlation, correlation matrix principle axes lengths  (sorted square roots of eigenvalues of correlation matrix)", seed=342799, Wed Mar  4 01:01:52 2020
+1 13 -0.012756726261721672 -1.0771483694581017e-05 4.286127009427004e-06 0.013876964932795851 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1

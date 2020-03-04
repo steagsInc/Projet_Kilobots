@@ -86,6 +86,6 @@ def testAccuracy(w,borne = 10,nb_bot_max = 10):
 
 if (__name__=="__main__"):
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=1000).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=10).result
     best_w = res[0]
     print("Meilleur résultat : ",best_w)
