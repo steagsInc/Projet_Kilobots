@@ -7,6 +7,8 @@ import numpy as np
 
 from topologyEvaluation.metricsTSCPSI import countTuringSpots, shapeIndex
 
+os.chdir("..")
+
 
 def extract_genotype(model=None):
     if model is None:
@@ -42,7 +44,7 @@ def turingSpotObjectif(w,model=None):
 
 def shapeIndexObjectif(w,model=None):
     if model is None:
-        model = ['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
+        model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
     #TODO : Remove this
     print("chemin courant : ",os.getcwd())
     os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python")
@@ -53,37 +55,45 @@ def shapeIndexObjectif(w,model=None):
 
 def productObjectif(w,model=None):
     if model is None:
-        model = ['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
+        model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
     #TODO : Remove this
     print("chemin courant : ",os.getcwd())
-    os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python")
     put_genotype(w,model)
     execute_simulation()
     return -(shapeIndex()*10*countTuringSpots())
 
 def poderatedSum(w,model=None):
     if model is None:
-        model=['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL']
+        model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
     #TODO : Remove this
-    print("chemin courant : ",os.getcwd())
-    os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python")
     put_genotype(w,model)
     execute_simulation()
     if(countTuringSpots() == 0):
-        return shapeIndex()
-    return -(10*shapeIndex()+countTuringSpots())
+        return 1000*shapeIndex()
+    return -35*shapeIndex()-2*countTuringSpots()+sumUV("produced/endstate.json")
+
+
+def sumUV(jsonfile):
+    import json
+    cpt = 0
+    with open(jsonfile,"r") as fp:
+        data = json.load(fp)
+        for i in data["bot_states"]:
+            print(i["state"])
+            for j in i["state"]:
+                cpt = cpt +  i["state"][j]*i["state"][j]
+
+    return float(cpt)
 
 
 
 if (__name__=="__main__"):
-    os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python")
-    w = extract_genotype(model=['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL'])
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(poderatedSum, maxfun=50).result
+    w = extract_genotype(model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v'])
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(poderatedSum, maxfun=100).result
     best_w = res[0]
     for i in res:
         print(i)
-
-    put_genotype(best_w, model=['A_VAL', 'B_VAL', 'C_VAL'])
+    put_genotype(best_w, model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v'])
     execute_simulation()
 
 

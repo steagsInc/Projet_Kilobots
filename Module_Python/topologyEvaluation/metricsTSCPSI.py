@@ -13,10 +13,10 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 import math
 
 print(cv2.__version__)
+fp = "produced/endstate.json"
 
 def returnUVList() :
     nodes = []
-    fp = 'endstate.json'
     with open(fp) as json_file:
         data = json.load(json_file)
         for state in data['bot_states'] :
@@ -27,7 +27,8 @@ def returnUVList() :
 
 def countTuringSpots(show = False, colorTresh = 2, periTresh = 100) :
     nodes = []
-    fp = 'endstate.json'
+    import os
+    print("Chemin avant bug", os.getcwd())
     with open(fp) as json_file:
         data = json.load(json_file)
     
@@ -127,7 +128,6 @@ def countTuringSpots(show = False, colorTresh = 2, periTresh = 100) :
 def shapeIndex(show = False):
     nodes = []
     
-    fp = 'endstate.json'
     with open(fp) as json_file:
         data = json.load(json_file)
     
@@ -196,7 +196,10 @@ def shapeIndex(show = False):
     
     print(truePeri)
     print(trueArea)
-    return np.abs(truePeri/(2*np.pi*trueArea))
+    if((2*np.pi*trueArea) != 0):
+        return np.abs(truePeri/(2*np.pi*trueArea))
+    else:
+        return 100
 
 def norme( u ) :
     """
@@ -232,7 +235,6 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
     
     nodes = []
     
-    fp = 'endstate.json'
     with open(fp) as json_file:
         data = json.load(json_file)
     
@@ -267,12 +269,7 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
     # Finding Contours 
     # Use a copy of the image e.g. edged.copy() 
     # since findContours alters the image 
-    contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) #, offset = (100, 10)) 
-      
-    
-    
-    print("Number of Contours found = " + str(len(contours))) 
-    
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) #, offset = (100, 10))
     if show :
         cv2.drawContours(image, contours, -1, (0, 255, 0), 3) 
         
@@ -316,5 +313,5 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
 
 
 #print("shapeIndex : " + str(shapeIndex()))
-print("countTuringSpots : " + str(countTuringSpots(show = True)))
+#print("countTuringSpots : " + str(countTuringSpots(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
