@@ -46,6 +46,8 @@ REGISTER_USERDATA(USERDATA)
 #define DT 0.00005
 //End_Parameters
 
+#define NB_NEIGHBOURS 5
+
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
@@ -383,24 +385,6 @@ void regulation_linear_model(){
 	mydata->molecules_concentration[1] += dt * dG[1];
 }
 
-void update_prediction() {
-
-    uint8_t i;
-
-    float s = 0;
-
-    for(i = 0; i < mydata->N_Neighbors; i++) {
-
-       //printf("%f\n", mydata->neighbors[i].prediction);
-
-        s = s + mydata->neighbors[i].prediction;
-
-    }
-
-    mydata->prediction=s/mydata->N_Neighbors;
-
-}
-
 void prediction_color() {
 
     //printf("%f\n", mydata->prediction);
@@ -484,6 +468,26 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 
 }
 
+//PERCEPTRON
+void process_perceptron(){
+
+    uint8_t i,k,c = 0;
+
+    float **x = mat_init(2*NB_NEIGHBOURS, 1);
+
+    for (i = 0; i < NB_NEIGHBOURS && i<mydata->N_Neighbors; i++) {
+
+        x[c][0] = mydata->neighbors[i].molecules_concentration[0];
+        c++;
+        x[c][0] = mydata->neighbors[i].molecules_concentration[1];
+        c++;
+
+    }
+
+    mydata->prediction = predict(mydata->perceptron, x)[0][0];
+    printf("%f\n", mydata->prediction);
+
+}
 
 /*
  * It processes a received message at the front of the ring buffer.
@@ -506,7 +510,7 @@ void process_message()
   if(d > COMM_R && mydata->N_Neighbors > 0 && get_bot_state() != FOLLOW) return;
 
   // search the neighbor list by ID
-  for (i = 0; i < mydata->N_Neighbors; i++) {
+  for (i = 0; i < mydata->N_Neighbors; i++)
       if (mydata->neighbors[i].ID == ID) { // found it
           mydata->neighbors[i].delta_dist = d - mydata->neighbors[i].dist;
           break;
@@ -579,26 +583,7 @@ void process_message()
 
       }
 
-  }
-
 }
-
-//PERCEPTRON
-void process_perceptron(uint8_t *data){
-
-    for (i = 0; i < mydata->N_Neighbors; i++) {
-        
-        float **x = mat_init(3, 1);
-        x[0][0] = mydata->neighbors[i].molecules_concentration[0];
-        x[1][0] = mydata->neighbors[i].molecules_concentration[1];
-        x[2][0] = data[8];
-
-        mydata->neighbors[i].prediction = predict(mydata->perceptron, x)[0][0];
-
-    }
-
-}
-
 
 /*
  * This function:
@@ -614,6 +599,8 @@ void receive_inputs()
         process_message();
         RB_popfront();
     }
+
+    process_perceptron();
 
     float alpha = 0.0001;
 
@@ -727,6 +714,8 @@ void setup() {
     // Random ID
     kilo_uid = rand_byte();
 
+    set_bot_state(WAIT);
+
     // Lock unblocked
     mydata->message_lock = 0;
 
@@ -739,9 +728,6 @@ void setup() {
     // Initialisation
     mydata->N_Neighbors = 0;
 
-    // In WAIT state
-    set_bot_state(WAIT);
-
     // Allowed to orbit the first time
     mydata->counter = 0;
 
@@ -750,7 +736,8 @@ void setup() {
     mydata->running_avg_Ns = 0;
 
     //PERCEPTRON
-    int shape[4] = {3,3,3,1};
+
+    int shape[4] = {2*NB_NEIGHBOURS,3,3,1};
     mydata->perceptron = new_perceptron(shape,4);
     load_weights(mydata->perceptron,"weights.txt");
 
@@ -769,13 +756,7 @@ void loop(){
     // Processes messages, and updates neighbors tables and N, NN running averages
 	receive_inputs();
 
-    // If bot not in state ORBIT or FOLLOW and with neighbors, run Turing patterning
-    if(get_bot_state() != ORBIT && get_bot_state() != FOLLOW && mydata->N_Neighbors > 0){
-
-        regulation_linear_model();
-        update_prediction();
-
-    }
+    regulation_linear_model();
 
     prediction_color();
     // Allows some time to start with the running averages
