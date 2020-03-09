@@ -581,13 +581,17 @@ void process_message()
 
   }
 
+  process_perceptron(data);
+
 }
 
 //PERCEPTRON
 void process_perceptron(uint8_t *data){
 
+    uint8_t i;
+
     for (i = 0; i < mydata->N_Neighbors; i++) {
-        
+
         float **x = mat_init(3, 1);
         x[0][0] = mydata->neighbors[i].molecules_concentration[0];
         x[1][0] = mydata->neighbors[i].molecules_concentration[1];
