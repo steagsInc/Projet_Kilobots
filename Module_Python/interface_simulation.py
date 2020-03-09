@@ -8,6 +8,7 @@ from decimal import *
 
 
 def lire_params(save=False):
+
     os.chdir("kilombo/templates/Turing_morphogenesis")
     with open("morphogenesis.c","r") as file1:
         content = file1.read()
@@ -55,3 +56,4 @@ def read_results():
 
 #execute_simulation()
 #print(read_results())
+write_params({})
