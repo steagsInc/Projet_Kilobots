@@ -8,28 +8,28 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="untitled">
-				<Option output="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/untitled.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug"/>
+				<Option output="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/untitled.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -39,15 +39,15 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/9.2.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled"/>
-					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="untitled/fast">
-				<Option output="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/untitled.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug"/>
+				<Option output="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/untitled.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -57,45 +57,45 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/9.2.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled/fast"/>
-					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.c">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.c">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.h">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.h">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/main.c">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/main.c">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.c">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.c">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.h">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.h">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.c">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.c">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.h">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.h">
 			<Option target="untitled"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/steag/CLionProjects/untitled/CMakeLists.txt">
+		<Unit filename="/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

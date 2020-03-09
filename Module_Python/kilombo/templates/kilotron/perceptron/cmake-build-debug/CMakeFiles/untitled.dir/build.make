@@ -43,10 +43,10 @@ RM = /cygdrive/c/Users/steag/.CLion2019.3/system/cygwin_cmake/bin/cmake.exe -E r
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /cygdrive/c/Users/steag/CLionProjects/untitled
+CMAKE_SOURCE_DIR = /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug
+CMAKE_BINARY_DIR = /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/untitled.dir/depend.make
@@ -59,55 +59,55 @@ include CMakeFiles/untitled.dir/flags.make
 
 CMakeFiles/untitled.dir/main.c.o: CMakeFiles/untitled.dir/flags.make
 CMakeFiles/untitled.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/untitled.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/main.c.o   -c /cygdrive/c/Users/steag/CLionProjects/untitled/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/untitled.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/main.c.o   -c /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/main.c
 
 CMakeFiles/untitled.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/untitled.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/c/Users/steag/CLionProjects/untitled/main.c > CMakeFiles/untitled.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/main.c > CMakeFiles/untitled.dir/main.c.i
 
 CMakeFiles/untitled.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/untitled.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/c/Users/steag/CLionProjects/untitled/main.c -o CMakeFiles/untitled.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/main.c -o CMakeFiles/untitled.dir/main.c.s
 
 CMakeFiles/untitled.dir/perceptron.c.o: CMakeFiles/untitled.dir/flags.make
 CMakeFiles/untitled.dir/perceptron.c.o: ../perceptron.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/untitled.dir/perceptron.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/perceptron.c.o   -c /cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/untitled.dir/perceptron.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/perceptron.c.o   -c /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.c
 
 CMakeFiles/untitled.dir/perceptron.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/untitled.dir/perceptron.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.c > CMakeFiles/untitled.dir/perceptron.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.c > CMakeFiles/untitled.dir/perceptron.c.i
 
 CMakeFiles/untitled.dir/perceptron.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/untitled.dir/perceptron.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.c -o CMakeFiles/untitled.dir/perceptron.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.c -o CMakeFiles/untitled.dir/perceptron.c.s
 
 CMakeFiles/untitled.dir/Layer.c.o: CMakeFiles/untitled.dir/flags.make
 CMakeFiles/untitled.dir/Layer.c.o: ../Layer.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/untitled.dir/Layer.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/Layer.c.o   -c /cygdrive/c/Users/steag/CLionProjects/untitled/Layer.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/untitled.dir/Layer.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/Layer.c.o   -c /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.c
 
 CMakeFiles/untitled.dir/Layer.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/untitled.dir/Layer.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/c/Users/steag/CLionProjects/untitled/Layer.c > CMakeFiles/untitled.dir/Layer.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.c > CMakeFiles/untitled.dir/Layer.c.i
 
 CMakeFiles/untitled.dir/Layer.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/untitled.dir/Layer.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/c/Users/steag/CLionProjects/untitled/Layer.c -o CMakeFiles/untitled.dir/Layer.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.c -o CMakeFiles/untitled.dir/Layer.c.s
 
 CMakeFiles/untitled.dir/matmul.c.o: CMakeFiles/untitled.dir/flags.make
 CMakeFiles/untitled.dir/matmul.c.o: ../matmul.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/untitled.dir/matmul.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/matmul.c.o   -c /cygdrive/c/Users/steag/CLionProjects/untitled/matmul.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/untitled.dir/matmul.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/untitled.dir/matmul.c.o   -c /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.c
 
 CMakeFiles/untitled.dir/matmul.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/untitled.dir/matmul.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/c/Users/steag/CLionProjects/untitled/matmul.c > CMakeFiles/untitled.dir/matmul.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.c > CMakeFiles/untitled.dir/matmul.c.i
 
 CMakeFiles/untitled.dir/matmul.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/untitled.dir/matmul.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/c/Users/steag/CLionProjects/untitled/matmul.c -o CMakeFiles/untitled.dir/matmul.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.c -o CMakeFiles/untitled.dir/matmul.c.s
 
 # Object files for target untitled
 untitled_OBJECTS = \
@@ -125,7 +125,7 @@ untitled.exe: CMakeFiles/untitled.dir/Layer.c.o
 untitled.exe: CMakeFiles/untitled.dir/matmul.c.o
 untitled.exe: CMakeFiles/untitled.dir/build.make
 untitled.exe: CMakeFiles/untitled.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable untitled.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable untitled.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/untitled.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -138,6 +138,6 @@ CMakeFiles/untitled.dir/clean:
 .PHONY : CMakeFiles/untitled.dir/clean
 
 CMakeFiles/untitled.dir/depend:
-	cd /cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /cygdrive/c/Users/steag/CLionProjects/untitled /cygdrive/c/Users/steag/CLionProjects/untitled /cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug /cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug /cygdrive/c/Users/steag/CLionProjects/untitled/cmake-build-debug/CMakeFiles/untitled.dir/DependInfo.cmake --color=$(COLOR)
+	cd /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug /cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/cmake-build-debug/CMakeFiles/untitled.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/untitled.dir/depend
 

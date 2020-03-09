@@ -32,8 +32,8 @@ float **predict(Perceptron *perc,float **input){
         a = compute_layer(perc->layers[i], a);
     }
 
-    //printf("prediction : ");
-    //displayMat(a,1,1);
+    printf("prediction : ");
+    displayMat(a,1,1);
 
     return a;
 
