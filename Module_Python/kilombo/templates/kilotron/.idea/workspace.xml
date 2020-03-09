@@ -9,7 +9,58 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab055a6f-a842-48f8-96f5-f3ca44671e40" name="Default Changelist" comment="" />
+    <list default="true" id="ab055a6f-a842-48f8-96f5-f3ca44671e40" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/Simulation_Milo.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/bot_pos.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/edge" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/edge.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/edge.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/execute_sim.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../blank_starter_template/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/bot_pos.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/edge.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/edge.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../edge/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/communication.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/communication.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/final.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/follow" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/follow.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/follow.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/util.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../follow/util.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/gradient" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/gradient.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/gradient.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/json_state.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/gradient.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/gradient.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/json_state.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradient2/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kilotron.c" beforeDir="false" afterPath="$PROJECT_DIR$/kilotron.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/Makefile.osx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/kilombo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/orbit" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/orbit.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/orbit.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../orbit/start_positions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../kilombo" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,7 +69,11 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
   <component name="ProjectId" id="1Ycz8NoXkpSE4ycIipiJAQRd5Mk" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -26,6 +81,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -40,10 +96,17 @@
       <option name="presentableId" value="Default" />
       <updated>1583256510645</updated>
       <workItem from="1583256512740" duration="2824000" />
+      <workItem from="1583753450729" duration="634000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1583753456065">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583753456065" />
   </component>
 </project>
