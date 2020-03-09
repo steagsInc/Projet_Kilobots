@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.h
 
-/cygdrive/c/Users/steag/CLionProjects/untitled/main.c
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/main.c
 stdio.h
 -
 matmul.h
-/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.h
 time.h
 -
 stdlib.h
 -
 perceptron.h
-/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.h
 
-/cygdrive/c/Users/steag/CLionProjects/untitled/matmul.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/matmul.h
 
-/cygdrive/c/Users/steag/CLionProjects/untitled/perceptron.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/perceptron.h
 Layer.h
-/cygdrive/c/Users/steag/CLionProjects/untitled/Layer.h
+/cygdrive/p/Projet_Kilobots/Module_Python/kilombo/templates/kilotron/perceptron/Layer.h
 

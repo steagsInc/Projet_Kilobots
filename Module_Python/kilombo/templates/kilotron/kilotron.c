@@ -506,84 +506,96 @@ void process_message()
   if(d > COMM_R && mydata->N_Neighbors > 0 && get_bot_state() != FOLLOW) return;
 
   // search the neighbor list by ID
-  for (i = 0; i < mydata->N_Neighbors; i++)
-    if (mydata->neighbors[i].ID == ID){ // found it
-    	mydata->neighbors[i].delta_dist = d - mydata->neighbors[i].dist;
-    	break;
-    }
+  for (i = 0; i < mydata->N_Neighbors; i++) {
+      if (mydata->neighbors[i].ID == ID) { // found it
+          mydata->neighbors[i].delta_dist = d - mydata->neighbors[i].dist;
+          break;
+      }
 
-  if (i == mydata->N_Neighbors)
-      {  // this neighbor is not in list
-        if (mydata->N_Neighbors < MAXN-1) // neighbor list is not full
-     	   mydata->N_Neighbors++;
-        else
-            i = find_most_distant_N_id(); // overwrite the most distant neighbor
+      if (i == mydata->N_Neighbors) {  // this neighbor is not in list
+          if (mydata->N_Neighbors < MAXN - 1) // neighbor list is not full
+              mydata->N_Neighbors++;
+          else
+              i = find_most_distant_N_id(); // overwrite the most distant neighbor
 
-        mydata->neighbors[i].delta_dist = 0;
+          mydata->neighbors[i].delta_dist = 0;
 
       }
 
-  // i now points to where this message should be stored
-  mydata->neighbors[i].ID = ID;
-  mydata->neighbors[i].timestamp = kilo_ticks;
-  mydata->neighbors[i].dist = d;
-  mydata->neighbors[i].N_Neighbors = data[2];
-  mydata->neighbors[i].n_bot_state = data[7];
+      // i now points to where this message should be stored
+      mydata->neighbors[i].ID = ID;
+      mydata->neighbors[i].timestamp = kilo_ticks;
+      mydata->neighbors[i].dist = d;
+      mydata->neighbors[i].N_Neighbors = data[2];
+      mydata->neighbors[i].n_bot_state = data[7];
 
-  uint8_t signo_rec;
-  uint8_t exp_rec;
-  uint16_t mant_rec;
-  uint16_t bit1;
-  float mant_fl;
+      uint8_t signo_rec;
+      uint8_t exp_rec;
+      uint16_t mant_rec;
+      uint16_t bit1;
+      float mant_fl;
 
-  signo_rec=0;
-  exp_rec=0;
-  mant_rec=0;
-  bit1=0;
-
-
-  int jj;
+      signo_rec = 0;
+      exp_rec = 0;
+      mant_rec = 0;
+      bit1 = 0;
 
 
-  for (j = 0; j < 2; j++){
-
-	// recover from "half" precision
-	signo_rec = data[3+j] >> 7;
-	exp_rec = (data[3+j] >> 2) & 0x1F;
-	mant_rec = ((data[3+j] & 0x3) << 8) | data[3+2+j];
-
-	mant_fl=0;
-	for (jj=9; jj>=0; jj--){
-
-	  bit1 = mant_rec>>jj;
-
-	  mant_fl = mant_fl + bit1*pow(2,jj-10);
-
-	  mant_rec = mant_rec - bit1*pow(2,jj);
-
-	}
+      int jj;
 
 
+      for (j = 0; j < 2; j++) {
 
-	if(exp_rec==31 && signo_rec==0)  mydata->neighbors[i].molecules_concentration[j]= 65504;
+          // recover from "half" precision
+          signo_rec = data[3 + j] >> 7;
+          exp_rec = (data[3 + j] >> 2) & 0x1F;
+          mant_rec = ((data[3 + j] & 0x3) << 8) | data[3 + 2 + j];
 
-	else if (exp_rec==31 && signo_rec==1) mydata->neighbors[i].molecules_concentration[j]= -65504;
+          mant_fl = 0;
+          for (jj = 9; jj >= 0; jj--) {
 
-	else if (exp_rec==-15 && mant_rec==0) mydata->neighbors[i].molecules_concentration[j] = 0;
+              bit1 = mant_rec >> jj;
 
-	else if (exp_rec==-15 && mant_rec!=0) mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1,signo_rec)*pow(2,exp_rec-15+1)*(0+mant_fl);
+              mant_fl = mant_fl + bit1 * pow(2, jj - 10);
 
-	else mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1,signo_rec)*pow(2,exp_rec-15)*(1+mant_fl);
+              mant_rec = mant_rec - bit1 * pow(2, jj);
+
+          }
+
+
+          if (exp_rec == 31 && signo_rec == 0) mydata->neighbors[i].molecules_concentration[j] = 65504;
+
+          else if (exp_rec == 31 && signo_rec == 1) mydata->neighbors[i].molecules_concentration[j] = -65504;
+
+          else if (exp_rec == -15 && mant_rec == 0) mydata->neighbors[i].molecules_concentration[j] = 0;
+
+          else if (exp_rec == -15 && mant_rec != 0)
+              mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1, signo_rec) * pow(2, exp_rec - 15 + 1) *
+                                                                (0 + mant_fl);
+
+          else
+              mydata->neighbors[i].molecules_concentration[j] =
+                      (float) pow(-1, signo_rec) * pow(2, exp_rec - 15) * (1 + mant_fl);
+
+      }
 
   }
 
-    //PERCEPTRON
-    float **x = mat_init(3,1);
-  x[0][0] = mydata->neighbors[i].molecules_concentration[0];
-  x[1][0] = mydata->neighbors[i].molecules_concentration[1];
-  x[2][0] = data[8];
+}
 
-    mydata->neighbors[i].prediction=predict(mydata->perceptron,x)[0][0];
+//PERCEPTRON
+void process_perceptron(uint8_t *data){
+
+    for (i = 0; i < mydata->N_Neighbors; i++) {
+        
+        float **x = mat_init(3, 1);
+        x[0][0] = mydata->neighbors[i].molecules_concentration[0];
+        x[1][0] = mydata->neighbors[i].molecules_concentration[1];
+        x[2][0] = data[8];
+
+        mydata->neighbors[i].prediction = predict(mydata->perceptron, x)[0][0];
+
+    }
 
 }
 
@@ -766,7 +778,6 @@ void loop(){
     }
 
     prediction_color();
-
     // Allows some time to start with the running averages
 	if(kilo_ticks == 250){
 		mydata->running_avg_Ns = mydata->N_Neighbors;
