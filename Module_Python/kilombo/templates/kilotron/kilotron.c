@@ -485,7 +485,7 @@ void process_perceptron(){
     }
 
     mydata->prediction = predict(mydata->perceptron, x)[0][0];
-    printf("%f\n", mydata->prediction);
+    //printf("%f\n", mydata->prediction);
 
 }
 
