@@ -16,12 +16,14 @@
 #define M_PI 3.141592653589793238462643383279502884197169399375105820974944
 #endif
 
-#define MAXN 20     // Maximum number of neighbors
+#define MAXN 2     // Maximum number of neighbors
 
 #define RB_SIZE 16  // Ring buffer size. Choose a power of two for faster code
                     // memory usage: 16*RB_SIZE
                     // 8 works too, but complains in the simulator
                     // when the bots are very dense
+
+#define COMMUNICATION 4
 
 
 // States of the robots
@@ -39,6 +41,7 @@ typedef struct {
 
   float molecules_concentration[2];     // Concentration of molecules U and V of this neighbor, respectively
   float prediction;
+  float communication_chanel[COMMUNICATION];
 
   uint32_t timestamp;                   // kilo_ticks when this neighbor was updated
 
@@ -80,7 +83,11 @@ typedef struct
   //PERCEPTRON
 
   Perceptron *perceptron;
-  float prediction;
+
+  float prediction1;
+  float prediction2;
+
+  float *communication_chanel;
 
 } USERDATA;
 

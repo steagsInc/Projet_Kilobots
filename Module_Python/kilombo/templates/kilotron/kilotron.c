@@ -46,8 +46,6 @@ REGISTER_USERDATA(USERDATA)
 #define DT 0.00005
 //End_Parameters
 
-#define NB_NEIGHBOURS 5
-
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
@@ -388,8 +386,7 @@ void regulation_linear_model(){
 void prediction_color() {
 
     //printf("%f\n", mydata->prediction);
-
-    set_color(RGB((int)(255*(1-mydata->prediction)),0,(int)(255*(mydata->prediction))));
+    set_color(RGB((int)(255*(mydata->prediction1)),0,(int)(255*(mydata->prediction2))));
 
 }
 
@@ -471,21 +468,28 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 //PERCEPTRON
 void process_perceptron(){
 
-    uint8_t i,k,c = 0;
+    uint8_t i,j = 0;
 
     float **x = mat_init(2*NB_NEIGHBOURS, 1);
+    x[0][0]=mydata->molecules_concentration[0];
+    x[1][0]=mydata->molecules_concentration[1];
 
-    for (i = 0; i < NB_NEIGHBOURS && i<mydata->N_Neighbors; i++) {
+    for (i = 0;i<mydata->N_Neighbors; i++) {
 
-        x[c][0] = mydata->neighbors[i].molecules_concentration[0];
-        c++;
-        x[c][0] = mydata->neighbors[i].molecules_concentration[1];
-        c++;
+      for(j=0;j<COMMUNICATION;j++){
+        x[j+2][0]=x[j+2][0]+mydata->neighbors[i].communication_chanel[j];
+      }
 
     }
 
-    mydata->prediction = predict(mydata->perceptron, x)[0][0];
+    float **prediction = predict(mydata->perceptron, x);
+
+    mydata->prediction1 = prediction[0][0];
+    mydata->prediction2 = prediction[1][0];
     //printf("%f\n", mydata->prediction);
+    for (i = 0;i<COMMUNICATION;i++){
+      mydata->communication_chanel[i] = prediction[i+2][0];
+    }
 
 }
 
@@ -532,6 +536,12 @@ void process_message()
       mydata->neighbors[i].dist = d;
       mydata->neighbors[i].N_Neighbors = data[2];
       mydata->neighbors[i].n_bot_state = data[7];
+
+      int c;
+
+      for (c=0;c<COMMUNICATION;c++){
+        mydata->neighbors[i].communication_chanel[c] = data[8+c];
+      }
 
       uint8_t signo_rec;
       uint8_t exp_rec;
@@ -600,8 +610,6 @@ void receive_inputs()
         RB_popfront();
     }
 
-    process_perceptron();
-
     float alpha = 0.0001;
 
     mydata->running_avg_Ns = calc_apprx_running_avg(mydata->running_avg_Ns, mydata->N_Neighbors, alpha);
@@ -642,7 +650,12 @@ void setup_message(void)
 
   mydata->transmit_msg.data[2] = mydata->N_Neighbors; //2: number of neighbors
   mydata->transmit_msg.data[7] = get_bot_state(); // 7: state of the robot
-  mydata->transmit_msg.data[8] = mydata->prediction;
+
+  int c;
+
+  for (c=0;c<COMMUNICATION;c++){
+    mydata->transmit_msg.data[8+c] = mydata->communication_chanel[c];
+  }
 
   int i;
 
@@ -737,9 +750,15 @@ void setup() {
 
     //PERCEPTRON
 
-    int shape[4] = {2*NB_NEIGHBOURS,3,3,1};
-    mydata->perceptron = new_perceptron(shape,4);
+    int shape[3] = {2+COMMUNICATION,20,2+COMMUNICATION};
+    mydata->perceptron = new_perceptron(shape,3);
     load_weights(mydata->perceptron,"weights.txt");
+
+    mydata->communication_chanel=(float*)malloc(COMMUNICATION * sizeof(float));
+    int i;
+    for (i = 0;i<COMMUNICATION;i++){
+      mydata->communication_chanel[i] = 0;
+    }
 
     // The message is initialized
     setup_message();
@@ -757,6 +776,8 @@ void loop(){
 	receive_inputs();
 
     regulation_linear_model();
+
+    process_perceptron();
 
     prediction_color();
     // Allows some time to start with the running averages

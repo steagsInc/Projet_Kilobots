@@ -10,7 +10,7 @@ os.chdir('..')
 path_weights = "kilombo/templates/kilotron/weights.txt"
 path_kilotron = "kilombo/templates/kilotron"
 
-concordance = ["circle","pile"]
+concordance = ["circle","line"]
 
 
 def setTopology(topology,number=0):
@@ -33,7 +33,7 @@ def simulatePerceptron(topology,number):
     setTopology(topology,number)
 
     os.chdir(path_kilotron)
-    os.system("./kilotron.c")
+    os.system("./kilotron")
     os.chdir("../../..")
 
 
@@ -147,7 +147,7 @@ def validation(nb_bot_max):
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=20).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(testAccuracy, maxfun=5).result
     best_w = res[0]
     validation(20)
     #print("Historique de prédictions ",historique_y)

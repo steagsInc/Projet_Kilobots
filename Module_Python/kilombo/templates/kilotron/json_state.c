@@ -18,8 +18,10 @@ json_t *json_state()
   json_object_set (state, "u", u);
   json_t* v = json_integer(mydata->molecules_concentration[1]);
   json_object_set (state, "v", v);
-  json_t* p = json_real(mydata->prediction);
-  json_object_set (state, "p", p);
+  json_t* p1 = json_real(mydata->prediction1);
+  json_object_set (state, "p1", p1);
+  json_t* p2 = json_real(mydata->prediction2);
+  json_object_set (state, "p2", p2);
 
   return state;
 }
