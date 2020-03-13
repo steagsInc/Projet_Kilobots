@@ -470,7 +470,7 @@ void process_perceptron(){
 
     uint8_t i,j = 0;
 
-    float **x = mat_init(2*NB_NEIGHBOURS, 1);
+    float **x = mat_init(2+COMMUNICATION, 1);
     x[0][0]=mydata->molecules_concentration[0];
     x[1][0]=mydata->molecules_concentration[1];
 
