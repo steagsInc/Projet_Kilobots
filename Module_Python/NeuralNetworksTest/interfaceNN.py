@@ -172,6 +172,10 @@ def testLogLoss(w,borne = 2):
         Z = np.hstack((np.zeros((y_p.shape[0], 1)), np.ones((y_p.shape[0], 1))))
         if(i%2 == 1):
             Z = np.hstack((np.ones((y_p.shape[0],1)),np.zeros((y_p.shape[0],1)) ))
+
+        for k in range(y_p.shape[0]):
+            y_p[k,:] = y_p[k,:] / np.sum(y_p[k,:])
+        print(y_p)
         c=log_loss(Z,y_p)
         cpt = cpt + c
         print('Sanction pour une topologie : ',c)
@@ -203,6 +207,32 @@ def testHingeLoss(w,borne = 2):
     return cpt
 
 
+def testCMMLoss(w,borne = 2):
+    tests = []
+    writeWeights(w)
+    L = []
+    cpt = 0
+    for i in range(0,borne):
+        if(i%2 == 0):
+            topology = "circle"
+        else:
+            topology = "line"
+        setTopology(topology,nb_bot_max)
+        simulatePerceptron(topology,nb_bot_max)
+        y_p = getPredictions()
+        Z = -np.ones(y_p.shape[0]).astype(int)
+        if(i%2 == 1):
+            Z = np.ones(y_p.shape[0]).astype(int)
+        P = np.max(y_p,axis=1)
+        P[np.where(np.argmax(y_p,axis=1) == 0)] = -P[np.where(np.argmax(y_p,axis=1) == 0)]
+        c=hinge_loss(P,Z)
+        cpt = cpt + c
+        print('Sanction pour une topologie : ',c)
+    print("Pénalité totale : ",cpt)
+    return cpt
+
+
+
 
 def validation(nb_bot_max):
     p = 0
@@ -228,7 +258,7 @@ def validation(nb_bot_max):
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 10).optimize(testHingeLoss, maxfun=20).result
+    res = cma.CMAEvolutionStrategy(w, 10).optimize(testLogLoss, maxfun=20).result
     best_w = res[0]
     validation(20)
     #print("Historique de prédictions ",historique_y)
