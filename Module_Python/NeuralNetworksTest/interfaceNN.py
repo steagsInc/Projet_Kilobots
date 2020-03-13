@@ -111,6 +111,8 @@ def testAccuracyFixed(w,borne = 2):
         setTopology(topology,nb_bot_max)
         simulatePerceptron(topology,nb_bot_max)
         y_p = getPredictions()
+        print(y_p)
+        input("Interface bloqué pour que tu visualises les prédiction appuie sur entrée batard")
         #En gros la je construit une ligne de zeros a cahque iteration
         Z = np.zeros(y_p.shape[1])
         #Ensuite j'inscris dessus la bonne prédiction
@@ -219,6 +221,7 @@ def testCMMLoss(w,borne = 2):
             topology = "line"
         setTopology(topology,nb_bot_max)
         simulatePerceptron(topology,nb_bot_max)
+
         y_p = getPredictions()
         Z = -np.ones(y_p.shape[0]).astype(int)
         if(i%2 == 1):
@@ -253,12 +256,16 @@ def validation(nb_bot_max):
     print("Précision globale de ", p / 10)
 
 
+def putRandomWeights():
+    w = readWeights()
+    r = np.random.random(w.shape[0])
+    writeWeights(r)
+
 
 
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
+    putRandomWeights()
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 10).optimize(testLogLoss, maxfun=20).result
-    best_w = res[0]
-    validation(20)
-    #print("Historique de prédictions ",historique_y)
+    res = cma.CMAEvolutionStrategy(w, 0.0001).optimize(testAccuracyFixed, maxfun=20).result
+    #best_w = res[0]
