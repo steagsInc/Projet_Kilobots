@@ -285,7 +285,7 @@ def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0, 
 
     return SI
 
-def shapeIndex(show = False, distVoisin = 120):
+def shapeIndex(show = False, colorTreshold = 0, distVoisin = 120):
     nodes = []
     
     with open(fp) as json_file:
@@ -302,7 +302,7 @@ def shapeIndex(show = False, distVoisin = 120):
     
     fig, ax = plt.subplots()
     #en noir
-    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c = ["black"  for i in nodes], s = distVoisin)
+    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c = [ "black"  if i[3] >= colorTreshold else "white" for i in nodes], s = distVoisin)
     
     plt.axis('equal')    
     plt.axis('off')
@@ -482,4 +482,4 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
 #print("countTuringSpots : " + str(countTuringSpotsWithVoronoi(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
 #print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
-#print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
+print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
