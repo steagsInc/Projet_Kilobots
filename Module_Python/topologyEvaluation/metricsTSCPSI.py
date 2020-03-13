@@ -7,6 +7,7 @@ Created on Sat Feb 29 11:50:56 2020
 
 import json
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 import cv2
 import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
@@ -38,11 +39,12 @@ def countTuringSpotsWithGraph(valueTresh = 5, distVoisin = 100) :
 
         # print(data)
         for state in data['bot_states']:  # ['bot_states']['state']:
+            id = state['ID']
             x = state['x_position']
             y = state['y_position']
             u = state['state'].get('u')
             v = state['state'].get('v')
-            nodes.append([x, y, u, v])
+            nodes.append([ x, y, u, v, id,])
 
     #on transforme en graphe, mais on garde que les noeuds avec u >= valueTresh d'abors
     nodes2 = []
@@ -55,10 +57,10 @@ def countTuringSpotsWithGraph(valueTresh = 5, distVoisin = 100) :
     #graphe sous forme de liste d'adjacence de type [id noeud, noeud voisin, noeud voisin...)
     graph = []
     for node in range(len(nodes)) :
-        graph.append([node])
+        graph.append([nodes[node][4]])
         for node2 in range(len(nodes)) :
-            if node != node2 and (nodes[node][0]-nodes[node2][0])**2 + (nodes[node][1]-nodes[node2][1])**2 <= distVoisin**2 :
-                graph[node].append(node2)
+            if nodes[node][4] != nodes[node2][4] and (nodes[node][0]-nodes[node2][0])**2 + (nodes[node][1]-nodes[node2][1])**2 <= distVoisin**2 :
+                graph[node].append(nodes[node2][4])
 
 
     #maintenant on prend un noeud au pif et on retire récursivement tous ses voisins du graphe, on répète jusqu'à vide
@@ -206,7 +208,7 @@ def countTuringSpotsWithVoronoi(show = False, colorTresh = 2, periTresh = 100) :
     #print([i[2] for i in nodes])
     return len(turingSpots)
 
-def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0) :
+def multiClusterShapeIndex(show = False, periTreshold = 0, colorTreshold = 0,  distVoisin = 50) :
     """
     retourne les shape index de tous les cluster dans une liste, pas seulement le shape index du cluster au plus grand périmètre
     """
@@ -224,10 +226,16 @@ def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0) 
             nodes.append([x, y, u, v])
 
     fig, ax = plt.subplots()
-    # en noir
-    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c=[ "black"  if i[3] >= colorTreshold else "white" for i in nodes], s=120, alpha = 1)
 
-    plt.axis('equal')
+    A = np.array(nodes)
+    x = A[:, 0]
+    y = A[:, 1]
+    c = A[:, 2]
+
+    ax.axis([min(x) - 100, max(x) + 100, min(y) - 100, max(y) + 100])
+
+    for x, y, c in zip(x, y, c):
+        ax.add_artist(Circle(xy=(x, y), radius=distVoisin / 2, color="black" if c >= colorTreshold else "white"))
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show :
@@ -284,7 +292,7 @@ def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0) 
 
     return SI
 
-def shapeIndex(show = False):
+def shapeIndex(show = False, colorTreshold = 0, distVoisin = 50):
     nodes = []
     
     with open(fp) as json_file:
@@ -297,13 +305,19 @@ def shapeIndex(show = False):
             u = state['state'].get('u')
             v = state['state'].get('v')
             nodes.append([x, y, u, v])
-     
-    
+
     fig, ax = plt.subplots()
-    #en noir
-    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c = ["black"  for i in nodes], s = 120)
-    
-    plt.axis('equal')    
+
+    A = np.array(nodes)
+    x = A[:, 0]
+    y = A[:, 1]
+    c = A[:, 2]
+
+    ax.axis([min(x) - 100, max(x) + 100, min(y) - 100, max(y) + 100])
+
+    for x, y, c in zip(x, y, c):
+        ax.add_artist(Circle(xy=(x, y), radius=distVoisin/2, color= "black"  if c >= colorTreshold else "white"))
+
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show :
@@ -481,4 +495,4 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
 #print("countTuringSpots : " + str(countTuringSpotsWithVoronoi(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
 #print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
-#print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
+print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
