@@ -13,7 +13,7 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 import math
 
 print(cv2.__version__)
-fp = "C:\\Users\\PC MILO fixe\\Desktop\\pytho projet AND\\endstate.json"
+fp = "/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python/produced/endstate.json"
 
 def returnUVList() :
     nodes = []
@@ -475,8 +475,8 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
     
 
 
-print("shapeIndex : " + str(shapeIndex(show = True)))
+print("shapeIndex : " + str(shapeIndex(show = False)))
 #print("countTuringSpots : " + str(countTuringSpotsWithVoronoi(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
-#print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
-print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
+print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
+print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = False)))
