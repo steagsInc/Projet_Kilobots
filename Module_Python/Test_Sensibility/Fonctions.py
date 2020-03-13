@@ -5,7 +5,7 @@ import json
 import matplotlib.colors as colors
 
 
-
+lock = False
 
 topologies = ["pile","random"]
 path_kilotron = "produced"
@@ -22,11 +22,16 @@ def simulatePerceptron1(topology,number):
 
 
 def simulatePerceptron(topology,number):
+    global lock
     if (os.getcwd().split("/")[-1] == "produced"):
         os.chdir("..")
     if (os.getcwd().split("/")[-1] == "Projet_Kilobots"):
         os.chdir("Module_Python")
-
+    if (os.getcwd().split("/")[-1] != "Module_Python"):
+        return
+    if(lock):
+        return
+    lock = True
     print("Chemiin : ",os.getcwd())
     os.chdir(path_kilotron)
     os.system("make")
@@ -39,6 +44,7 @@ def simulatePerceptron(topology,number):
     os.system("./morphogenesis")
     os.chdir("..")
     print("Chemin en sortie de simulate perceptron : ", os.getcwd())
+    lock = False
 
 def generate_neighbours(id,X,neighborhood_max = 55):
     neighbours = []

@@ -8,7 +8,7 @@ import dash_cytoscape as cyto
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.linear_model import SGDClassifier
@@ -19,12 +19,13 @@ from sklearn.model_selection import cross_val_score, learning_curve
 from sklearn.tree import DecisionTreeClassifier
 
 from Test_Sensibility.Fonctions import readStates, setTopology, simulatePerceptron
+from Test_Sensibility.neuralNetworksToTest.generalStructure import CustomizableNN
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 if(os.getcwd().split("/")[-1] == "Test_Sensibility"):
     os.chdir("..")
 
-batch_size = 50
+batch_size = 350
 
 number_robots = 10
 topology_robots = "random"
@@ -300,8 +301,10 @@ app.layout = html.Div([
 
 
 @app.callback(Output("simulation-indication","color"),
-              [Input("robots-positions","elements"),Input('train-modele',"n_clicks"),Input("number-neighbours","value")])
-def generateTable(elem,nclicks,val):
+              [Input('train-modele',"n_clicks"),Input("number-neighbours","value")],
+              [State("robots-positions","elements")]
+              )
+def generateTable(nclicks,val,elem):
     global X_data
     global X_Df
     global robots_for_data
@@ -362,6 +365,14 @@ def displayTable(n):
 
 @app.callback(Output("visualisation-classes","figure"),[Input('plot2-modele',"n_clicks")])
 def displayPlot(n):
+    print("X_data = ",X_data)
+    if(len(X_data) == 0):
+        return {
+            'data': [],
+            'layout': {
+                'clickmode': 'event+select'
+            }
+        }
     X,Y = X_data[:,:-1], X_data[:,-1]
     id_1 = np.where(Y.reshape(-1,1) == 1)[0]
     print("Test de id1 : ",id_1)

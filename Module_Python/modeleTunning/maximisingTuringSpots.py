@@ -1,5 +1,4 @@
 import cma
-from cma import purecma
 
 from interface_simulation import lire_params, write_params, execute_simulation
 import os
@@ -69,8 +68,21 @@ def poderatedSum(w,model=None):
     put_genotype(w,model)
     execute_simulation()
     if(countTuringSpots() == 0):
+        return 1000*shapeIndex()+-35*shapeIndex()-2*countTuringSpots()+sumUV("produced/endstate.json")**2
+    return -35*shapeIndex()-2*countTuringSpots()+sumUV("produced/endstate.json")**2
+
+def objectif1(w,model=None):
+    if model is None:
+        model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v']
+    #TODO : Remove this
+    put_genotype(w,model)
+    execute_simulation()
+    if(countTuringSpots() == 0):
         return 1000*shapeIndex()
-    return -35*shapeIndex()-2*countTuringSpots()+sumUV("produced/endstate.json")
+    return -35*shapeIndex()-2*countTuringSpots()
+
+
+
 
 
 def sumUV(jsonfile):
@@ -88,6 +100,7 @@ def sumUV(jsonfile):
 
 
 if (__name__=="__main__"):
+    print("Chemin au debut : ",os.getcwd())
     w = extract_genotype(model =['A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v'])
     res = cma.CMAEvolutionStrategy(w, 1).optimize(poderatedSum, maxfun=100).result
     best_w = res[0]
