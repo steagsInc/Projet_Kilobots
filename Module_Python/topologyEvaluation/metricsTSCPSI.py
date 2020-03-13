@@ -230,7 +230,8 @@ def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0) 
     plt.axis('equal')
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
-    plt.show()
+    if show :
+        plt.show()
 
     image = cv2.imread("forContour.png")
 
@@ -304,8 +305,9 @@ def shapeIndex(show = False):
     
     plt.axis('equal')    
     plt.axis('off')
-    fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0) 
-    plt.show()
+    fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
+    if show :
+        plt.show()
     
     
     image = cv2.imread("forContour.png")
@@ -475,8 +477,8 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
     
 
 
-print("shapeIndex : " + str(shapeIndex(show = True)))
+#print("shapeIndex : " + str(shapeIndex(show = True)))
 #print("countTuringSpots : " + str(countTuringSpotsWithVoronoi(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
 #print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
-print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
+#print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
