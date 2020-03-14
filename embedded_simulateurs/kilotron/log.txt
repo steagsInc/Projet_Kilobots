@@ -1,0 +1,36 @@
+Requested parameter: imageName is not a string
+Requested parameter: finalImage is not a string
+Requested parameter: stateFileName is not a string
+Requested parameter: stateFileSteps is not an integer.
+ Using default value 100.
+Requested parameter: displayWidthPercent is not a number.
+ Using default value 0.900000.
+Requested parameter: displayHeightPercent is not a number.
+ Using default value 0.900000.
+Requested parameter: histLength is not an integer.
+ Using default value 500.
+Requested parameter: distanceNoise is not a number.
+ Using default value 0.000000.
+Requested parameter: speed is not a number.
+ Using default value 7.000000.
+Requested parameter: speedVariation is not a number.
+ Using default value 0.000000.
+Requested parameter: turnRate is not a number.
+ Using default value 13.000000.
+Requested parameter: turnOffsetVariation is not a number.
+ Using default value 0.000000.
+Requested parameter: turnSlopeVariation is not a number.
+ Using default value 0.000000.
+Requested parameter: pushDisplacement is not a number.
+ Using default value 1.000000.
+Requested parameter: distanceCoefficient is not a number.
+ Using default value 1.000000.
+Requested parameter: displayX is not a number.
+ Using default value 0.000000.
+Requested parameter: displayY is not a number.
+ Using default value 0.000000.
+Requested parameter: useGrid is not an integer.
+ Using default value 1.
+Requested parameter: colorscheme is not a string
+Requested parameter: nBots is not an integer.
+ Using default value 100.
