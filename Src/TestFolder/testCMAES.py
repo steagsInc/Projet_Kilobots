@@ -2,7 +2,7 @@ import os
 
 import cma
 
-from Src.predictionAccuracyMeasurement import simulator
+from Src.simulationController.predictionAccuracyMeasurement import simulator
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
@@ -13,7 +13,7 @@ def fitness(w):
     S.Swarm.controller.write_Weights(w)
     S.computeSimulation()
     #print("Pénalité de ",S.getHinge())
-    #print("Précision : ",S.getPrecision())
+    print("Précision : ",S.getPrecision())
     return -S.getPrecision()
 
 if(__name__=="__main__"):

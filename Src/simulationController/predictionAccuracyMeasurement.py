@@ -9,14 +9,14 @@ Ce simulateur sert a calculer sur un essaim les differentes loss en effectuant d
 """
 
 class simulator():
-    def __init__(self,topologies = ("circle", "line"),nb = 15):
+    def __init__(self,topologies = ("circle", "line"),nb = 100):
         self.Topologies = topologies
         self.nb_robots = nb
         self.Swarm = swarmDescriptor("kilotron")
         self.pred = []
 
     def computeSimulation(self):
-        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(200).withNombre(self.nb_robots)
+        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(100).withNombre(self.nb_robots)
         self.pred.clear()
         for i in range(len(self.Topologies)):
             self.Swarm.setTopology(topology=self.Topologies[i])
@@ -78,7 +78,7 @@ class simulator():
 
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
-    os.chdir("..")
+    os.chdir("../..")
     S = simulator()
     #TODO : Violon des loss
     for i in range(0,10):

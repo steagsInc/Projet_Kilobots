@@ -4,9 +4,11 @@ from Src.controllers.swarmDescriptor import swarmDescriptor
 
 
 class topologyOptimisation:
-    def __init__(self,topologies = "pile",nb = 250):
+    def __init__(self,topologies = "pile",nb = 250,visible = False,time = 1500):
         self.Topologies = topologies
         self.nb_robots = nb
+        self.visible = visible
+        self.time = time
         self.Swarm = swarmDescriptor("morphogenesis")
         self.pred = []
 
@@ -29,8 +31,8 @@ class topologyOptimisation:
         self.Swarm.controller.write_params(P)
 
     def computeSimulation(self):
-        self.Swarm.controller = self.Swarm.controller.withVisiblite(False)\
-            .withTime(1500).withNombre(self.nb_robots).\
+        self.Swarm.controller = self.Swarm.controller.withVisiblite(self.visible)\
+            .withTime(self.time).withNombre(self.nb_robots).\
             withTopology(self.Topologies).run()
 
 
@@ -39,7 +41,7 @@ class topologyOptimisation:
 
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
-    os.chdir("..")
+    os.chdir("../..")
     S = topologyOptimisation()
     #TODO : Violon des loss
     for i in range(0,10):
