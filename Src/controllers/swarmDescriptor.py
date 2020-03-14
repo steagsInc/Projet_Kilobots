@@ -125,6 +125,19 @@ class swarmDescriptor:
             cpt = cpt + 1
         return multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
 
+    def SumshapeIndex(self):
+        cpt = []
+        for c in self.clusters:
+            cpt = cpt + [c.shape_index]
+        cpt = np.array(cpt)
+        return cpt.sum()
+
+    def MaxshapeIndex(self):
+        cpt = []
+        for c in self.clusters:
+            cpt = cpt + [c.shape_index]
+        cpt = np.array(cpt)
+        return cpt.max()
 
 
     def setNb_robots(self,nb):
