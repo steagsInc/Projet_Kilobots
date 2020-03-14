@@ -121,6 +121,7 @@ class simulationController:
             os.chdir(self.path_project)
         os.chdir("embedded_simulateurs/" + self.path)
         json.dump(self.parametres,open("kilombo.json","w"))
+        os.system("make >error.tmp 2>&1")
         os.system("./"+self.path+" >error.tmp 2>&1")
         os.chdir("../..")
         return self

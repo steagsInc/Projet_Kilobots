@@ -9,14 +9,14 @@ Ce simulateur sert a calculer sur un essaim les differentes loss en effectuant d
 """
 
 class simulator():
-    def __init__(self,topologies = ("circle", "line"),nb = 15):
+    def __init__(self,topologies = ("circle", "line"),nb = 100):
         self.Topologies = topologies
         self.nb_robots = nb
         self.Swarm = swarmDescriptor("kilotron")
         self.pred = []
 
     def computeSimulation(self):
-        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(200).withNombre(self.nb_robots)
+        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(100).withNombre(self.nb_robots)
         self.pred.clear()
         for i in range(len(self.Topologies)):
             self.Swarm.setTopology(topology=self.Topologies[i])
@@ -60,9 +60,25 @@ class simulator():
         cpt = cpt / (len(self.pred)*self.pred[0].shape[0])
         return cpt
 
+    def getLeastSquare(self):
+        cpt = 0
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            Z = np.zeros(y_p.shape[1])
+            # Ensuite j'inscris dessus la bonne prédiction
+            Z[i % 2] = 1
+            c = np.zeros((1, len(y_p[0])))
+            for j in range(y_p.shape[0]):
+                # Je compte une pénalité si l'avis du robot donc argmax(p) != de la vraie topologie
+                if (np.argmax(y_p[j]) != i % 2):
+                    c = c + (y_p[j] - Z) ** 2
+            c = np.array(c)
+            cpt = cpt + c.sum()
+        return cpt
+
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
-    os.chdir("..")
+    os.chdir("../..")
     S = simulator()
     #TODO : Violon des loss
     for i in range(0,10):
