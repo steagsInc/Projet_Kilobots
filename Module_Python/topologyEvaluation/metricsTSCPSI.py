@@ -14,7 +14,7 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 import math
 
 print(cv2.__version__)
-fp = "C:\\Users\\PC MILO fixe\\Desktop\\pytho projet AND\\endstate.json"
+fp = "/home/mohamed/PycharmProjects/Projet_Kilobots/Module_Python/produced/endstate.json"
 
 def returnUVList() :
     nodes = []
@@ -208,7 +208,7 @@ def countTuringSpotsWithVoronoi(show = False, colorTresh = 2, periTresh = 100) :
     #print([i[2] for i in nodes])
     return len(turingSpots)
 
-def multiClusterShapeIndex(show = False, periTreshold = 0, colorTreshold = 0,  distVoisin = 50) :
+def multiClusterShapeIndex(show = False, periTreshold = 100, colorTreshold = 0,  distVoisin = 50) :
     """
     retourne les shape index de tous les cluster dans une liste, pas seulement le shape index du cluster au plus grand périmètre
     """
@@ -494,5 +494,5 @@ def shapeCharacterizingPoints(angleTreshold, show = False) :
 #print("shapeIndex : " + str(shapeIndex(show = True)))
 #print("countTuringSpots : " + str(countTuringSpotsWithVoronoi(show = True)))
 #print("shapeCharacterizingPoints : " + str(shapeCharacterizingPoints(160)))
-#print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
-print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = True)))
+print("countTuringSpots : " + str(countTuringSpotsWithGraph()))
+print("multi cluster shapeIndex : " + str(multiClusterShapeIndex(show = False)))
