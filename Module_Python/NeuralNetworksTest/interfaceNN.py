@@ -115,6 +115,7 @@ def testAccuracyFixed(w,borne = 2):
         Z = np.zeros(y_p.shape[1])
         #Ensuite j'inscris dessus la bonne prédiction
         Z[i%2] = 1
+        print(Z)
         c = np.zeros((1,len(y_p[0])))
         for j in range(y_p.shape[0]):
             #Je compte une pénalité si l'avis du robot donc argmax(p) != de la vraie topologie
@@ -195,7 +196,7 @@ def testHingeLoss(w,borne = 2):
         setTopology(topology,nb_bot_max)
         simulatePerceptron(topology,nb_bot_max)
         y_p = getPredictions()
-        Z = -np.ones(y_p.shape[0]).astype(int)
+        Z = -np.zeros(y_p.shape[0]).astype(int)
         if(i%2 == 1):
             Z = np.ones(y_p.shape[0]).astype(int)
         P = np.max(y_p,axis=1)
@@ -258,7 +259,7 @@ def validation(nb_bot_max):
 if (__name__=="__main__"):
     print("chemin courant : ",os.getcwd())
     w = readWeights()
-    res = cma.CMAEvolutionStrategy(w, 10).optimize(testLogLoss, maxfun=20).result
+    res = cma.CMAEvolutionStrategy(w, 10).optimize(testHingeLoss, maxfun=20).result
     best_w = res[0]
     validation(20)
     #print("Historique de prédictions ",historique_y)

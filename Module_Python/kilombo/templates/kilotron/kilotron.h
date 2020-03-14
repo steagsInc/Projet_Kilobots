@@ -16,7 +16,7 @@
 #define M_PI 3.141592653589793238462643383279502884197169399375105820974944
 #endif
 
-#define MAXN 2     // Maximum number of neighbors
+#define MAXN 20    // Maximum number of neighbors
 
 #define RB_SIZE 16  // Ring buffer size. Choose a power of two for faster code
                     // memory usage: 16*RB_SIZE
