@@ -483,7 +483,8 @@ void process_perceptron(){
     }
 
     float **prediction = predict(mydata->perceptron, x);
-
+    printf("Prédiction 01 : %f \n",prediction[0][0]);
+    printf("Prédiction 02 : %f \n",prediction[1][0]);
     mydata->prediction1 = prediction[0][0];
     mydata->prediction2 = prediction[1][0];
     //printf("%f\n", mydata->prediction);

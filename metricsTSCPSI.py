@@ -7,7 +7,6 @@ Created on Sat Feb 29 11:50:56 2020
 
 import json
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 import cv2
 import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
@@ -208,7 +207,7 @@ def countTuringSpotsWithVoronoi(show = False, colorTresh = 2, periTresh = 100) :
     #print([i[2] for i in nodes])
     return len(turingSpots)
 
-def multiClusterShapeIndex(show = False, periTreshold = 0, colorTreshold = 0,  distVoisin = 50) :
+def multiClusterShapeIndex(show = False, periTreshold = 500, colorTreshold = 0,  distVoisin = 120) :
     """
     retourne les shape index de tous les cluster dans une liste, pas seulement le shape index du cluster au plus grand périmètre
     """
@@ -226,16 +225,10 @@ def multiClusterShapeIndex(show = False, periTreshold = 0, colorTreshold = 0,  d
             nodes.append([x, y, u, v])
 
     fig, ax = plt.subplots()
+    # en noir
+    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c=[ "black"  if i[3] >= colorTreshold else "white" for i in nodes], s=distVoisin, alpha = 1)
 
-    A = np.array(nodes)
-    x = A[:, 0]
-    y = A[:, 1]
-    c = A[:, 2]
-
-    ax.axis([min(x) - 100, max(x) + 100, min(y) - 100, max(y) + 100])
-
-    for x, y, c in zip(x, y, c):
-        ax.add_artist(Circle(xy=(x, y), radius=distVoisin / 2, color="black" if c >= colorTreshold else "white"))
+    plt.axis('equal')
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show :
@@ -292,7 +285,7 @@ def multiClusterShapeIndex(show = False, periTreshold = 0, colorTreshold = 0,  d
 
     return SI
 
-def shapeIndex(show = False, colorTreshold = 0, distVoisin = 50):
+def shapeIndex(show = False, colorTreshold = 0, distVoisin = 120):
     nodes = []
     
     with open(fp) as json_file:
@@ -305,19 +298,13 @@ def shapeIndex(show = False, colorTreshold = 0, distVoisin = 50):
             u = state['state'].get('u')
             v = state['state'].get('v')
             nodes.append([x, y, u, v])
-
+     
+    
     fig, ax = plt.subplots()
-
-    A = np.array(nodes)
-    x = A[:, 0]
-    y = A[:, 1]
-    c = A[:, 2]
-
-    ax.axis([min(x) - 100, max(x) + 100, min(y) - 100, max(y) + 100])
-
-    for x, y, c in zip(x, y, c):
-        ax.add_artist(Circle(xy=(x, y), radius=distVoisin/2, color= "black"  if c >= colorTreshold else "white"))
-
+    #en noir
+    plt.scatter([i[0] for i in nodes], [i[1] for i in nodes], c = [ "black"  if i[3] >= colorTreshold else "white" for i in nodes], s = distVoisin)
+    
+    plt.axis('equal')    
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show :
