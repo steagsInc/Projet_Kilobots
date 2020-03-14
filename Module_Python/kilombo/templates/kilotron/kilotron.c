@@ -611,6 +611,8 @@ void receive_inputs()
         RB_popfront();
     }
 
+    process_perceptron();
+
     float alpha = 0.0001;
 
     mydata->running_avg_Ns = calc_apprx_running_avg(mydata->running_avg_Ns, mydata->N_Neighbors, alpha);
@@ -753,7 +755,7 @@ void setup() {
 
     int shape[3] = {2+COMMUNICATION,20,2+COMMUNICATION};
     mydata->perceptron = new_perceptron(shape,3);
-    load_weights(mydata->perceptron,"weights.txt");
+    //load_weights(mydata->perceptron,"weights.txt");
 
     mydata->communication_chanel=(float*)malloc(COMMUNICATION * sizeof(float));
     int i;
@@ -777,8 +779,6 @@ void loop(){
 	receive_inputs();
 
     regulation_linear_model();
-
-    process_perceptron();
 
     prediction_color();
     // Allows some time to start with the running averages
