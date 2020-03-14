@@ -14,9 +14,9 @@ def fitness(w):
     S.computeSimulation()
     print("Pénalité de ",S.getHinge())
     print("Précision : ",S.getPrecision())
-    return S.getPrecision()
+    return S.getLeastSquare()
 
 if(__name__=="__main__"):
     S.Swarm.controller.put_Random_Weights()
     w = S.Swarm.controller.read_Weights()
-    res = cma.CMAEvolutionStrategy(w, 0.1).optimize(fitness, maxfun=200).result
+    res = cma.CMAEvolutionStrategy(w, 0.01).optimize(fitness, maxfun=200).result
