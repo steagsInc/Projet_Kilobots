@@ -43,6 +43,8 @@ class simulationController:
             return self.parametres_model
 
     def write_params(self,P=None):
+        if (self.path == "kilotron"):
+            return self
         self.read_params()
         if(P):
             self.parametres_model = P
@@ -57,6 +59,8 @@ class simulationController:
         return self
 
     def rez_params(self):
+        if(self.path == "kilotron"):
+            return self
         self.write_params({})
         self.read_params()
         return self
@@ -114,16 +118,22 @@ class simulationController:
 
     def repositionner(self,project_path):
         self.path_project = project_path
-        os.chdir(project_path)
+        if(project_path.split("/")[-1] != os.getcwd().split("/")[-1]):
+            os.chdir(project_path)
 
     def run(self):
-        if(self.path_project):
+        if(self.path_project and self.path_project.split("/")[-1] != os.getcwd().split("/")[-1]):
             os.chdir(self.path_project)
-        os.chdir("embedded_simulateurs/" + self.path)
+        print("Avant bug je suis : ",os.getcwd())
+        if (self.path != os.getcwd().split("/")[-1]):
+            print("Changement de chemin in")
+            os.chdir("embedded_simulateurs/" + self.path)
         json.dump(self.parametres,open("kilombo.json","w"))
         os.system("make >error.tmp 2>&1")
         os.system("./"+self.path+" >error.tmp 2>&1")
-        os.chdir("../..")
+        if (self.path == os.getcwd().split("/")[-1]):
+            print("Changement de chemin out")
+            os.chdir("../..")
         return self
 
 

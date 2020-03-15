@@ -22,26 +22,16 @@ from Src.controllers.swarmDescriptor import swarmDescriptor
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots")
+#os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots")
+if (os.getcwd().split("/")[-1] == "Dashboard"):
+    os.chdir("../..")
 print("Chemin avant lancement du serveur : ", os.getcwd())
 
 S = swarmDescriptor("morphogenesis")
-
+S.setTime(1000)
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-"""D = dict(
-                data=dict(
-                    id = i,
-                    label = "",
-                    U = df["U"][i],
-                    V = df["V"][i],
-                    nb_neighbours = 0
-                ),
-                position = dict(
-                    x=df["x"][i],
-                    y=df["y"][i]
-                )
-            ) for i in range(0,df.shape[0])"""
+
 
 position_robots = cyto.Cytoscape(
         id='robots-positions',
@@ -85,7 +75,6 @@ app.layout = html.Div([
 @app.callback(Output('robots-positions',"elements"),[Input("Lancer","n_clicks")])
 def executer_simulation(n):
     S.executeSimulation()
-    print("click")
     return [
         dict(
             data=dict(
@@ -96,16 +85,14 @@ def executer_simulation(n):
                 nb_neighbours=0
             ),
             position=dict(
-                x=S.positions[i],
-                y=S.positions[i]
+                x=S.positions[i][0],
+                y=S.positions[i][1]
             )
         ) for i in range(0, S.positions.shape[0])
     ]
-    pass
 
 
 if __name__ == '__main__':
-
     print("Chemin avant lancement du serveur : ",os.getcwd())
     app.run_server(debug=True)
 
