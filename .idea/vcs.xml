@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/kilombo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/kilombo/kilolib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/kilombo/templates/Turing_morphogenesis" vcs="Git" />
+  </component>
+</project>
