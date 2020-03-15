@@ -33,7 +33,7 @@ float **predict(Perceptron *perc,float **input){
     }
 
     //printf("prediction : ");
-    //displayMat(a,1,1);
+    //displayMat(a,6,1);
 
     return a;
 
@@ -88,7 +88,7 @@ void write_weights(Perceptron *perc,char* file_name){
 void load_weights(Perceptron *perc,char* file_name){
     FILE* file = fopen (file_name, "r");
 
-    int l,i,j;
+    int l,i,j,c=0;
     float w = 0;
 
     //printf("LOADING");
@@ -98,7 +98,7 @@ void load_weights(Perceptron *perc,char* file_name){
         for(i=0;i<perc->layers[l]->nb_neurons;i++){
           for(j=0;j<perc->layers[l]->nb_input;j++){
 
-              fscanf (file, "%f\n", &w);
+              fscanf (file, "%f", &w);
               perc->layers[l]->weights[i][j] = w;
 
           }
@@ -106,7 +106,7 @@ void load_weights(Perceptron *perc,char* file_name){
 
         for(i=0;i<perc->layers[l]->nb_neurons;i++){
 
-            fscanf (file, "%f\n", &w);
+            fscanf (file, "%f", &w);
             perc->layers[l]->bias[i][0] = w;
 
         }
