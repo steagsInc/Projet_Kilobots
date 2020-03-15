@@ -483,8 +483,8 @@ void process_perceptron(){
     }
 
     float **prediction = predict(mydata->perceptron, x);
-    printf("Prédiction 01 : %f \n",prediction[0][0]);
-    printf("Prédiction 02 : %f \n",prediction[1][0]);
+    //printf("Prédiction 01 : %f \n",prediction[0][0]);
+    //printf("Prédiction 02 : %f \n",prediction[1][0]);
     mydata->prediction1 = prediction[0][0];
     mydata->prediction2 = prediction[1][0];
     //printf("%f\n", mydata->prediction);
@@ -751,7 +751,7 @@ void setup() {
 
     //PERCEPTRON
 
-    int shape[3] = {2+COMMUNICATION,20,2+COMMUNICATION};
+    int shape[4] = {2+COMMUNICATION,25,25,2+COMMUNICATION};
     mydata->perceptron = new_perceptron(shape,3);
     load_weights(mydata->perceptron,"weights.txt");
     //write_weights(mydata->perceptron,"weights.txt");
