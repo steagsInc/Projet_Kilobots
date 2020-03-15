@@ -751,8 +751,8 @@ void setup() {
 
     //PERCEPTRON
 
-    int shape[3] = {2+COMMUNICATION,25,25,2+COMMUNICATION};
-    mydata->perceptron = new_perceptron(shape,3);
+    int shape[4] = {2+COMMUNICATION,25,25,2+COMMUNICATION};
+    mydata->perceptron = new_perceptron(shape,4);
     load_weights(mydata->perceptron,"weights.txt");
     //write_weights(mydata->perceptron,"weights.txt");
 
