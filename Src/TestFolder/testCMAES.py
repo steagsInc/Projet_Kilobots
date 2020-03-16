@@ -50,8 +50,8 @@ def fitness(w):
 if(__name__=="__main__"):
     S.Swarm.controller.put_Random_Weights()
     w = S.Swarm.controller.read_Weights()
-    with tf.device('/GPU:0'):
-        res = cma.CMAEvolutionStrategy(w, 0.1).optimize(fitness, maxfun=500).result
+    with tf.device("GPU:0"):
+        res = cma.CMAEvolutionStrategy(w, 0.1).optimize(fitness, maxfun=100).result
     plt.plot(x_precisions, historique_precisions, color='green')
     plt.plot(x_precisions, historique_fitness, color='red')
     plt.show()

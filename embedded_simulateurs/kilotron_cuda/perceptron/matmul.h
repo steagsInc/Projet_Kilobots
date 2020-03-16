@@ -8,8 +8,8 @@ float **mat_init(int n_rows, int n_cols);
 float **mat_gen_random(int n_rows, int n_cols);
 void mat_destroy(float **m);
 float **mat_mul4(int n_a_rows, int n_a_cols, float **a, int n_b_cols, float **b);
-float **mat_mul_cuda(int n_a_rows, int n_a_cols, float **a, float **b);
-float **mat_add(float **a,float **b,int nb_rows,int nb_cols);
+float *mat_mul_cuda(float **computeCuda,int n_a_rows, int n_a_cols, float **a, float *b);
+void mat_add(float *a,float **b,int nb_rows);
 void displayMat(float **m,int n_rows,int n_cols);
 void displayList(float *m,int n_rows);
 

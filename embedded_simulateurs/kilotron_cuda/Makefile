@@ -23,7 +23,7 @@ SIMHEADERS=/usr/local/include
 KILOLIB    =$(KILOHEADERS)/build/kilolib.a
 
 #compilation flags for simulated version
-SIM_CFLAGS = -c -g -O2 #-I$(KILOHEADERS)
+SIM_CFLAGS = -c -g -lineinfo -O2 #-I$(KILOHEADERS)
 
 #linking flags for simulated version
 SIM_LFLAGS = -lsim -lSDL -lm -ljansson

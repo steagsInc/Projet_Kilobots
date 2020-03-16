@@ -21,6 +21,16 @@ Layer *new_layer(int nb_input, int nb_neurons){
     layer->bias=mat_gen_random(nb_neurons,1);
     //displayMat(layer->bias,nb_neurons,1);
 
+    layer->computeCuda = (float**)malloc(6*sizeof(float*));
+
+    layer->computeCuda[0] = (float*)malloc(nb_neurons*nb_input*sizeof(float));
+    layer->computeCuda[1] = (float*)malloc(nb_neurons*nb_input*sizeof(float));
+    layer->computeCuda[2] = (float*)malloc(nb_neurons*sizeof(float));
+
+    cudaMalloc((void**)&layer->computeCuda[3], nb_neurons*nb_input*sizeof(float));
+    cudaMalloc((void**)&layer->computeCuda[4], nb_neurons*nb_input*sizeof(float));
+    cudaMalloc((void**)&layer->computeCuda[5], nb_neurons*sizeof(float));
+
     return layer;
 
 }
@@ -31,24 +41,21 @@ void display_layer(Layer *layer){
     displayMat(layer->bias,layer->nb_neurons,1);
 }
 
-void activation_mat(float **mat,int nb_rows,int nb_cols){
+void activation_mat(float *mat,int nb_rows){
 
     int i,j;
     for (i = 0; i < nb_rows; ++i)
-        for (j = 0; j < nb_cols; ++j)
-            mat[i][j] = (float)(1/(1+exp((double)(mat[i][j]))));
+          mat[i] = (float)(1/(1+exp((double)(mat[i]))));
 
 }
 
-float **compute_layer(Layer *layer,float **input){
+float *compute_layer(Layer *layer,float *input){
 
-    float **res1 = mat_mul_cuda(layer->nb_neurons,layer->nb_input,layer->weights,input);
-    mat_destroy(input);
-    float **res2 = mat_add(res1,layer->bias,layer->nb_neurons,1);
-    mat_destroy(res1);
-    activation_mat(res2,layer->nb_neurons,1);
+    float *res1 = mat_mul_cuda(layer->computeCuda,layer->nb_neurons,layer->nb_input,layer->weights,input);
+    mat_add(res1,layer->bias,layer->nb_neurons);
+    activation_mat(res1,layer->nb_neurons);
 
-    return res2;
+    return res1;
 }
 
 void free_layer(Layer *layer){
@@ -56,6 +63,15 @@ void free_layer(Layer *layer){
 
   free(layer->weights);
   free(layer->bias);
+
+  free(layer->computeCuda[0]);
+  free(layer->computeCuda[1]);
+  free(layer->computeCuda[2]);
+  cudaFree(layer->computeCuda[3]);
+  cudaFree(layer->computeCuda[4]);
+  cudaFree(layer->computeCuda[5]);
+
+  free(layer->computeCuda);
 
   free(layer);
 

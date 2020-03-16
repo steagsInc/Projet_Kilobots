@@ -126,95 +126,53 @@ float **mat_mul4(int n_a_rows, int n_a_cols, float **a, int n_b_cols, float **b)
 	return m;
 }
 
-__global__ void matrixMultiplicationKernel(float* A, float* B, float* C, int N) {
+__global__ void matrixMultiplicationKernel(float* A, float* B, float* C, int n_rows,int nb_entry) {
 
-    int ROW = blockIdx.y*blockDim.y+threadIdx.y;
-    int COL = blockIdx.x*blockDim.x+threadIdx.x;
+    int ROW = blockIdx.x*blockDim.x + threadIdx.x;
 
     float tmpSum = 0;
 
-    if (ROW < N && COL < N) {
+    if (ROW < n_rows) {
         // each thread computes one element of the block sub-matrix
-        for (int i = 0; i < N; i++) {
-            tmpSum += A[ROW * N + i] * B[i * 1 + COL];
+        for (int i = 0; i < nb_entry; i++) {
+          //printf("%f\n",A[ROW * N + i]);
+          //printf("%f\n",B[i * 1 + COL]);
+          tmpSum += A[ROW * nb_entry + i] * B[i];
         }
+        C[ROW] = tmpSum;
     }
-    C[ROW * N + COL] = tmpSum;
 }
 
-float **mat_mul_cuda(int n_a_rows, int n_a_cols, float **a, float **b)
+float *mat_mul_cuda(float **computeCuda,int n_a_rows, int n_a_cols, float **a, float *b)
 {
-	int i, j;
-	float **m;
-	m = mat_init(n_a_rows, n_a_cols);
-  float *x, *y,*z, *d_x, *d_y,*d_z;
-  x = (float*)malloc(n_a_rows*n_a_cols*sizeof(float));
-  y = (float*)malloc(n_a_rows*n_a_cols*sizeof(float));
-  z = (float*)malloc(n_a_rows*sizeof(float));
-
-  cudaMalloc(&d_x, n_a_rows*n_a_cols*sizeof(float));
-  cudaMalloc(&d_y, n_a_rows*n_a_cols*sizeof(float));
-  cudaMalloc(&d_z, n_a_rows*sizeof(float));
-
-  int c = 0;
-
+	int i, j,c = 0;
 
 	for (i = 0; i < n_a_rows; ++i){
     for (j = 0; j < n_a_cols; ++j){
-      x[c]=a[i][j];
+      computeCuda[0][c]=a[i][j];
       c++;
     }
   }
 
-  c=0;
+  cudaMemcpy(computeCuda[3], computeCuda[0], n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(computeCuda[4], b, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
 
-  for (j = 0; j < n_a_cols; ++j){
-    y[c]=b[j][0];
-    c++;
-  }
+  matrixMultiplicationKernel<<<(n_a_rows+255)/256, 256>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
 
-  cudaDeviceSynchronize();
+  cudaMemcpy(computeCuda[2], computeCuda[5], n_a_rows*sizeof(float), cudaMemcpyDeviceToHost);
 
-  cudaMemcpy(d_x, x, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_y, y, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
-
-  dim3 threadsPerBlock(n_a_rows, n_a_cols);
-  dim3 blocksPerGrid(1, 1);
-  if (n_a_rows*n_a_cols > 512){
-      threadsPerBlock.x = 512;
-      threadsPerBlock.y = 512;
-      blocksPerGrid.x = ceil(double(n_a_rows)/double(threadsPerBlock.x));
-      blocksPerGrid.y = ceil(double(n_a_cols)/double(threadsPerBlock.y));
-  }
-
-  matrixMultiplicationKernel<<<blocksPerGrid,threadsPerBlock>>>(d_x, d_y, d_z, n_a_cols);
-
-  cudaMemcpy(z, d_z, n_a_rows*sizeof(float), cudaMemcpyDeviceToHost);
-
-  cudaDeviceSynchronize();
-
-  c=0;
-
-  for (i = 0; i < n_a_rows; ++i){
-    m[i][0]=z[c];
-    c++;
-  }
-
-	return m;
+	return computeCuda[2];
 }
 
 /*******************************
  MAT_ADD
  *******************************/
 
-float **mat_add(float **a,float **b,int nb_rows,int nb_cols){
+void mat_add(float *a,float **b,int nb_rows){
 
-    int i,j;
-    float **m = mat_init(nb_rows, nb_cols);
+    int i;
     for (i = 0; i < nb_rows; ++i)
-        for (j = 0; j < nb_cols; ++j)
-            m[i][j] = a[i][j]+b[i][j];
-    return m;
+        a[i] = a[i]+b[i][0];
 }
 
 //DEBUG
@@ -232,7 +190,7 @@ void displayMat(float **m,int n_rows,int n_cols){
 }
 
 void displayList(float *m,int n_rows){
-    int i, j;
+    int i;
     for (i = 0; i < n_rows; ++i){
         printf("%f ", m[i]);
     }

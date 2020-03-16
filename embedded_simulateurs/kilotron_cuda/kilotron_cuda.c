@@ -470,29 +470,29 @@ void process_perceptron(){
 
     uint8_t i,j = 0;
 
-    float **x = mat_init(2+COMMUNICATION, 1);
-    x[0][0]=mydata->molecules_concentration[0];
-    x[1][0]=mydata->molecules_concentration[1];
+    float *x = (float*)malloc(2+COMMUNICATION*sizeof(float));
+    x[0]=mydata->molecules_concentration[0];
+    x[1]=mydata->molecules_concentration[1];
 
     for (i = 0;i<mydata->N_Neighbors; i++) {
 
       for(j=0;j<COMMUNICATION;j++){
-        x[j+2][0]=x[j+2][0]+mydata->neighbors[i].communication_chanel[j];
+        x[j+2]=x[j+2]+mydata->neighbors[i].communication_chanel[j];
       }
 
     }
 
-    float **prediction = predict(mydata->perceptron, x);
+    float *prediction = predict(mydata->perceptron, x);
     //printf("Prédiction 01 : %f \n",prediction[0][0]);
     //printf("Prédiction 02 : %f \n",prediction[1][0]);
-    mydata->prediction1 = prediction[0][0];
-    mydata->prediction2 = prediction[1][0];
+    mydata->prediction1 = prediction[0];
+    mydata->prediction2 = prediction[1];
     //printf("%f\n", mydata->prediction);
     for (i = 0;i<COMMUNICATION;i++){
-      mydata->communication_chanel[i] = prediction[i+2][0];
+      mydata->communication_chanel[i] = prediction[i+2];
     }
 
-    free(prediction);
+    free(x);
 
 }
 

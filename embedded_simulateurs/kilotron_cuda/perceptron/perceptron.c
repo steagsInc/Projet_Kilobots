@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <cuda_runtime.h>
+#include <cuda.h>
 
 #include "perceptron.h"
 #include "matmul.h"
@@ -24,10 +26,10 @@ Perceptron *new_perceptron(int shape[],int nb_layers){
 
 }
 
-float **predict(Perceptron *perc,float **input){
+float *predict(Perceptron *perc,float *input){
 
     int i;
-    float **a = input;
+    float *a = input;
     for (i=0;i<perc->nb_layers;i++) {
         a = compute_layer(perc->layers[i], a);
     }

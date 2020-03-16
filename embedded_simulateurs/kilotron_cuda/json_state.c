@@ -6,7 +6,7 @@
 #include <jansson.h>
 #include <stdio.h>
 #include <string.h>
-#include "kilotron.h"
+#include "kilotron_cuda.h"
 
 json_t *json_state()
 {
