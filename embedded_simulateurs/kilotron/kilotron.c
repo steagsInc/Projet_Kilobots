@@ -492,6 +492,8 @@ void process_perceptron(){
       mydata->communication_chanel[i] = prediction[i+2][0];
     }
 
+    free(prediction);
+
 }
 
 /*
@@ -751,7 +753,7 @@ void setup() {
 
     //PERCEPTRON
 
-    int shape[4] = {2+COMMUNICATION,25,25,2+COMMUNICATION};
+    int shape[4] = {2+COMMUNICATION,50,50,2+COMMUNICATION};
     mydata->perceptron = new_perceptron(shape,4);
     load_weights(mydata->perceptron,"weights.txt");
     //write_weights(mydata->perceptron,"weights.txt");
@@ -799,6 +801,12 @@ void loop(){
 
     // Message is updated
 	setup_message();
+
+}
+
+void kilofree(){
+
+    free_perceptron(mydata->perceptron);
 
 }
 

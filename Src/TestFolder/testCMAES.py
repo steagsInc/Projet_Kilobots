@@ -3,6 +3,8 @@ import os
 import cma
 import tensorflow as tf
 import matplotlib.pyplot as plt
+
+import time
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
@@ -19,6 +21,7 @@ x_precisions = []
 historique_fitness = []
 
 def fitness(w):
+    timeStart = time.time()
     global meilleur_precision
     global meilleur_fitness
     global historique_precisions
@@ -41,7 +44,8 @@ def fitness(w):
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    return S.getHinge()
+    print("tps ecoulé : ",time.time()-timeStart)
+    return S.getLogLoss()
 
 if(__name__=="__main__"):
     S.Swarm.controller.put_Random_Weights()

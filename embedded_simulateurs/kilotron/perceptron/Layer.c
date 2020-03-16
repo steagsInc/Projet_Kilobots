@@ -50,3 +50,13 @@ float **compute_layer(Layer *layer,float **input){
 
     return res2;
 }
+
+void free_layer(Layer *layer){
+
+
+  free(layer->weights);
+  free(layer->bias);
+
+  free(layer);
+
+}
