@@ -12,7 +12,7 @@ class simulator():
     def __init__(self,topologies = ("circle", "line"),nb = 100):
         self.Topologies = topologies
         self.nb_robots = nb
-        self.Swarm = swarmDescriptor("kilotron_cuda")
+        self.Swarm = swarmDescriptor("kilotron")
         self.pred = []
 
     def computeSimulation(self):

@@ -34,3 +34,11 @@ Requested parameter: useGrid is not an integer.
 ALSA lib pulse.c:243:(pulse_connect) PulseAudio: Unable to connect: Access denied
 
 Requested parameter: colorscheme is not a string
+Reading simulator parameters from kilombo.json
+Size of kilobot structure : 248
+Size of USERDATA structure: 416
+Running 30 bots with timestep 0.041667 for total time 100.000000
+     0 s -      0 steps -      1 kilo_ticks    0.002 s.
+    42 s -   1000 steps -   1292 kilo_ticks    2.347 s.
+    83 s -   2000 steps -   2584 kilo_ticks    2.294 s.
+Simulation finished

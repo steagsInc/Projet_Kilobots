@@ -46,6 +46,9 @@ REGISTER_USERDATA(USERDATA)
 #define DT 0.00005
 //End_Parameters
 
+
+
+#define NN 20
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
@@ -753,7 +756,7 @@ void setup() {
 
     //PERCEPTRON
 
-    int shape[4] = {2+COMMUNICATION,50,50,2+COMMUNICATION};
+    int shape[4] = {2+COMMUNICATION,NN,NN,2+COMMUNICATION};
     mydata->perceptron = new_perceptron(shape,4);
     load_weights(mydata->perceptron,"weights.txt");
     //write_weights(mydata->perceptron,"weights.txt");

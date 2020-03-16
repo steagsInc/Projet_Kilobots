@@ -157,7 +157,7 @@ float *mat_mul_cuda(float **computeCuda,int n_a_rows, int n_a_cols, float **a, f
   cudaMemcpy(computeCuda[3], computeCuda[0], n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(computeCuda[4], b, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
 
-  matrixMultiplicationKernel<<<(n_a_rows+255)/256, 256>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
+  matrixMultiplicationKernel<<<(n_a_rows+1023)/1024, 1024>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
 
   cudaMemcpy(computeCuda[2], computeCuda[5], n_a_rows*sizeof(float), cudaMemcpyDeviceToHost);
 
