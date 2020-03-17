@@ -113,33 +113,16 @@ float sdot_sse(int n, const float *x, const float *y)
  * Matrix multiplication *
  *************************/
 
-float **mat_mul4(int n_a_rows, int n_a_cols, float **a, int n_b_cols, float **b)
-{
-	int i, j, n_b_rows = n_a_cols;
-	float **m, **bT;
-	m = mat_init(n_a_rows, n_b_cols);
-	bT = mat_transpose(n_b_rows, n_b_cols, b);
-	for (i = 0; i < n_a_rows; ++i)
-		for (j = 0; j < n_b_cols; ++j)
-			m[i][j] = sdot_1(n_a_cols, a[i], bT[j]);
-	mat_destroy(bT);
-	return m;
-}
-
 __global__ void matrixMultiplicationKernel(float* A, float* B, float* C, int n_rows,int nb_entry) {
 
     int ROW = blockIdx.x*blockDim.x + threadIdx.x;
+    int COL = blockIdx.y*blockDim.y + threadIdx.y;
 
-    float tmpSum = 0;
-
-    if (ROW < n_rows) {
+    if (ROW < n_rows && COL < nb_entry) {
         // each thread computes one element of the block sub-matrix
-        for (int i = 0; i < nb_entry; i++) {
-          //printf("%f\n",A[ROW * N + i]);
-          //printf("%f\n",B[i * 1 + COL]);
-          tmpSum += A[ROW * nb_entry + i] * B[i];
-        }
-        C[ROW] = tmpSum;
+        //printf("%f\n",A[ROW * N + i]);
+        //printf("%f\n",B[i * 1 + COL]);
+        C[ROW] += A[ROW * nb_entry + COL] * B[COL];
     }
 }
 
@@ -156,8 +139,12 @@ float *mat_mul_cuda(float **computeCuda,int n_a_rows, int n_a_cols, float **a, f
 
   cudaMemcpy(computeCuda[3], computeCuda[0], n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(computeCuda[4], b, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(computeCuda[5], computeCuda[6], n_a_rows*sizeof(float), cudaMemcpyHostToDevice);
 
-  matrixMultiplicationKernel<<<(n_a_rows+1023)/1024, 1024>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
+  dim3 threadsPerBlock (min(n_a_rows,1024), min(n_a_cols,1024));
+  dim3 blocksPerGrid((n_a_rows+1023)/1024, (n_a_cols+1023)/1024);
+
+  matrixMultiplicationKernel<<<blocksPerGrid, threadsPerBlock>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
 
   cudaMemcpy(computeCuda[2], computeCuda[5], n_a_rows*sizeof(float), cudaMemcpyDeviceToHost);
 

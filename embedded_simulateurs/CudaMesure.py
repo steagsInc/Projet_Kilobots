@@ -34,7 +34,7 @@ def mesure(max,step):
         t_cuda.append(run("kilotron_cuda"))
         print(i)
 
-    n = np.array(range(10,max,step))
+    n = np.array(range(10,max+1,step))
 
     plt.plot(n, np.array(t))
     plt.plot(n, np.array(t_cuda))

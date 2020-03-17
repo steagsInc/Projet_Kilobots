@@ -21,7 +21,7 @@ Layer *new_layer(int nb_input, int nb_neurons){
     layer->bias=mat_gen_random(nb_neurons,1);
     //displayMat(layer->bias,nb_neurons,1);
 
-    layer->computeCuda = (float**)malloc(6*sizeof(float*));
+    layer->computeCuda = (float**)malloc(7*sizeof(float*));
 
     layer->computeCuda[0] = (float*)malloc(nb_neurons*nb_input*sizeof(float));
     layer->computeCuda[1] = (float*)malloc(nb_neurons*nb_input*sizeof(float));
@@ -30,6 +30,13 @@ Layer *new_layer(int nb_input, int nb_neurons){
     cudaMalloc((void**)&layer->computeCuda[3], nb_neurons*nb_input*sizeof(float));
     cudaMalloc((void**)&layer->computeCuda[4], nb_neurons*nb_input*sizeof(float));
     cudaMalloc((void**)&layer->computeCuda[5], nb_neurons*sizeof(float));
+    layer->computeCuda[6] = (float*)malloc(nb_neurons*sizeof(float));
+
+    int i;
+
+    for (i=0;i<nb_neurons;i++){
+      layer->computeCuda[6][i]=0;
+    }
 
     return layer;
 
@@ -61,8 +68,8 @@ float *compute_layer(Layer *layer,float *input){
 void free_layer(Layer *layer){
 
 
-  free(layer->weights);
-  free(layer->bias);
+  mat_destroy(layer->weights);
+  mat_destroy(layer->bias);
 
   free(layer->computeCuda[0]);
   free(layer->computeCuda[1]);
@@ -70,6 +77,7 @@ void free_layer(Layer *layer){
   cudaFree(layer->computeCuda[3]);
   cudaFree(layer->computeCuda[4]);
   cudaFree(layer->computeCuda[5]);
+  free(layer->computeCuda[6]);
 
   free(layer->computeCuda);
 

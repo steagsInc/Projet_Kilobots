@@ -54,8 +54,8 @@ float **compute_layer(Layer *layer,float **input){
 void free_layer(Layer *layer){
 
 
-  free(layer->weights);
-  free(layer->bias);
+  mat_destroy(layer->weights);
+  mat_destroy(layer->bias);
 
   free(layer);
 
