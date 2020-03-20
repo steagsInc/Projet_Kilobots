@@ -6,7 +6,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("pile",nb=200,visible=True,time=2000)
+S = topologyOptimisation("line",nb=50,visible=False,time=200)
 
 
 def fitnessShapeIndex(w):
@@ -36,8 +36,10 @@ def varianceUV(w):
     S.computeSimulation()
     S.Swarm.readDatas()
     print("Variance : ",np.std(S.Swarm.concentrations,axis=0))
+    print("Moyenne : ",S.Swarm.concentrations.mean(axis=0))
 
-    return -np.std(S.Swarm.concentrations,axis=0).sum()+np.mean(np.max(S.Swarm.concentrations,0))
+    print("Donc la pénalité ",-np.std(S.Swarm.concentrations,axis=0).sum())
+    return -np.std(S.Swarm.concentrations,axis=0).sum()+ S.Swarm.concentrations.mean(axis=0).T@S.Swarm.concentrations.mean(axis=0)
 
 
 
@@ -55,6 +57,6 @@ def fitness(w):
 if(__name__=="__main__"):
     w = S.extract_genotype()
     S.Swarm.controller.withVisiblite(True)
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(varianceUV, maxfun=500).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(varianceUV, maxfun=2000).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())

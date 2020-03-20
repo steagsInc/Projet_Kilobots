@@ -11,7 +11,7 @@ print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin
 os.chdir("../..")
 S = simulator(nb=30)
 
-S.Swarm.setTime(100)
+S.Swarm.setTime(200)
 
 meilleur_precision = 0
 meilleur_fitness = 1000
@@ -34,7 +34,7 @@ def fitness(w):
     S.Swarm.controller.write_Weights(w)
     S.computeSimulation()
     P = S.getPrecision()
-    L = -S.minHinge()
+    L = S.maxHinge()
     historique_precisions.append(P)
     historique_fitness.append(L)
     if(P > meilleur_precision):

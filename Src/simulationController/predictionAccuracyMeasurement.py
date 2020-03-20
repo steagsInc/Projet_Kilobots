@@ -12,7 +12,7 @@ class simulator():
     def __init__(self,topologies = ("circle", "line"),nb = 100):
         self.Topologies = topologies
         self.nb_robots = nb
-        self.Swarm = swarmDescriptor("kilotron")
+        self.Swarm = swarmDescriptor("kilotron_cuda")
         self.pred = []
 
     def computeSimulation(self):
@@ -24,7 +24,22 @@ class simulator():
             self.pred.append(self.Swarm.predictions)
 
 
-    def getHinge(self):
+    #def getHingeContinuous(self):
+    #    cpt = 0
+    #    for i in range(0, len(self.pred)):
+    #        y_p = self.pred[i]
+    #        Z = -np.ones(y_p.shape[0]).astype(int)
+    #        if (i % 2 == 1):
+    #            Z = np.ones(y_p.shape[0]).astype(int)
+    #        P = np.max(y_p, axis=1)
+    #        P[np.where(np.argmax(y_p, axis=1) == 0)] = -P[np.where(np.argmax(y_p, axis=1) == 0)]
+    #        Z  = Z.reshape((Z.shape[0],1))
+    #        P  = P.reshape((P.shape[0],1))
+    #        c = hinge_loss(Z, P)
+    #        cpt = cpt + c
+    #    return cpt
+
+    def getHingeContinuous(self):
         cpt = 0
         for i in range(0, len(self.pred)):
             y_p = self.pred[i]
@@ -33,11 +48,103 @@ class simulator():
                 Z = np.ones(y_p.shape[0]).astype(int)
             P = np.max(y_p, axis=1)
             P[np.where(np.argmax(y_p, axis=1) == 0)] = -P[np.where(np.argmax(y_p, axis=1) == 0)]
+            PZ = -P * Z
+            PZ[np.where(PZ < 0)] = 0
+            # print("P*Z=: ", PZ)
+            c = np.sum(PZ)
+            cpt = cpt + c
             Z  = Z.reshape((Z.shape[0],1))
             P  = P.reshape((P.shape[0],1))
-            c = hinge_loss(Z, P)
             cpt = cpt + c
         return cpt
+
+    def getHingeContinuousEcart(self):
+        cpt = 0
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            Z = -np.ones(y_p.shape[0]).astype(int)
+            if (i % 2 == 1):
+                Z = np.ones(y_p.shape[0]).astype(int)
+            P = np.max(y_p, axis=1) - np.min(y_p,axis=1)
+            P[np.where(np.argmax(y_p, axis=1) == 0)] = -P[np.where(np.argmax(y_p, axis=1) == 0)]
+            PZ = -P * Z
+            PZ[np.where(PZ < 0)] = 0
+            # print("P*Z=: ", PZ)
+            c = np.sum(PZ)
+            cpt = cpt + c
+            Z  = Z.reshape((Z.shape[0],1))
+            P  = P.reshape((P.shape[0],1))
+            cpt = cpt + c
+        return cpt
+
+
+
+    def getHinge(self):
+        cpt = 0
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            Z = -np.ones(y_p.shape[0]).astype(int)
+            if (i % 2 == 1):
+                Z = np.ones(y_p.shape[0]).astype(int)
+            P = np.argmax(y_p, axis=1)
+            P[np.where(np.argmax(y_p, axis=1) == 0)] = -1
+            #print("P=: ", P)
+            #print("Z=: ", Z)
+            PZ = -P*Z
+            PZ[np.where(PZ < 0)] = 0
+            #print("P*Z=: ", PZ)
+            c =np.sum(PZ)
+            cpt = cpt + c
+            Z  = Z.reshape((Z.shape[0],1))
+            P  = P.reshape((P.shape[0],1))
+            print("Loss ajoutée ",c)
+        print("Donc on retourne : ",cpt)
+        return cpt
+
+    def maxHinge(self):
+        cpt = []
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            Z = -np.ones(y_p.shape[0]).astype(int)
+            if (i % 2 == 1):
+                Z = np.ones(y_p.shape[0]).astype(int)
+            P = np.argmax(y_p, axis=1)
+            P[np.where(np.argmax(y_p, axis=1) == 0)] = -1
+            #print("P=: ", P)
+            #print("Z=: ", Z)
+            PZ = -P*Z
+            PZ[np.where(PZ < 0)] = 0
+            #print("P*Z=: ", PZ)
+            c =np.sum(PZ)
+            cpt = cpt + [c]
+            Z  = Z.reshape((Z.shape[0],1))
+            P  = P.reshape((P.shape[0],1))
+            print("Loss ajoutée ",c)
+        print("Donc on retourne : ",max(cpt))
+        return max(cpt)
+
+
+    def minHinge(self):
+        cpt = []
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            Z = -np.ones(y_p.shape[0]).astype(int)
+            if (i % 2 == 1):
+                Z = np.ones(y_p.shape[0]).astype(int)
+            P = np.argmax(y_p, axis=1)
+            P[np.where(np.argmax(y_p, axis=1) == 0)] = -1
+            #print("P=: ", P)
+            #print("Z=: ", Z)
+            PZ = -P*Z
+            PZ[np.where(PZ < 0)] = 0
+            #print("P*Z=: ", PZ)
+            c =np.sum(PZ)
+            cpt = cpt + [c]
+            Z  = Z.reshape((Z.shape[0],1))
+            P  = P.reshape((P.shape[0],1))
+            print("Loss ajoutée ",c)
+        print("Donc on retourne : ",min(cpt))
+        return min(cpt)
 
     def getLogLoss(self):
         cpt = 0
