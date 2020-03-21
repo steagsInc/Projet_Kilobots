@@ -20,6 +20,7 @@ Perceptron *new_perceptron(int shape[],int nb_layers){
     for (i=0;i<nb_layers-1;i++){
         perc->layers[i]=new_layer(shape[i],shape[i+1]);
         assert( perc->layers[i] != NULL );
+        //display_layer(perc->layers[i]);
     }
 
     return perc;

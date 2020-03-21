@@ -121,7 +121,6 @@ __global__ void matrixMultiplicationKernel(float* A, float* B, float* C, int n_r
     if (ROW < n_rows && COL < nb_entry) {
         // each thread computes one element of the block sub-matrix
         //printf("%f\n",A[ROW * N + i]);
-        //printf("%f\n",B[i * 1 + COL]);
         C[ROW] += A[ROW * nb_entry + COL] * B[COL];
     }
 }

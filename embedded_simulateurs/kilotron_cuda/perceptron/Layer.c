@@ -61,7 +61,6 @@ float *compute_layer(Layer *layer,float *input){
     float *res1 = mat_mul_cuda(layer->computeCuda,layer->nb_neurons,layer->nb_input,layer->weights,input);
     mat_add(res1,layer->bias,layer->nb_neurons);
     activation_mat(res1,layer->nb_neurons);
-
     return res1;
 }
 

@@ -33,8 +33,8 @@ def fitness(w):
     x_precisions.append(nb_exec)
     S.Swarm.controller.write_Weights(w)
     S.computeSimulation()
-    P = S.getPrecision()
-    L = S.maxHinge()
+    P = S.getEcartPrecision()
+    L = S.getHinge()
     historique_precisions.append(P)
     historique_fitness.append(L)
     if(P > meilleur_precision):
@@ -49,24 +49,14 @@ def fitness(w):
 
 
 if(__name__=="__main__"):
-<<<<<<< HEAD
-    S.Swarm.controller.put_Random_Weights()
-    w = S.Swarm.controller.read_Weights()
-    with tf.device("GPU:0"):
-        res = cma.CMAEvolutionStrategy(w, 0.1).optimize(fitness, maxfun=10).result
-    plt.plot(x_precisions, historique_precisions, color='green')
-    plt.plot(x_precisions, historique_fitness, color='red')
-    plt.show()
-    print("Fin de l'executin : meilleur précision : ",meilleur_precision)
-=======
-    while(nb_exec < 1000):
+    while(nb_exec < 100):
         if(meilleur_precision == 1):
             meilleur_precision = 0
             best_w = None
         S.Swarm.controller.put_Random_Weights()
         w = S.Swarm.controller.read_Weights()
         with tf.device('/GPU:0'):
-            res = cma.CMAEvolutionStrategy(w, 0.01).optimize(fitness, maxfun=500).result
+            res = cma.CMAEvolutionStrategy(w, 0.1).optimize(fitness, maxfun=100).result
         plt.plot(x_precisions, historique_precisions, color='green')
         plt.plot(x_precisions, historique_fitness, color='red')
         plt.show()
@@ -74,4 +64,3 @@ if(__name__=="__main__"):
     Df = pd.DataFrame(best_w)
     Df.to_csv("best.txt",";")
     print("Fin de l'executin : meilleur précision : ",meilleur_precision)
->>>>>>> b7dddcd25c53fb1925ae1b647e338217962cad37

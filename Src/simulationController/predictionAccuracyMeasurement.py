@@ -97,8 +97,8 @@ class simulator():
             cpt = cpt + c
             Z  = Z.reshape((Z.shape[0],1))
             P  = P.reshape((P.shape[0],1))
-            print("Loss ajoutée ",c)
-        print("Donc on retourne : ",cpt)
+            #print("Loss ajoutée ",c)
+        #print("Donc on retourne : ",cpt)
         return cpt
 
     def maxHinge(self):
@@ -166,6 +166,11 @@ class simulator():
             cpt = cpt + np.where(pred == i%2)[0].shape[0]
         cpt = cpt / (len(self.pred)*self.pred[0].shape[0])
         return cpt
+
+    def getEcartPrecision(self):
+        p0 = -np.sum(self.pred[0][:][1])/self.nb_robots +np.sum(self.pred[0][:][0])/self.nb_robots
+        p1 = -np.sum(self.pred[1][:][0]) / self.nb_robots + np.sum(self.pred[1][:][1]) / self.nb_robots
+        return p0+p1
 
     def getLeastSquare(self):
         cpt = 0

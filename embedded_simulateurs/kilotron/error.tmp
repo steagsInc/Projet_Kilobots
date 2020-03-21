@@ -32,7 +32,6 @@ Requested parameter: displayY is not a number.
 Requested parameter: useGrid is not an integer.
  Using default value 1.
 Requested parameter: colorscheme is not a string
-<<<<<<< HEAD
 Reading simulator parameters from kilombo.json
 Size of kilobot structure : 248
 Size of USERDATA structure: 416
@@ -41,5 +40,3 @@ Running 30 bots with timestep 0.041667 for total time 100.000000
     42 s -   1000 steps -   1292 kilo_ticks    3.018 s.
     83 s -   2000 steps -   2584 kilo_ticks    2.989 s.
 Simulation finished
-=======
->>>>>>> b7dddcd25c53fb1925ae1b647e338217962cad37

@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-% # columns="iteration, evaluation, sigma, axis ratio, bestever, best, median, worst objective function value, further objective values of best", seed=559646, Tue Mar 17 16:29:47 2020, <python>{}</python>
-1 24 0.09922127609204986 1.000049950279074 17.095253414519547 1.7095253414519547e+01 18.556919186984445 19.523380605345338   
-=======
-% # columns="iteration, evaluation, sigma, axis ratio, bestever, best, median, worst objective function value, further objective values of best", seed=827943, Fri Mar 20 23:50:40 2020, <python>{}</python>
-1 6 0.9412000446281995 1.0000250003125026 1.9294663201016704 1.9294663201016704e+00 41458968381.9017 1.990326031367244e+17   
->>>>>>> b7dddcd25c53fb1925ae1b647e338217962cad37
+% # columns="iteration, evaluation, sigma, axis ratio, bestever, best, median, worst objective function value, further objective values of best", seed=905096, Sat Mar 21 19:05:00 2020, <python>{}</python>
+1 24 0.09922357512366682 1.000049950279074 30 3.0000000000000000e+01 30 30   
