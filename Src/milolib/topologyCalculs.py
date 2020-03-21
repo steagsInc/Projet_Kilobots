@@ -418,7 +418,8 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
     plt.axis('equal')
     plt.axis('off')
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
-    plt.show()
+    if show :
+        plt.show()
 
     image = cv2.imread("forContour.png")
 
