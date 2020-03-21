@@ -123,12 +123,10 @@ class swarmDescriptor:
         self.clusteriser()
         cpt = 0
         C = multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
-        if(len(self.clusters) > 0):
-            for i in C:
+        for i in C:
+            if (len(self.clusters) > cpt):
                 self.clusters[cpt].shape_index = i
                 cpt = cpt + 1
-        else:
-            print(C)
         return multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
 
     def SumshapeIndex(self):

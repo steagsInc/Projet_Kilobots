@@ -42,7 +42,9 @@ def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
     elif(nom_fitness == "Shape Index"):
         computeOptization(fitnessShapeIndex,nb_iterations,sigma)
     elif(nom_fitness == "Aggregation Multiplication"):
-        computeOptization(fitnessAggregation,nb_iterations)
+        computeOptization(fitnessAggregation1,nb_iterations)
+    elif (nom_fitness == "Aggregation Addition"):
+        computeOptization(fitnessAggregation2, nb_iterations)
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots()
     S.Swarm.shapeIndex()
@@ -89,6 +91,32 @@ def varianceUV(w):
     return -np.std(S.Swarm.concentrations,axis=0).sum()+np.mean(np.max(S.Swarm.concentrations,0))
 
 
+def fitnessAggregation1(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.shapeIndex()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    if(-(S.Swarm.nb_turing_spots*np.array(S.Swarm.shapeIndex()).sum()) < best_fitness and S.Swarm.nb_turing_spots > 0):
+        S.Swarm.renduTuringSpot()
+        best_fitness = -(S.Swarm.nb_turing_spots*np.array(S.Swarm.shapeIndex()).sum())
+        print("Nouvelle meilleur fitness a : ",best_fitness)
+    return -(S.Swarm.nb_turing_spots*np.array(S.Swarm.shapeIndex()).sum())
+
+
+def fitnessAggregation2(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.shapeIndex()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    if(-(S.Swarm.nb_turing_spots+np.array(S.Swarm.shapeIndex()).sum()) < best_fitness and S.Swarm.nb_turing_spots > 0):
+        S.Swarm.renduTuringSpot()
+        best_fitness = -(S.Swarm.nb_turing_spots+np.array(S.Swarm.shapeIndex()).sum())
+        print("Nouvelle meilleur fitness a : ",best_fitness)
+    return -(S.Swarm.nb_turing_spots+np.array(S.Swarm.shapeIndex()).sum())
 
 def fitnessTuringSpot(w):
     global best_fitness
