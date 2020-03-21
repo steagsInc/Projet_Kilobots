@@ -154,7 +154,7 @@ def countTuringSpotsWithVoronoi(show=False, colorTresh=2, periTresh=100):
     plt.axis([-800, 800, -800, 800])
     plt.axis('off')
     fig.savefig("forContour.png")
-    plt.clf()
+    plt.close()
     
     image = cv2.imread("forContour.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -241,7 +241,7 @@ def multiClusterShapeIndex(show=False, periTreshold=100, colorTreshold=0, distVo
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show:
         plt.show()
-    plt.clf()
+    plt.close()
     
     image = cv2.imread("forContour.png")
 
@@ -321,7 +321,7 @@ def shapeIndex(show=False, colorTreshold=0, distVoisin=50):
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show:
         plt.show()
-    plt.clf()
+    plt.close()
     
     image = cv2.imread("forContour.png")
 
@@ -423,7 +423,7 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
     fig.savefig("forContour.png", bbox_inches='tight', pad_inches=0)
     if show :
         plt.show()
-    plt.clf()
+    plt.close()
         
     image = cv2.imread("forContour.png")
 
