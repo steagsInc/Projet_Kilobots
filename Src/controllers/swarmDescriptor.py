@@ -1,3 +1,4 @@
+import math
 import os
 import json
 
@@ -20,9 +21,9 @@ class Cluster:
         return str(
             dict(
                 id = self.cluster_id,
-                elements = self.ids,
-                size = self.nb_element,
-                shape_index = self.shape_index
+                size=self.nb_element,
+                shape_index=self.shape_index,
+                elements = self.ids
             )
         )
 
@@ -47,7 +48,7 @@ class swarmDescriptor:
         self.clusters = []
         self.nb_turing_spots = 0
         self.turing_spots = []
-        self.seuillage_turing_spots = 5
+        self.seuillage_turing_spots = 4
 
     def setRange(self,portee):
         self.portee_communication = portee
@@ -80,6 +81,7 @@ class swarmDescriptor:
 
 
     def clusteriser(self):
+        self.clusters.clear()
         L = countTuringSpotsWithGraph(distVoisin=self.controller.range, valueTresh=0)
         cpt = 0
         for i in L:
@@ -120,9 +122,11 @@ class swarmDescriptor:
     def shapeIndex(self):
         self.clusteriser()
         cpt = 0
-        for i in multiClusterShapeIndex(show=False,distVoisin=self.controller.range):
-            self.clusters[cpt].shape_index = i
-            cpt = cpt + 1
+        C = multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
+        for i in C:
+            if (len(self.clusters) > cpt):
+                self.clusters[cpt].shape_index = i
+                cpt = cpt + 1
         return multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
 
     def SumshapeIndex(self):
@@ -145,6 +149,37 @@ class swarmDescriptor:
 
     def setTime(self,time):
         self.controller = self.controller.withTime(time)
+
+    def genererRendu(self):
+        self.readDatas()
+        pos = self.positions
+        U = self.concentrations[:,0]
+        pos_vert = pos[np.where(U >= self.seuillage_turing_spots)]
+        pos_bleu = pos[np.where(U >= self.seuillage_turing_spots-1)]
+        pos_rose = pos[np.where( U >= self.seuillage_turing_spots-2)]
+        pos_cyan = pos[np.where( U >= self.seuillage_turing_spots-3)]
+        pos_noir = pos[np.where(U < self.seuillage_turing_spots - 3)]
+        plt.scatter(pos_noir[:,0],pos_noir[:,1],c = "black")
+        plt.scatter(pos_bleu[:,0],pos_bleu[:,1], c="blue")
+        plt.scatter(pos_cyan[:,0],pos_cyan[:,1], c="cyan")
+        plt.scatter(pos_rose[:,0],pos_rose[:,1], c="pink")
+        plt.scatter(pos_vert[:,0],pos_vert[:,1], c="green")
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.show()
+
+    def renduTuringSpot(self,restedespoints = True):
+        T = self.turing_spots
+        pos = self.positions
+        if(restedespoints):
+            plt.scatter(pos[:,0],pos[:,1], c="black")
+        for s in T:
+            X = pos[s,0]
+            Y = pos[s,1]
+            plt.scatter(X,Y,c=np.random.rand(3,).reshape((1,3)))
+        plt.show()
+
+
 
 
     def executeSimulation(self,nb_elements = None,topology = None,time = None):
@@ -169,13 +204,17 @@ if(__name__=="__main__"):
     print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ",os.getcwd())
     os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
+
     C = swarmDescriptor("morphogenesis")
-    C.setTime(1000)
-    C.setTopology("random")
-    C.setNb_robots(100)
-    C.setRange(70)
-    C.executeSimulation()
-    C.shapeIndex()
+    C.controller.rez_params()
+    #C.setTime(1000)
+    #C.setTopology("random")
+    #C.setNb_robots(350)
+    #C.setRange(70)
+    #C.executeSimulation()
+    #C.calculerTuringSpots(0)
+    #C.genererRendu()
+    #C.renduTuringSpot()
     #print("Sommes U et V : ",C.getSommeUV())
     #print("Etates Clusters : " , C.getDonnesCluster(predOrStates=False))
     #print("Predictions Clusters : " , C.getDonnesCluster(predOrStates=True))

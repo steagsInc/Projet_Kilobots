@@ -41,7 +41,7 @@ def varianceUV(w):
 
 
 
-def fitness(w):
+def fitnessTuringSpot(w):
     S.put_genotype(w)
     S.computeSimulation()
     S.Swarm.setRange(80)
@@ -51,10 +51,20 @@ def fitness(w):
     #print("Précision : ",S.getPrecision())
     return -S.Swarm.nb_turing_spots
 
+def computeOptization(func,iter):
+    S = topologyOptimisation("pile", nb=250, visible=False, time=500,model=[])
+    w = S.extract_genotype()
+    S.Swarm.controller.withVisiblite(True)
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(func, maxfun=iter).result
+    S.put_genotype(res[0])
+    S.Swarm.controller.write_params(S.Swarm.controller.read_params())
+
+
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
     S.Swarm.controller.withVisiblite(True)
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(varianceUV, maxfun=500).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(fitnessAggregation, maxfun=500).result
+
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())

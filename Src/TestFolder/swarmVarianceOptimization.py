@@ -6,7 +6,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("line",nb=50,visible=False,time=200)
+S = topologyOptimisation("line",nb=50,visible=False,time=2000)
 
 
 def fitnessShapeIndex(w):
@@ -28,8 +28,10 @@ def fitnessAggregation(w):
     S.Swarm.calculerTuringSpots(seuil=4)
     #print("Précision : ",S.getPrecision())
     #print("Shape de ", -S.Swarm.SumshapeIndex())
-    print("Penalité de  : ",-(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex()))
-    return -(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex())
+    S.Swarm.readDatas()
+    print("Concentrations : ",S.Swarm.concentrations)
+    print("Penalité de  : ",-(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex())+ np.abs(S.Swarm.concentrations[:,0]).sum())
+    return -(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex())+ np.abs(S.Swarm.concentrations[:,0]).sum()
 
 def varianceUV(w):
     S.put_genotype(w)
@@ -57,6 +59,6 @@ def fitness(w):
 if(__name__=="__main__"):
     w = S.extract_genotype()
     S.Swarm.controller.withVisiblite(True)
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(varianceUV, maxfun=2000).result
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(fitnessAggregation, maxfun=2000).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())

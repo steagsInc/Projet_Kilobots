@@ -62,8 +62,11 @@ class simulationController:
     def rez_params(self):
         if(self.path == "kilotron"):
             return self
-        self.write_params({})
-        self.read_params()
+        print("debug rez : ",os.getcwd())
+        with open("embedded_simulateurs/natif/morphogenesis.c", "r") as file1:
+            content = file1.read()
+            f = open("embedded_simulateurs/" + self.path + "/" + self.path + ".c", "w")
+            f.write(content)
         return self
 
     def read_Weights(self):

@@ -33,7 +33,7 @@ S.controller.withVisiblite(False)
 S.setTopology("pile")
 S.seuillage_turing_spots = 2
 changed = False
-
+polar_th = 4
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 position_robots = cyto.Cytoscape(
@@ -50,17 +50,30 @@ position_robots = cyto.Cytoscape(
             }
         },
         {
-            'selector': '[U<0]',
-            'style': {
-                'background-color': 'RED'
-            }
-        },
-{
-            'selector': '[U>'+str(S.seuillage_turing_spots)+']',
-            'style': {
-                'background-color': 'GREEN'
-            }
-        },
+                    'selector': '[U>'+str(polar_th-3)+']',
+                    'style': {
+                        'background-color': 'CYAN'
+                    }
+                },
+        {
+                    'selector': '[U>'+str(polar_th-2)+']',
+                    'style': {
+                        'background-color': 'BLUE'
+                    }
+                },
+                {
+                    'selector': '[U>'+str(polar_th-1)+']',
+                    'style': {
+                        'background-color': 'PINK'
+                    }
+                },
+                {
+                            'selector': '[U>='+str(polar_th)+']',
+                            'style': {
+                                'background-color': 'GREEN'
+                            }
+                        }
+
 
     ]
 )
