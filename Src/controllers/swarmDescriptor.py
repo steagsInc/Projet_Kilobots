@@ -169,7 +169,7 @@ if(__name__=="__main__"):
     print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ",os.getcwd())
     os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
-    C = swarmDescriptor("kilotron")
+    C = swarmDescriptor("morphogenesis")
     C.setTime(1000)
     C.setTopology("random")
     C.setNb_robots(100)

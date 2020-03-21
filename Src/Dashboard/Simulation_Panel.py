@@ -28,10 +28,13 @@ if (os.getcwd().split("/")[-1] == "Dashboard"):
 print("Chemin avant lancement du serveur : ", os.getcwd())
 
 S = swarmDescriptor("morphogenesis")
-S.setTime(1000)
+S.setTime(250)
+S.controller.withVisiblite(False)
+S.setTopology("pile")
+S.seuillage_turing_spots = 2
+changed = False
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
 
 position_robots = cyto.Cytoscape(
         id='robots-positions',
@@ -68,13 +71,100 @@ position_robots = cyto.Cytoscape(
 app.layout = html.Div([
     html.H1("Visualisation des simulations"),
     position_robots,
-    html.Button("Executer Simulation",id="Lancer",n_clicks=0)
-    ]
+    html.Center(
+        [
+            html.Button("Executer Simulation",id="Lancer",n_clicks=0),
+            daq.Indicator(
+                id='fin_simulation',
+                value=False,
+                color="green"
+            )
+        ]
+    ),
+    html.Button("Rendu Visuel",id="render",n_clicks=0),
+    html.H3("Temps de simulation : "),
+    dcc.Slider(
+                    id="gestion_temps",
+                    min=0,
+                    max=2000,
+                    marks={i: '{} s'.format(i) for i in range(0,2000,100)},
+                    value=5,
+                ),
+    html.H3("Taille de l'essaim : "),
+        dcc.Slider(
+                        id="taille_essaim",
+                        min=0,
+                        max=500,
+                        marks={i: '{} robots'.format(i) for i in range(0,500,25)},
+                        value=5,
+                    ),
+    html.H3("Topology de départ : "),
+    dcc.Dropdown(
+        id = "topology_depart",
+        options=[
+            {'label': 'Cercle', 'value': 'circle'},
+            {'label': 'Ligne', 'value': 'line'},
+            {'label': 'Aléatoire', 'value': 'random'},
+            {'label': 'Empilé', 'value': 'pile'},
+            {'label': 'Elipse', 'value': 'ellipse'},
+        ],
+        multi=False,
+        value="pile"
+    ),
+    html.P(id="placeholder_time"),
+    html.P(id="placeholder_changement"),
+    html.P(id="placeholder_topology"),
+    html.P(id="placeholder_taille"),
+    html.P(id="placeholder_render")
+
+]
 )
+
+@app.callback(Output("placeholder_time","children"),[Input("gestion_temps","value")])
+def maj_temps(valeur):
+    global changed
+    S.setTime(valeur)
+    changed = True
+    return []
+
+@app.callback(Output("placeholder_topology","children"),[Input("topology_depart","value")])
+def maj_topology(valeur):
+    global changed
+    S.setTopology(valeur)
+    changed = True
+    return []
+
+
+
+@app.callback(Output("placeholder_taille","children"),[Input("taille_essaim","value")])
+def maj_taille(valeur):
+    global changed
+    S.setNb_robots(valeur)
+    changed = True
+    return []
+
+
+@app.callback(Output("fin_simulation","color"),[Input("placeholder_time","children"),Input('robots-positions',"elements"),Input("placeholder_topology","children"),Input("placeholder_taille","children")])
+def changeColor(a1,a2,a3,a4):
+    if changed:
+        return "red"
+    else:
+        return "green"
+
+
+@app.callback(Output('placeholder_render',"children"),[Input("render","n_clicks")])
+def render(n):
+    S.controller.withVisiblite(True)
+    S.executeSimulation()
+    S.controller.withVisiblite(False)
+
+
 
 @app.callback(Output('robots-positions',"elements"),[Input("Lancer","n_clicks")])
 def executer_simulation(n):
+    global changed
     S.executeSimulation()
+    changed = False
     return [
         dict(
             data=dict(
