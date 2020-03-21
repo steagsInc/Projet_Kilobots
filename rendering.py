@@ -12,7 +12,6 @@ best_fitness = np.inf
 
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-os.chdir("..")
 S = topologyOptimisation("pile",nb=200,visible=False,time=1200)
 
 def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
@@ -38,7 +37,6 @@ def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
     S.Swarm.controller.rez_params()
     if(Model):
         S.model = Model
-
     if(nom_fitness == "Turing Spot"):
         computeOptization(fitnessTuringSpot,nb_iterations,sigma)
     elif(nom_fitness == "Shape Index"):
@@ -63,6 +61,7 @@ def fitnessShapeIndex(w):
     S.Swarm.shapeIndex()
     if (-np.array(S.Swarm.shapeIndex()).sum() < best_fitness):
         print("Améliorations du shape index : ",S.Swarm.shapeIndex())
+        plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.shapeIndex()).sum()
     return -np.array(S.Swarm.shapeIndex()).sum()
@@ -74,6 +73,7 @@ def fitnessAggregation(w):
     S.computeSimulation()
     S.Swarm.setRange(80)
     S.Swarm.shapeIndex()
+    plt.clf()
     #print("Nombre de turing de ",-S.Swarm.nb_turing_spots)
     S.Swarm.calculerTuringSpots(seuil=4)
     #print("Précision : ",S.getPrecision())
