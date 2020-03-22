@@ -28,7 +28,7 @@ import math
 
 import toussaint
 
-#from Src.controllers.simulationController import simulationController
+from Src.controllers.simulationController import simulationController
 
 """
 Oui ça fonctionne vraiment avec un chemin absolu donc changez le si vous voulez executer ce test.
@@ -486,7 +486,7 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
     return Q
 
 
-def clustersRectanglitude(valueTresh=5, distVoisin=100) :
+def clustersRectanglitude(valueTresh=0, distVoisin=100) :
     """
     retourne une liste contenant la rectanglitude des cluster : l'aire du polygone convexe/l'aire du rectangle de toussaint
     """
@@ -530,3 +530,23 @@ def clustersRectanglitude(valueTresh=5, distVoisin=100) :
     return list
 
 
+
+"""
+Ceci est un test qui sert a montrer pourquoi il ne faut pas programmer comme ça les enfants ! 
+prennez de la drogue c'est moins dangereux pour vous et pour la société wolah.
+"""
+#TODO : Milo Essaye de modifier ces print afin qu'ils donnent une idée intuitive de ce que fait ton code Stp
+if(__name__=="__main__"):
+    print("Début du test de simulateur sur le chemin : ",os.getcwd())
+    os.chdir("..")
+    print("Le simulateur s'execute sur : ",os.getcwd())
+    """
+    Bonne pratique de la programmation : 
+    """
+    C = simulationController("morphogenesis").withTime(150).withTopology("line").withVisiblite(True).withNombre(15).run()
+    """
+        Mauvaise pratique de la programmation : 
+    """
+    print(countTuringSpotsWithGraph())
+    print(multiClusterShapeIndex())
+    print(clustersRectanglitude())
