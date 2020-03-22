@@ -88,7 +88,7 @@ class simulationController:
 
     def put_Random_Weights(self):
         w = self.read_Weights()
-        r = np.random.random(w.shape[0])
+        r = np.random.random(w.shape[0])*np.random.normal(0,1,w.shape[0])
         self.write_Weights(r)
 
     def getModelParametres(self):
@@ -148,6 +148,7 @@ if(__name__=="__main__"):
     print("Début du test de simulateur sur le chemin : ",os.getcwd())
     os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
-    C = simulationController("kilotron").withTime(150).withTopology("line").withVisiblite(True).withNombre(5).run()
+    C = simulationController("kilotron_cuda").withTime(300).withTopology("line").withVisiblite(True).withNombre(50).run()
     C.read_Weights()
+    C.put_Random_Weights()
     print(C.weights)

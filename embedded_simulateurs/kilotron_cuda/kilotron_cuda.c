@@ -47,7 +47,7 @@ REGISTER_USERDATA(USERDATA)
 //End_Parameters
 
 
-#define NN 25
+#define NN 200
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
@@ -485,8 +485,8 @@ void process_perceptron(){
     }
 
     float *prediction = predict(mydata->perceptron, x);
-    //printf("Prédiction 01 : %f \n",prediction[0]);
-    //printf("Prédiction 02 : %f \n",prediction[1]);
+    printf("Prédiction 01 : %f \n",prediction[0]);
+    printf("Prédiction 02 : %f \n",prediction[1]);
     mydata->prediction1 = prediction[0];
     mydata->prediction2 = prediction[1];
     //printf("%f\n", mydata->prediction);
@@ -757,8 +757,8 @@ void setup() {
 
     int shape[4] = {2+COMMUNICATION,NN,NN,2+COMMUNICATION};
     mydata->perceptron = new_perceptron(shape,4);
-    load_weights(mydata->perceptron,"weights.txt");
-    //write_weights(mydata->perceptron,"weights.txt");
+    //load_weights(mydata->perceptron,"weights.txt");
+    write_weights(mydata->perceptron,"weights.txt");
 
     mydata->communication_chanel=(float*)malloc(COMMUNICATION * sizeof(float));
     int i;
