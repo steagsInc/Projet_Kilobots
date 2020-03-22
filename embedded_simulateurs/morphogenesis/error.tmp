@@ -31,4 +31,3 @@ Requested parameter: displayY is not a number.
  Using default value 0.000000.
 Requested parameter: useGrid is not an integer.
  Using default value 1.
-Requested parameter: colorscheme is not a string

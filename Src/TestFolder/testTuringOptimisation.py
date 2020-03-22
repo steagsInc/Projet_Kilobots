@@ -6,7 +6,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("pile",nb=300,visible=True,time=2000)
+S = topologyOptimisation("pile",nb=100,visible=True,time=10000)
 
 
 def fitnessShapeIndex(w):
@@ -65,7 +65,16 @@ def computeOptization(func,iter):
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())
 
-
+#pour faire de la rectanglitude, essayer avec plus de temps et des essaims plus petits
+def fitnessRectanglitude(w):
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.setRange(80)
+    #S.Swarm.shapeIndex()
+    rect = np.mean(S.Swarm.rectanglitude(seuil=0))
+    print("Pénalité de ",-rect**2)
+    #print("Précision : ",S.getPrecision())
+    return -rect**2
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
@@ -74,7 +83,7 @@ if(__name__=="__main__"):
     S.computeSimulation()
     S.Swarm.calculerTuringSpots(seuil=4)
     print("Depart a : ", S.Swarm.nb_turing_spots)
-    res = cma.CMAEvolutionStrategy(w, 0.0001).optimize(fitnessTuringSpot, maxfun=500).result
+    res = cma.CMAEvolutionStrategy(w, 0.0001).optimize(fitnessRectanglitude, maxfun=500).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())
 
