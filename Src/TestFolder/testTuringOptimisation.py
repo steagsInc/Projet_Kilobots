@@ -6,7 +6,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("pile",nb=200,visible=True,time=2000)
+S = topologyOptimisation("pile",nb=300,visible=True,time=2000)
 
 
 def fitnessShapeIndex(w):
@@ -74,6 +74,6 @@ if(__name__=="__main__"):
     S.computeSimulation()
     S.Swarm.calculerTuringSpots(seuil=4)
     print("Depart a : ", S.Swarm.nb_turing_spots)
-    res = cma.CMAEvolutionStrategy(w, 0.001).optimize(fitnessTuringSpot, maxfun=500).result
+    res = cma.CMAEvolutionStrategy(w, 0.0001).optimize(fitnessTuringSpot, maxfun=500).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())

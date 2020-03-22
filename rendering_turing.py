@@ -12,7 +12,7 @@ best_fitness = np.inf
 
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-S = topologyOptimisation("pile",nb=200,visible=False,time=1200)
+S = topologyOptimisation("pile",nb=300,visible=True,time=2000)
 
 def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
     S.Swarm.setTime(1500)
@@ -23,6 +23,8 @@ def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
         computeOptization(fitnessShapeIndex,nb_iterations,sigma)
     elif(nom_fitness == "Aggregation Multiplication"):
         computeOptization(fitnessAggregation,nb_iterations)
+    elif (nom_fitness == "Rectanglitude"):
+        computeOptization(fitnessRectanglitude, nb_iterations)
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots()
     S.Swarm.shapeIndex()
@@ -45,6 +47,8 @@ def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
         computeOptization(fitnessAggregation1,nb_iterations)
     elif (nom_fitness == "Aggregation Addition"):
         computeOptization(fitnessAggregation2, nb_iterations)
+    elif (nom_fitness == "Rectanglitude"):
+        computeOptization(fitnessRectanglitude, nb_iterations)
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots()
     S.Swarm.shapeIndex()
@@ -68,6 +72,18 @@ def fitnessShapeIndex(w):
         best_fitness = -np.array(S.Swarm.shapeIndex()).sum()
     return -np.array(S.Swarm.shapeIndex()).sum()
 
+def fitnessRectanglitude(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.rectanglitude()
+    if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
+        print("Améliorations du shape index : ",S.Swarm.shapeIndex())
+        plt.clf()
+        S.Swarm.genererRendu()
+        best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
+    return -np.array(S.Swarm.rectanglitude()).sum()
 
 
 def fitnessAggregation(w):
@@ -124,6 +140,7 @@ def fitnessTuringSpot(w):
     S.computeSimulation()
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots(seuil=4)
+    print("Nb turing spot : ",S.Swarm.nb_turing_spots)
     if(-S.Swarm.nb_turing_spots < best_fitness and S.Swarm.nb_turing_spots > 0):
         S.Swarm.renduTuringSpot()
         best_fitness = -S.Swarm.nb_turing_spots
@@ -139,5 +156,5 @@ def computeOptization(func,iter,sigma = 0.1):
 
 
 if(__name__=="__main__"):
-    #renduFitness("Turing Spot",50)
-    renduFitness("Shape Index",50)
+    renduModel("Turing Spot",50,sigma=1,Model=("D_u","D_v"))
+    #renduFitness("Shape Index",50)

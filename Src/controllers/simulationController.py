@@ -147,7 +147,13 @@ if(__name__=="__main__"):
     print("Début du test de simulateur sur le chemin : ",os.getcwd())
     os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
-    C = simulationController("kilotron_cuda").withTime(300).withTopology("line").withVisiblite(True).withNombre(50).run()
-    C.read_Weights()
-    C.put_Random_Weights()
-    print(C.weights)
+    C = simulationController("morphogenesis").withTime(1000).withTopology("pile").withVisiblite(True).withNombre(150)
+    C.write_params(
+        dict(
+            D_u = 3
+        )
+    )
+    C.run()
+    C.rez_params()
+    C.run()
+    print(C.read_params())

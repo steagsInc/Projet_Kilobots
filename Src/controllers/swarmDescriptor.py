@@ -224,11 +224,12 @@ if(__name__=="__main__"):
 
     C = swarmDescriptor("morphogenesis")
     C.controller.rez_params()
-    C.setTime(200)
+    C.setTime(1500)
     C.setTopology("random")
-    C.setNb_robots(350)
+    C.setNb_robots(300)
     C.executeSimulation()
-    C.rectanglitude()
+    C.shapeIndex()
+    C.calculerTuringSpots(seuil=4)
     #C.shapeIndex()
     for i in C.clusters:
         print(i)
