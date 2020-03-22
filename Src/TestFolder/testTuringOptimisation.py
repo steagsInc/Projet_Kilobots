@@ -17,7 +17,13 @@ def fitnessShapeIndex(w):
     print("Pénalité de ",-S.Swarm.SumshapeIndex())
     return -S.Swarm.SumshapeIndex()
 
-
+def fitnessRectanglitude(w):
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.setRange(80)
+    S.Swarm.shapeIndex()
+    print("Pénalité de ",-S.Swarm.SumshapeIndex())
+    return -np.array(S.Swarm.rectanglitude()).sum()
 
 def fitnessAggregation(w):
     S.put_genotype(w)
@@ -64,7 +70,6 @@ def computeOptization(func,iter):
 if(__name__=="__main__"):
     w = S.extract_genotype()
     S.Swarm.controller.withVisiblite(True)
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(fitnessAggregation, maxfun=500).result
-
+    res = cma.CMAEvolutionStrategy(w, 1).optimize(fitnessTuringSpot, maxfun=500).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())

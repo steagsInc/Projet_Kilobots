@@ -3,7 +3,7 @@ import os
 import json
 
 from Src.milolib import topologyCalculs
-from Src.milolib.topologyCalculs import countTuringSpotsWithGraph, multiClusterShapeIndex
+from Src.milolib.topologyCalculs import countTuringSpotsWithGraph, multiClusterShapeIndex, clustersRectanglitude
 from Src.controllers.simulationController import simulationController
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,6 +16,7 @@ class Cluster:
         self.nb_element = 0
         self.ids = ids
         self.shape_index = 0
+        self.rectanglitude = 0
 
     def __str__(self):
         return str(
@@ -23,6 +24,7 @@ class Cluster:
                 id = self.cluster_id,
                 size=self.nb_element,
                 shape_index=self.shape_index,
+                rectangliude = self.rectanglitude,
                 elements = self.ids
             )
         )
@@ -44,6 +46,7 @@ class swarmDescriptor:
         self.concentrations = None
         #TODO Implémenter ça
         self.canaux = None
+        self.portee_communication  = 40
         #Données construites par les calculs
         self.clusters = []
         self.nb_turing_spots = 0
@@ -121,6 +124,7 @@ class swarmDescriptor:
 
     def shapeIndex(self):
         self.clusteriser()
+        topologyCalculs.fp = os.getcwd() + "/embedded_simulateurs/" + self.path + "/endstate.json"
         cpt = 0
         C = multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
         for i in C:
@@ -129,7 +133,20 @@ class swarmDescriptor:
                 cpt = cpt + 1
         return multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
 
+
+    def rectanglitude(self):
+        self.clusteriser()
+        topologyCalculs.fp = os.getcwd() + "/embedded_simulateurs/" + self.path + "/endstate.json"
+        cpt = 0
+        C = clustersRectanglitude( distVoisin=self.controller.range)
+        for i in C:
+            if (len(self.clusters) > cpt):
+                self.clusters[cpt].rectanglitude = i
+                cpt = cpt + 1
+        return clustersRectanglitude(distVoisin=self.controller.range)
+
     def SumshapeIndex(self):
+
         cpt = []
         for c in self.clusters:
             cpt = cpt + [c.shape_index]
@@ -141,7 +158,7 @@ class swarmDescriptor:
         for c in self.clusters:
             cpt = cpt + [c.shape_index]
         cpt = np.array(cpt)
-        return cpt.max()
+        return cpt.max(cpt)
 
 
     def setNb_robots(self,nb):
@@ -207,11 +224,14 @@ if(__name__=="__main__"):
 
     C = swarmDescriptor("morphogenesis")
     C.controller.rez_params()
-    #C.setTime(1000)
-    #C.setTopology("random")
-    #C.setNb_robots(350)
-    #C.setRange(70)
-    #C.executeSimulation()
+    C.setTime(200)
+    C.setTopology("random")
+    C.setNb_robots(350)
+    C.executeSimulation()
+    C.rectanglitude()
+    #C.shapeIndex()
+    for i in C.clusters:
+        print(i)
     #C.calculerTuringSpots(0)
     #C.genererRendu()
     #C.renduTuringSpot()

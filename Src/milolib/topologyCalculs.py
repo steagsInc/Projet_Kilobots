@@ -26,9 +26,10 @@ import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import math
 
-import toussaint
+
 
 from Src.controllers.simulationController import simulationController
+from Src.milolib import toussaint
 
 """
 Oui ça fonctionne vraiment avec un chemin absolu donc changez le si vous voulez executer ce test.
@@ -41,7 +42,7 @@ fp = r"/home/mohamed/PycharmProjects/Kilotron_Projet/embedded_simulateurs/morpho
 
 
 #quand c'est milo qui code sur son windows
-fp = "C:\\Users\\PC MILO fixe\\Desktop\\pytho projet AND\\endstate.json"
+fp = "/home/mohamed/PycharmProjects/Projet_Kilobots/embedded_simulateurs/morphogenesis/endstate.json"
 
 
 def returnUVList():
@@ -511,8 +512,6 @@ def clustersRectanglitude(valueTresh=0, distVoisin=100) :
             for i in graph[pack] :
                 if node[4] == i :
                     clusters[pack].append((  round(node[0]), round(node[1])   ))
-    print(graph)
-    print(clusters)
 
     list = []
     for clusterkey in clusters.keys() :
@@ -538,12 +537,12 @@ prennez de la drogue c'est moins dangereux pour vous et pour la société wolah.
 #TODO : Milo Essaye de modifier ces print afin qu'ils donnent une idée intuitive de ce que fait ton code Stp
 if(__name__=="__main__"):
     print("Début du test de simulateur sur le chemin : ",os.getcwd())
-    os.chdir("..")
+    os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
     """
     Bonne pratique de la programmation : 
     """
-    C = simulationController("morphogenesis").withTime(150).withTopology("line").withVisiblite(True).withNombre(15).run()
+    C = simulationController("morphogenesis").withTime(150).withTopology("pile").withVisiblite(True).withNombre(15).run()
     """
         Mauvaise pratique de la programmation : 
     """
