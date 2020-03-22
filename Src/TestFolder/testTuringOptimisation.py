@@ -77,3 +77,7 @@ if(__name__=="__main__"):
     res = cma.CMAEvolutionStrategy(w, 0.0001).optimize(fitnessTuringSpot, maxfun=500).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())
+
+
+
+#NTM MILO J'AI VRAIMENT UN COMMIT POUR CA
