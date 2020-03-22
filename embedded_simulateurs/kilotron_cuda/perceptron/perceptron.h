@@ -13,6 +13,7 @@ typedef struct Perceptron {
 } Perceptron;
 
 Perceptron *new_perceptron(int shape[],int nb_layer);
+Perceptron *new_perceptron_config(const char* file_name);
 float *predict(Perceptron *perc,float *input);
 void set_layer(Perceptron *perc,int layer_nb,float **weights,float **bias);
 void read_weights (const char* file_name);
