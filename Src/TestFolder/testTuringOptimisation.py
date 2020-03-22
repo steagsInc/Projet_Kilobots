@@ -69,7 +69,11 @@ def computeOptization(func,iter):
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
+    S.Swarm.controller.rez_params()
     S.Swarm.controller.withVisiblite(True)
-    res = cma.CMAEvolutionStrategy(w, 1).optimize(fitnessTuringSpot, maxfun=500).result
+    S.computeSimulation()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    print("Depart a : ", S.Swarm.nb_turing_spots)
+    res = cma.CMAEvolutionStrategy(w, 0.001).optimize(fitnessTuringSpot, maxfun=500).result
     S.put_genotype(res[0])
     S.Swarm.controller.write_params(S.Swarm.controller.read_params())
