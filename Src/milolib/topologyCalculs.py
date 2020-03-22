@@ -26,13 +26,22 @@ import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import math
 
-from Src.controllers.simulationController import simulationController
+import toussaint
+
+#from Src.controllers.simulationController import simulationController
 
 """
 Oui ça fonctionne vraiment avec un chemin absolu donc changez le si vous voulez executer ce test.
 Science sans conscience n'est que ruine de l'âme - A.Einstein
 """
+
+"""
 fp = r"/home/mohamed/PycharmProjects/Kilotron_Projet/embedded_simulateurs/morphogenesis/endstate.json"
+"""
+
+
+#quand c'est milo qui code sur son windows
+fp = "C:\\Users\\PC MILO fixe\\Desktop\\pytho projet AND\\endstate.json"
 
 
 def returnUVList():
@@ -48,9 +57,9 @@ def returnUVList():
 # mettre le valueTresh à 0 pour que ça compte les clusters au lieu des turing spots
 def countTuringSpotsWithGraph(valueTresh=5, distVoisin=100):
     """
-    prend les points ayant une valeur de u au dessus de valueTresh et retourne les clusters d'éléments de distance < 100
+    prend les points ayant une valeur de u au dessus de valueTresh et retourne les clusters d'éléments de distance < distvoisin
 
-    retourne les clusters sous forme de liste de liste d'id temporelles (pas les vraies id des kilobots)
+    retourne les clusters sous forme de liste de liste de leurs id
     """
     nodes = []
     with open(fp) as json_file:
@@ -477,28 +486,47 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
     return Q
 
 
-
-
-
-"""
-Ceci est un test qui sert a montrer pourquoi il ne faut pas programmer comme ça les enfants ! 
-prennez de la drogue c'est moins dangereux pour vous et pour la société wolah.
-"""
-#TODO : Milo Essaye de modifier ces print afin qu'ils donnent une idée intuitive de ce que fait ton code Stp
-
-if(__name__=="__main__"):
-    print("Début du test de simulateur sur le chemin : ",os.getcwd())
-    os.chdir("..")
-    print("Le simulateur s'execute sur : ",os.getcwd())
-
+def clustersRectanglitude(valueTresh=5, distVoisin=100) :
     """
-    Bonne pratique de la programmation : 
+    retourne une liste contenant la rectanglitude des cluster : l'aire du polygone convexe/l'aire du rectangle de toussaint
     """
-    C = simulationController("morphogenesis").withTime(150).withTopology("line").withVisiblite(True).withNombre(15).run()
+    graph = countTuringSpotsWithGraph(valueTresh, distVoisin)
+    nodes = []
+    with open(fp) as json_file:
+        data = json.load(json_file)
+        for state in data['bot_states']:  # ['bot_states']['state']:
+            id = state['ID']
+            x = state['x_position']
+            y = state['y_position']
+            u = state['state'].get('u')
+            v = state['state'].get('v')
+            nodes.append([x, y, u, v, id])
 
-    """
-        Mauvaise pratique de la programmation : 
-    """
-    print(countTuringSpotsWithGraph())
-    print(multiClusterShapeIndex())
+    clusters = {}
+    for pack in range(len(graph)):
+        clusters[pack] = []
+
+    for node in nodes :
+        for pack in range(len(graph)) :
+            for i in graph[pack] :
+                if node[4] == i :
+                    clusters[pack].append((  round(node[0]), round(node[1])   ))
+    print(graph)
+    print(clusters)
+
+    list = []
+    for clusterkey in clusters.keys() :
+        cluster = clusters.get(clusterkey)
+        if len(cluster) > 3 :
+            env = toussaint.enveloppeConvexe(cluster)
+            areaOfPolygon = toussaint.areaOfConvexPolygon(env)
+            areaOfRect = toussaint.areaOfConvexPolygon(toussaint.Toussaint(env))
+            list.append(areaOfPolygon/areaOfRect)
+        if len(cluster) == 3 :
+            list.append(1/2)
+        if len(cluster) <= 2 :
+            list.append(0)
+
+    return list
+
 
