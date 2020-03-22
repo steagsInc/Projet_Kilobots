@@ -520,7 +520,9 @@ def clustersRectanglitude(valueTresh=0, distVoisin=100) :
             env = toussaint.enveloppeConvexe(cluster)
             areaOfPolygon = toussaint.areaOfConvexPolygon(env)
             areaOfRect = toussaint.areaOfConvexPolygon(toussaint.Toussaint(env))
-            list.append(areaOfPolygon/areaOfRect)
+
+            if areaOfRect != 0 :
+                list.append(areaOfPolygon/areaOfRect)
         if len(cluster) == 3 :
             list.append(1/2)
         """

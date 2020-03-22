@@ -6,7 +6,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("pile",nb=100,visible=True,time=10000)
+S = topologyOptimisation("pile",nb=100,visible=True,time=20000)
 
 
 def fitnessShapeIndex(w):
