@@ -4,6 +4,7 @@ from Src.controllers.swarmDescriptor import swarmDescriptor
 
 
 class topologyOptimisation:
+    model_variables =('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v')
     def __init__(self,topologies = "pile",nb = 250,visible = False,time = 1500,model =('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'E_VAL', 'F_VAL', 'G_VAL', 'D_u', 'D_v')):
         self.Topologies = topologies
         self.nb_robots = nb

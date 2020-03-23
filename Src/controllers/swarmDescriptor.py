@@ -134,20 +134,16 @@ class swarmDescriptor:
         return multiClusterShapeIndex(show=False, distVoisin=self.controller.range)
 
 
-    def rectanglitude(self, seuil = 0):
+    def rectanglitude(self):
         self.clusteriser()
         topologyCalculs.fp = os.getcwd() + "/embedded_simulateurs/" + self.path + "/endstate.json"
-
-
-        """
         cpt = 0
-        C = clustersRectanglitude( distVoisin=self.controller.range, seuil = seuil)
+        C = clustersRectanglitude( distVoisin=self.controller.range)
         for i in C:
             if (len(self.clusters) > cpt):
                 self.clusters[cpt].rectanglitude = i
                 cpt = cpt + 1
-        """
-        return clustersRectanglitude(distVoisin=self.controller.range, valueTresh = seuil)
+        return clustersRectanglitude(distVoisin=self.controller.range)
 
     def SumshapeIndex(self):
 

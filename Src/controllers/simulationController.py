@@ -26,6 +26,7 @@ class simulationController:
         self.parametres_model = {}
         self.read_params()
         self.weights = None
+        self.shape = {}
 
     def read_params(self,save=False):
         with open("embedded_simulateurs/" + self.path + "/" + self.path+ ".c", "r") as file1:
@@ -61,12 +62,47 @@ class simulationController:
     def rez_params(self):
         if(self.path == "kilotron"):
             return self
-        print("debug rez : ",os.getcwd())
         with open("embedded_simulateurs/natif/morphogenesis.c", "r") as file1:
             content = file1.read()
             f = open("embedded_simulateurs/" + self.path + "/" + self.path + ".c", "w")
             f.write(content)
         return self
+
+    def getShape(self):
+        if (self.path != "kilotron" and self.path != "kilotron_cuda"):
+            return self
+        with open("embedded_simulateurs/"+self.path+"/perceptron/NN.txt", "r") as file1:
+            content = file1.readlines()
+            L = []
+            for i in content:
+                if(i.strip().isnumeric()):
+                    L.append(i.strip())
+                else:
+                    self.shape[i.strip()] = L[0]
+                    L.remove(L[0])
+
+
+    def setShape(self,P):
+        if (self.path != "kilotron" and self.path != "kilotron_cuda"):
+            return self
+        self.getShape()
+        for i in P:
+            self.shape[i] = P[i]
+        self.writeShape()
+        os.chdir("embedded_simulateurs/" + self.path+ "/perceptron")
+        os.system("./refreshWeights")
+        os.chdir("../../..")
+
+    def writeShape(self):
+        if (self.path != "kilotron" and self.path != "kilotron_cuda"):
+            return self
+        with open("embedded_simulateurs/"+self.path+"/perceptron/NN.txt", "w") as file1:
+            s = ""
+            for i in self.shape.values():
+                s = s + str(i) + "\n"
+            for i in self.shape.keys():
+                s = s + str(i) + "\n"
+            file1.write(s)
 
     def read_Weights(self):
         with open("embedded_simulateurs/" + self.path + "/weights.txt", "r") as fp:
@@ -85,9 +121,9 @@ class simulationController:
                 st = st + str(i) + "\n"
             fp.write(st)
 
-    def put_Random_Weights(self):
+    def put_Random_Weights(self,sigma=0.5,mean=0):
         w = self.read_Weights()
-        r = np.random.random(w.shape[0])*np.random.normal(0,1,w.shape[0])
+        r = np.random.normal(mean,sigma,w.shape[0])
         self.write_Weights(r)
 
     def getModelParametres(self):
@@ -147,13 +183,12 @@ if(__name__=="__main__"):
     print("Début du test de simulateur sur le chemin : ",os.getcwd())
     os.chdir("../..")
     print("Le simulateur s'execute sur : ",os.getcwd())
-    C = simulationController("morphogenesis").withTime(1000).withTopology("pile").withVisiblite(True).withNombre(150)
-    C.write_params(
+    C = simulationController("kilotron_cuda").withTime(1000).withTopology("pile").withVisiblite(True).withNombre(150)
+    C.getShape()
+    C.setShape(
         dict(
-            D_u = 3
+            NEURONES = 50,
+            HIDDEN = 2
         )
     )
-    C.run()
-    C.rez_params()
-    C.run()
-    print(C.read_params())
+

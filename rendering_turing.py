@@ -12,7 +12,7 @@ best_fitness = np.inf
 
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-S = topologyOptimisation("pile",nb=300,visible=True,time=2000)
+S = topologyOptimisation("pile",nb=300,visible=False,time=2000)
 
 def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
     S.Swarm.setTime(1500)
@@ -140,8 +140,8 @@ def fitnessTuringSpot(w):
     S.computeSimulation()
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots(seuil=4)
-    print("Nb turing spot : ",S.Swarm.nb_turing_spots)
     if(-S.Swarm.nb_turing_spots < best_fitness and S.Swarm.nb_turing_spots > 0):
+        print("Amélioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
         S.Swarm.renduTuringSpot()
         best_fitness = -S.Swarm.nb_turing_spots
     return -S.Swarm.nb_turing_spots
