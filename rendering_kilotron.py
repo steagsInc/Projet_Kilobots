@@ -46,6 +46,88 @@ def fitness(w):
     return L
 
 
+def fitnessHinge(w):
+    timeStart = time.time()
+    global meilleur_precision
+    global meilleur_fitness
+    global historique_precisions
+    global historique_fitness
+    global nb_exec
+    global x_precisions
+    nb_exec = nb_exec + 1
+    print("Etape ", nb_exec , " : ")
+    x_precisions.append(nb_exec)
+    S.Swarm.controller.write_Weights(w)
+    S.computeSimulation()
+    P = S.getPrecision()
+    L = S.getHinge()
+    historique_precisions.append(P)
+    historique_fitness.append(L)
+    if(P > meilleur_precision):
+        meilleur_precision = P
+        print("Précision : ", P)
+        best_w = w
+    if (L < meilleur_fitness):
+        meilleur_fitness = L
+        print("Penalite : ", L)
+    #print("tps ecoulé : ",time.time()-timeStart)
+    return L
+
+def fitnessLeastSquare(w):
+    timeStart = time.time()
+    global meilleur_precision
+    global meilleur_fitness
+    global historique_precisions
+    global historique_fitness
+    global nb_exec
+    global x_precisions
+    nb_exec = nb_exec + 1
+    print("Etape ", nb_exec , " : ")
+    x_precisions.append(nb_exec)
+    S.Swarm.controller.write_Weights(w)
+    S.computeSimulation()
+    P = S.getPrecision()
+    L = S.getLeastSquare()
+    historique_precisions.append(P)
+    historique_fitness.append(L)
+    if(P > meilleur_precision):
+        meilleur_precision = P
+        print("Précision : ", P)
+        best_w = w
+    if (L < meilleur_fitness):
+        meilleur_fitness = L
+        print("Penalite : ", L)
+    #print("tps ecoulé : ",time.time()-timeStart)
+    return L
+
+def fitnessLogLoss(w):
+    timeStart = time.time()
+    global meilleur_precision
+    global meilleur_fitness
+    global historique_precisions
+    global historique_fitness
+    global nb_exec
+    global x_precisions
+    nb_exec = nb_exec + 1
+    print("Etape ", nb_exec , " : ")
+    x_precisions.append(nb_exec)
+    S.Swarm.controller.write_Weights(w)
+    S.computeSimulation()
+    P = S.getPrecision()
+    L = S.getLogLoss()
+    historique_precisions.append(P)
+    historique_fitness.append(L)
+    if(P > meilleur_precision):
+        meilleur_precision = P
+        print("Précision : ", P)
+        best_w = w
+    if (L < meilleur_fitness):
+        meilleur_fitness = L
+        print("Nouvelle meilleure loss : ", L)
+    #print("tps ecoulé : ",time.time()-timeStart)
+    return L
+
+
 def fitnessPrecision(w):
     timeStart = time.time()
     global meilleur_precision
@@ -72,6 +154,10 @@ def fitnessPrecision(w):
 
 
 def optimizeNeuralNetwork(iter,sigma,func,shape):
+    global nb_exec
+    global x_precisions
+    global historique_fitness
+    global historique_precisions
     S.Swarm.controller.setShape(shape)
     historique_fitness.clear()
     historique_precisions.clear()

@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 S = topologyOptimisation("pile",nb=150,visible=False,time=500)
 model_variables = S.model_variables
 
-def sensibilite_param(param,min=None,max=None,nb_points=20,display=("mean_u","mean_v","sigma_u","sigma_v","turing_spots","shape_index")) :
+def sensibilite_param(param,min=None,max=None,wideness=10,nb_points=20,display=("mean_u","mean_v","sigma_u","sigma_v","turing_spots","shape_index")) :
     S.Swarm.controller.rez_params()
     p_init = S.Swarm.controller.read_params()[param]
     if(min == None):
-        min = p_init - 10*p_init
+        min = p_init - wideness*p_init
     if (max == None):
-        max = p_init + 10* p_init
+        max = p_init + wideness* p_init
     print("min = ",min," max = ",max," nombre de points = ",nb_points)
     X = np.linspace(min,max,nb_points)
     concentration_moyenne_u = []
@@ -28,7 +28,7 @@ def sensibilite_param(param,min=None,max=None,nb_points=20,display=("mean_u","me
     nb_turing_spots = []
     shape_index = []
     for x in X:
-        print("x= ",x)
+        print(param,"= ",x)
         D = {}
         D[param] = float(x)
         S.Swarm.controller.write_params(D)
@@ -46,25 +46,21 @@ def sensibilite_param(param,min=None,max=None,nb_points=20,display=("mean_u","me
             plt.xlabel(param)
             plt.ylabel(opt)
             plt.plot(X,concentration_moyenne_u)
-            plt.savefig("figures/"+str(param)+"-"+str(min)+"-"+str(max)+"-"+str(nb_points)+"-"+str(opt))
             plt.show()
         elif (opt == "mean_v"):
             plt.xlabel(param)
             plt.ylabel(opt)
             plt.plot(X, concentration_moyenne_v)
             plt.show()
-            plt.savefig("figures/"+str(param)+"-"+str(min)+"-"+str(max)+"-"+str(nb_points)+"-"+str(opt))
         elif (opt == "sigma_u"):
             plt.xlabel(param)
             plt.ylabel(opt)
             plt.plot(X, concentration_sigma_u)
-            plt.savefig("figures/"+str(param)+"-"+str(min)+"-"+str(max)+"-"+str(nb_points)+"-"+str(opt))
             plt.show()
         elif (opt == "sigma_v"):
             plt.xlabel(param)
             plt.ylabel(opt)
             plt.plot(X, concentration_sgima_v)
-            plt.savefig("figures/"+str(param)+"-"+str(min)+"-"+str(max)+"-"+str(nb_points)+"-"+str(opt))
             plt.show()
         elif (opt == "turing_spots"):
             plt.xlabel(param)
@@ -94,7 +90,7 @@ def sensibilite_many(params,mean=0,sigma=1,nb_points=20,display=("mean_u","mean_
     shape_index = []
     X =[]
     for x in samples:
-        print("x= ", x)
+        print("perturbation = ", x)
         D = {}
         for i in p_init:
             D[i] = float(p_init[i] + x[params.index(i)])
@@ -124,29 +120,21 @@ def sensibilite_many(params,mean=0,sigma=1,nb_points=20,display=("mean_u","mean_
             plt.xlabel(params)
             plt.ylabel(opt)
             plt.plot(X, concentration_moyenne_u)
-            plt.savefig(
-                "figures/" + str(params) + "-" + str(min) + "-" + str(max) + "-" + str(nb_points) + "-" + str(opt))
             plt.show()
         elif (opt == "mean_v"):
             plt.xlabel(params)
             plt.ylabel(opt)
             plt.plot(X, concentration_moyenne_v)
             plt.show()
-            plt.savefig(
-                "figures/" + str(params) + "-" + str(min) + "-" + str(max) + "-" + str(nb_points) + "-" + str(opt))
         elif (opt == "sigma_u"):
             plt.xlabel(params)
             plt.ylabel(opt)
             plt.plot(X, concentration_sigma_u)
-            plt.savefig(
-                "figures/" + str(params) + "-" + str(min) + "-" + str(max) + "-" + str(nb_points) + "-" + str(opt))
             plt.show()
         elif (opt == "sigma_v"):
             plt.xlabel(params)
             plt.ylabel(opt)
             plt.plot(X, concentration_sgima_v)
-            plt.savefig(
-                "figures/" + str(params) + "-" + str(min) + "-" + str(max) + "-" + str(nb_points) + "-" + str(opt))
             plt.show()
         elif (opt == "turing_spots"):
             plt.xlabel(params)

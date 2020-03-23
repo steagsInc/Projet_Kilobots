@@ -37,8 +37,8 @@ REGISTER_USERDATA(USERDATA)
 #define E_VAL 0.1
 #define F_VAL 0.12
 #define G_VAL 0.06
-#define D_u 1.69647522351
-#define D_v 10.72320791107
+#define D_u 1.40556374506
+#define D_v 9.93615535417
 #define LINEAR_R 160
 #define SYNTH_U_MAX 0.23
 #define SYNTH_V_MAX 0.5
