@@ -101,6 +101,8 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
+    A = "123456789"
+    print(A[1::2])
     #print("Chemin avant lancement du serveur : ",os.getcwd())
     app.run_server(debug=True)
 
