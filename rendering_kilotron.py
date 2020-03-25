@@ -209,15 +209,15 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
     I = np.linspace(min,max,points)
     Y = []
     T = []
-    for shape in I:
+    for s in I:
         shape = dict(
             HIDDEN = hidden,
-            NEURONES = int(shape)
+            NEURONES = int(s)
         )
         t  = analysePredictions(shape, 1)
         Y.append(t[0])
         T.append(t[1])
-        print("Simulation pour une shape de : ",shape, " finie en : ",analysePredictions(shape,1)[1])
+        print("Simulation pour une shape de : ",s, " finie en : ",t[1])
 
     plt.plot(I,Y)
     plt.show()
