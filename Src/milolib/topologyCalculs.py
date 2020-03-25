@@ -527,7 +527,8 @@ def clustersRectanglitude(valueTresh=0, distVoisin=100) :
             list.append(1/2)
         if len(cluster) <= 2 :
             list.append(0)
-
+    if list == [] :
+        list = [0]
     return list
 
 
