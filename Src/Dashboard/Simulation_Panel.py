@@ -99,8 +99,8 @@ app.layout = html.Div([
     dcc.Slider(
                     id="gestion_temps",
                     min=0,
-                    max=2000,
-                    marks={i: '{} s'.format(i) for i in range(0,2000,100)},
+                    max=15000,
+                    marks={i: '{} s'.format(i) for i in range(0,15000,1000)},
                     value=5,
                 ),
     html.H3("Taille de l'essaim : "),
@@ -197,19 +197,9 @@ def executer_simulation(n):
 
 if __name__ == '__main__':
     pca = PCA(n_components=2, svd_solver='full')
-    X = []
-    pca.fit(X)
-    X = pca.transform(X)
-    print(np.random.normal(0.1,0.001,4))
-    print(np.random.normal(0.1,0.001,4))
-
-    print(np.random.normal(0.1,0.001,4))
-
-    print(np.random.normal(0.1,0.001,4))
-
 
 
     print("Chemin avant lancement du serveur : ",os.getcwd())
-    #app.run_server(debug=True)
+    app.run_server(debug=True)
 
 

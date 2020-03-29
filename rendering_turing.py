@@ -12,7 +12,9 @@ best_fitness = np.inf
 
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-S = topologyOptimisation("pile",nb=300,visible=False,time=2000)
+S = topologyOptimisation("random",nb=200,visible=False,time=2500)
+#S.computeSimulation()
+
 
 def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
     S.Swarm.setTime(1500)
@@ -48,7 +50,7 @@ def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
     elif (nom_fitness == "Aggregation Addition"):
         computeOptization(fitnessAggregation2, nb_iterations)
     elif (nom_fitness == "Rectanglitude"):
-        computeOptization(fitnessRectanglitude, nb_iterations)
+        computeOptization(fitnessRectanglitudeMaxSTS, nb_iterations)
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots()
     S.Swarm.shapeIndex()
@@ -79,12 +81,55 @@ def fitnessRectanglitude(w):
     S.Swarm.readDatas()
     S.Swarm.rectanglitude()
     if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
-        print("Améliorations du shape index : ",S.Swarm.shapeIndex())
+        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
         plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
     return -np.array(S.Swarm.rectanglitude()).sum()
 
+
+def fitnessRectanglitudeMean(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.rectanglitude()
+    if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
+        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
+        plt.clf()
+        S.Swarm.genererRendu()
+        best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
+    return -np.array(S.Swarm.rectanglitude()).mean()
+
+
+def fitnessRectanglitudeMeanTS(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.rectanglitude()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
+        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
+        plt.clf()
+        S.Swarm.genererRendu()
+        best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
+    return -(np.array(S.Swarm.rectanglitude()).mean()*S.Swarm.nb_turing_spots)
+
+def fitnessRectanglitudeMaxSTS(w):
+    global best_fitness
+    S.put_genotype(w)
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.rectanglitude()-(2*np.array(S.Swarm.rectanglitude()).mean()*S.Swarm.nb_turing_spots+20*S.Swarm.nb_turing_spots)
+    S.Swarm.calculerTuringSpots(seuil=4)
+    if (-(2*np.array(S.Swarm.rectanglitude()).mean()*S.Swarm.nb_turing_spots+20*S.Swarm.nb_turing_spots)< best_fitness):
+        print("Rectanglitude max : ",np.array(S.Swarm.rectanglitude()).max())
+        print("nb turing spots : ",S.Swarm.nb_turing_spots)
+        plt.clf()
+        S.Swarm.genererRendu()
+        best_fitness = -(2*np.array(S.Swarm.rectanglitude()).mean()*S.Swarm.nb_turing_spots+20*S.Swarm.nb_turing_spots)
+    return -(2*np.array(S.Swarm.rectanglitude()).mean()*S.Swarm.nb_turing_spots+20*S.Swarm.nb_turing_spots)
 
 def fitnessAggregation(w):
     S.put_genotype(w)
@@ -156,5 +201,6 @@ def computeOptization(func,iter,sigma = 0.1):
 
 
 if(__name__=="__main__"):
-    renduModel("Turing Spot",50,sigma=1,Model=("D_u","D_v"))
+    S.Swarm.controller.rez_params()
+    renduModel("Turing Spot",550,sigma=0.01)
     #renduFitness("Shape Index",50)
