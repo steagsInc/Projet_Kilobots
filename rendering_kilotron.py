@@ -215,7 +215,7 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
             NEURONES = int(s)
         )
         t  = analysePredictions(shape, 1)
-        Y.append(t[0])
+        Y.append(t[0][0])
         T.append(t[1])
         print("Simulation pour une shape de : ",s, " finie en : ",t[1])
 
@@ -226,8 +226,8 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=150,
-        HIDDEN=2
+        NEURONES=110,
+        HIDDEN=3
     )
-    plot_variance_neuronnes(10,150,3,50)
-    #optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)
+    #plot_variance_neuronnes(10,200,3,30)
+    optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)

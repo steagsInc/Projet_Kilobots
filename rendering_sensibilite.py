@@ -152,4 +152,4 @@ def sensibilite_many(params,mean=0,sigma=1,nb_points=20,display=("mean_u","mean_
 
 
 if(__name__=="__main__"):
-    sensibilite_many(["D_u","D_v"],nb_points=10)
+    sensibilite_param("A_VAL",nb_points=10)

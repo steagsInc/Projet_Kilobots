@@ -42,7 +42,6 @@ def varianceUV(w):
     S.computeSimulation()
     S.Swarm.readDatas()
     print("Variance : ",np.std(S.Swarm.concentrations,axis=0))
-
     return -np.std(S.Swarm.concentrations,axis=0).sum()+np.mean(np.max(S.Swarm.concentrations,0))
 
 
