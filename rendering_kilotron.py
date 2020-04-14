@@ -6,7 +6,7 @@ import numpy as np
 import time
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
-print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
+print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = simulator(nb=30)
 
 S.Swarm.setTime(100)
@@ -37,12 +37,12 @@ def fitness(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 
@@ -65,12 +65,12 @@ def fitnessHinge(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 def fitnessLeastSquare(w):
@@ -92,12 +92,12 @@ def fitnessLeastSquare(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 def fitnessLogLoss(w):
@@ -119,12 +119,12 @@ def fitnessLogLoss(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Nouvelle meilleure loss : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 
@@ -145,8 +145,8 @@ def fitnessPrecision(w):
     historique_fitness.append(P)
     if (P > meilleur_precision):
         meilleur_precision = P
-        print("Nouvelle meilleure Précision : ", P)
-    # print("tps ecoulé : ",time.time()-timeStart)
+        print("Nouvelle meilleure Precision : ", P)
+    # print("tps ecoule : ",time.time()-timeStart)
     return -P
 
 
@@ -197,7 +197,7 @@ def analysePredictions(shape,iter=5,init_param = (0,1),verbose=False):
     SSTD = SSTD / temps.shape[0]
     temps = np.mean(temps)
     if(verbose):
-        print("Résultats moyens fait sur ",iter," ittérations.")
+        print("Resultats moyens fait sur ",iter," itterations.")
         print("MATRICE DE COVARIANCE P1,P2 -> U,V :")
         print(SUP)
         print("COVARIANCE P1-> P2 :",SPP)

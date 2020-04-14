@@ -8,7 +8,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = topologyOptimisation("pile",nb=70,visible=False,time=3000)
+S = topologyOptimisation("pile",nb=150,visible=False,time=3000)
 
 
 
@@ -53,7 +53,7 @@ def fitnessTuringSpot(w):
     S.Swarm.calculerTuringSpots(seuil=4)
     return S.Swarm.nb_turing_spots
 
-def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=100, verbose=True):
+def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=50,wide_search=1.5):
     IND_SIZE = len(var)
     creator.create("MaFitness", base.Fitness, weights=weights)
     creator.create("Individual", list, fitness=creator.MaFitness)
@@ -61,33 +61,31 @@ def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=100, verbose=True):
 
     eval_funcs = lambda x: tuple([f(x) for f in funcs_l])
     toolbox.register("evaluate", eval_funcs)
-    S.Swarm.controller.rez_params()
     S.model = var
     c = S.extract_genotype()
 
     init_func = lambda c, sigma, size: np.random.normal(c, sigma, size)
-    bound_max = list(2*c)
-    bound_min = list(-2*c)
+    bound_max = list(wide_search*c)
+    bound_min = list(-wide_search*c)
     toolbox.register("attr_float", init_func, c, sigma, len(var))
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     paretofront = tools.ParetoFront()
     #toolbox.register("mutate", tools.mutGaussian, mu=c, sigma=sigma, indpb=1.0 / IND_SIZE)
     toolbox.register("mutate", tools.mutPolynomialBounded, low=bound_min, up=bound_max, eta=20.0, indpb=1.0 / IND_SIZE)
-    toolbox.register("select", tools.selNSGA2)
-    CXPB = 0.8
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("avg", np.mean, axis=0)
-    stats.register("std", np.std, axis=0)
-    stats.register("min", np.min, axis=0)
-    stats.register("max", np.max, axis=0)
-    logbook = tools.Logbook()
-    logbook.header = "gen", "evals", "std", "min", "avg", "max"
+    toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=bound_min, up=bound_min, eta=20.0)
 
-    stats.register("min", np.min, axis=0)
-    stats.register("max", np.max, axis=0)
+    toolbox.register("select", tools.selNSGA2)
+    CXPB = 0.6
+    L = []
+    turing_spot = tools.Statistics(lambda ind: ind.fitness.values[0])
+    shape_index = tools.Statistics(lambda ind: ind.fitness.values[2])
+    rectanglitude = tools.Statistics(lambda ind: ind.fitness.values[1])
+
+    mstats = tools.MultiStatistics(Rectanglitude=rectanglitude, Shape_Index=shape_index, Turing_Spot = turing_spot)
+    mstats.register("avg", np.mean, axis=0)
+    mstats.register("max", np.max, axis=0)
     logbook = tools.Logbook()
-    logbook.header = "gen", "evals", "std", "min", "avg", "max"
     pop = toolbox.population(n=MU)
     # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
@@ -97,17 +95,20 @@ def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=100, verbose=True):
     # This is just to assign the crowding distance to the individuals
     # no actual selection is done
     pop = toolbox.select(pop, len(pop))
-    record = stats.compile(pop)
-    logbook.record(gen=0, evals=len(invalid_ind), **record)
+    record = mstats.compile(pop)
+    #print("Record  =" ,record)
+    logbook.record( **record)
     print(logbook.stream)
     # Begin the generational process
     for gen in range(1, NGEN):
         # Vary the population
+        if(gen%5==0):
+            S.Swarm.controller.withVisiblite(True)
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [toolbox.clone(ind) for ind in offspring]
         for ind1, ind2 in zip(offspring[::2], offspring[1::2]):
-            #if random.random() <= CXPB:
-            #    toolbox.mate(ind1, ind2)
+            if random.random() <= CXPB:
+                toolbox.mate(ind1, ind2)
             toolbox.mutate(ind1)
             toolbox.mutate(ind2)
             del ind1.fitness.values, ind2.fitness.values
@@ -118,8 +119,8 @@ def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=100, verbose=True):
             ind.fitness.values = fit
         # Select the next generation population
         pop = toolbox.select(pop + offspring, MU)
-        record = stats.compile(pop)
-        logbook.record(gen=gen, evals=len(invalid_ind), **record)
+        record = mstats.compile(pop)
+        logbook.record(g=gen, **record)
         print(logbook.stream)
 
     return pop, paretofront
@@ -179,7 +180,7 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = True, MAXITER = 100, STAGNATION
     toolbox.register("evaluate", eval_funcs)
 
     halloffame = tools.HallOfFame(1)
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats = tools.Statistics(lambda ind: np.array([ind.fitness.values]))
     stats.register("average", np.mean)
     stats.register("std", np.std)
     stats.register("min", np.min)
@@ -243,10 +244,17 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = True, MAXITER = 100, STAGNATION
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
-    S.Swarm.controller.rez_params()
+    #S.Swarm.controller.rez_params()
+
     #funcs_l = [lambda x:2*x ,lambda x:5*x+3]
     #eval_funcs = lambda x: tuple([f(x) for f in funcs_l])
     #print(eval_funcs(3))
     #cmaES([fitnessTuringSpot, fitnessRectanglitude] , (+2,+1) , 5 , 10,('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), 0.1,10)
     #CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), (+1,-1), [fitnessRectanglitude,fitnessShapeIndex], 0.01, verbose = True, MAXITER = 10, STAGNATION_ITER =10)
-    NSGA([fitnessTuringSpot,fitnessRectanglitude, fitnessShapeIndex],(+1,+2,-1),('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'),sigma=0.01)
+    NSGA([fitnessTuringSpot,fitnessRectanglitude, fitnessShapeIndex],(+5,+1,-10),('D_u', 'D_v'),sigma=2)
+    S.Swarm.controller.withVisiblite(True)
+    S.Swarm.controller.withTime(-1)
+    S.Swarm.controller.withNombre(200)
+    S.Swarm.controller.withTopology("pile")
+
+    S.Swarm.controller.run()
