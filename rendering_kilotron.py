@@ -4,6 +4,7 @@ import cma
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import tensorflow as tf
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
@@ -229,5 +230,5 @@ if(__name__=="__main__"):
         NEURONES=150,
         HIDDEN=2
     )
-    plot_variance_neuronnes(10,150,3,50)
-    #optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)
+    #plot_variance_neuronnes(10,150,3,50)
+    optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)
