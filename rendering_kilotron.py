@@ -7,7 +7,7 @@ import time
 import tensorflow as tf
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
-print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
+print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = simulator(nb=30)
 
 S.Swarm.setTime(100)
@@ -38,12 +38,12 @@ def fitness(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 
@@ -66,12 +66,12 @@ def fitnessHinge(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 def fitnessLeastSquare(w):
@@ -93,12 +93,12 @@ def fitnessLeastSquare(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Penalite : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 def fitnessLogLoss(w):
@@ -120,12 +120,12 @@ def fitnessLogLoss(w):
     historique_fitness.append(L)
     if(P > meilleur_precision):
         meilleur_precision = P
-        print("Précision : ", P)
+        print("Precision : ", P)
         best_w = w
     if (L < meilleur_fitness):
         meilleur_fitness = L
         print("Nouvelle meilleure loss : ", L)
-    #print("tps ecoulé : ",time.time()-timeStart)
+    #print("tps ecoule : ",time.time()-timeStart)
     return L
 
 
@@ -146,8 +146,8 @@ def fitnessPrecision(w):
     historique_fitness.append(P)
     if (P > meilleur_precision):
         meilleur_precision = P
-        print("Nouvelle meilleure Précision : ", P)
-    # print("tps ecoulé : ",time.time()-timeStart)
+        print("Nouvelle meilleure Precision : ", P)
+    # print("tps ecoule : ",time.time()-timeStart)
     return -P
 
 
@@ -198,7 +198,7 @@ def analysePredictions(shape,iter=5,init_param = (0,1),verbose=False):
     SSTD = SSTD / temps.shape[0]
     temps = np.mean(temps)
     if(verbose):
-        print("Résultats moyens fait sur ",iter," ittérations.")
+        print("Resultats moyens fait sur ",iter," itterations.")
         print("MATRICE DE COVARIANCE P1,P2 -> U,V :")
         print(SUP)
         print("COVARIANCE P1-> P2 :",SPP)
@@ -216,7 +216,7 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
             NEURONES = int(s)
         )
         t  = analysePredictions(shape, 1)
-        Y.append(t[0])
+        Y.append(t[0][0])
         T.append(t[1])
         print("Simulation pour une shape de : ",s, " finie en : ",t[1])
 
@@ -227,8 +227,8 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=150,
-        HIDDEN=2
+        NEURONES=110,
+        HIDDEN=3
     )
     #plot_variance_neuronnes(10,150,3,50)
     optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)

@@ -196,7 +196,7 @@ def executer_simulation(n):
 
 
 if __name__ == '__main__':
-    pca = PCA(n_components=2, svd_solver='full')
+    #pca = PCA(n_components=2, svd_solver='full')
 
 
     print("Chemin avant lancement du serveur : ",os.getcwd())

@@ -56,11 +56,25 @@ void activation_mat(float *mat,int nb_rows){
 
 }
 
+void softmax_mat(float *mat,int nb_rows){
+
+    int i,j;
+
+    float sum = 0;
+
+    for (i = 0; i < nb_rows; ++i)
+          sum = sum + exp((double)(mat[i]));
+
+    for (i = 0; i < nb_rows; ++i)
+          mat[i] = exp((double)(mat[i]))/sum;
+
+}
+
 float *compute_layer(Layer *layer,float *input){
 
     float *res1 = mat_mul_cuda(layer->computeCuda,layer->nb_neurons,layer->nb_input,layer->weights,input);
     mat_add(res1,layer->bias,layer->nb_neurons);
-    activation_mat(res1,layer->nb_neurons);
+    softmax_mat(res1,layer->nb_neurons);
     return res1;
 }
 

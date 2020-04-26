@@ -1,5 +1,5 @@
 """
-Ces méthodes sont utilisés afin de ne pas surcharger les notebooks.
+Ces methodes sont utilises afin de ne pas surcharger les notebooks.
 """
 import os
 
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 best_fitness = np.inf
 
 
-print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
+print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = topologyOptimisation("random",nb=200,visible=False,time=2500)
 #S.computeSimulation()
 
@@ -68,7 +68,7 @@ def fitnessShapeIndex(w):
     S.Swarm.readDatas()
     S.Swarm.shapeIndex()
     if (-np.array(S.Swarm.shapeIndex()).sum() < best_fitness):
-        print("Améliorations du shape index : ",S.Swarm.shapeIndex())
+        print("Ameliorations du shape index : ",S.Swarm.shapeIndex())
         plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.shapeIndex()).sum()
@@ -81,7 +81,7 @@ def fitnessRectanglitude(w):
     S.Swarm.readDatas()
     S.Swarm.rectanglitude()
     if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
-        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
+        print("Ameliorations du shape index : ",S.Swarm.rectanglitude())
         plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
@@ -95,7 +95,7 @@ def fitnessRectanglitudeMean(w):
     S.Swarm.readDatas()
     S.Swarm.rectanglitude()
     if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
-        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
+        print("Ameliorations du shape index : ",S.Swarm.rectanglitude())
         plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
@@ -110,7 +110,7 @@ def fitnessRectanglitudeMeanTS(w):
     S.Swarm.rectanglitude()
     S.Swarm.calculerTuringSpots(seuil=4)
     if (-np.array(S.Swarm.rectanglitude()).sum() < best_fitness):
-        print("Améliorations du shape index : ",S.Swarm.rectanglitude())
+        print("Ameliorations du shape index : ",S.Swarm.rectanglitude())
         plt.clf()
         S.Swarm.genererRendu()
         best_fitness = -np.array(S.Swarm.rectanglitude()).sum()
@@ -139,9 +139,9 @@ def fitnessAggregation(w):
     plt.clf()
     #print("Nombre de turing de ",-S.Swarm.nb_turing_spots)
     S.Swarm.calculerTuringSpots(seuil=4)
-    #print("Précision : ",S.getPrecision())
+    #print("Precision : ",S.getPrecision())
     #print("Shape de ", -S.Swarm.SumshapeIndex())
-    print("Penalité de  : ",-(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex()))
+    print("Penalite de  : ",-(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex()))
     return -(S.Swarm.nb_turing_spots*S.Swarm.SumshapeIndex())
 
 def varianceUV(w):
@@ -186,7 +186,7 @@ def fitnessTuringSpot(w):
     S.Swarm.readDatas()
     S.Swarm.calculerTuringSpots(seuil=4)
     if(-S.Swarm.nb_turing_spots < best_fitness and S.Swarm.nb_turing_spots > 0):
-        print("Amélioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
+        print("Amelioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
         S.Swarm.renduTuringSpot()
         best_fitness = -S.Swarm.nb_turing_spots
     return -S.Swarm.nb_turing_spots
