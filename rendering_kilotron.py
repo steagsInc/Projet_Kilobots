@@ -150,7 +150,27 @@ def fitnessPrecision(w):
     # print("tps ecoule : ",time.time()-timeStart)
     return -P
 
-
+def fitnessCrossEntropy(w):
+    timeStart = time.time()
+    global meilleur_precision
+    global meilleur_fitness
+    global historique_precisions
+    global historique_fitness
+    global nb_exec
+    global x_precisions
+    nb_exec = nb_exec + 1
+    print("Iteration ", nb_exec, " : ")
+    S.Swarm.controller.write_Weights(w)
+    S.computeSimulation()
+    L = S.getCrossEntropy()
+    P = S.getPrecision()
+    x_precisions.append(nb_exec)
+    historique_fitness.append(P)
+    if (P > meilleur_precision):
+        meilleur_precision = P
+        print("Nouvelle meilleure Precision : ", P)
+    # print("tps ecoule : ",time.time()-timeStart)
+    return L
 
 
 
@@ -231,4 +251,4 @@ if(__name__=="__main__"):
         HIDDEN=3
     )
     #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)
+    optimizeNeuralNetwork(10, 0.01, fitnessCrossEntropy, shape)

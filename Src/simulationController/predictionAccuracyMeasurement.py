@@ -16,7 +16,7 @@ class simulator():
         self.pred = []
 
     def computeSimulation(self):
-        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(100).withNombre(self.nb_robots)
+        self.Swarm.controller = self.Swarm.controller.withVisiblite(True).withTime(100).withNombre(self.nb_robots)
         self.pred.clear()
         for i in range(len(self.Topologies)):
             self.Swarm.setTopology(topology=self.Topologies[i])
@@ -58,6 +58,12 @@ class simulator():
             cpt = cpt + c
         return cpt
 
+    def softmax(self,predictions):
+        predictions = np.exp(predictions)
+        for i in range(predictions.shape[0]):
+            predictions[i,:] = predictions[i,:] / np.sum(predictions[i,:])
+        return predictions
+
     def getHingeContinuousEcart(self):
         cpt = 0
         for i in range(0, len(self.pred)):
@@ -77,7 +83,21 @@ class simulator():
             cpt = cpt + c
         return cpt
 
-
+    def getCrossEntropy(self):
+        cpt = 0
+        loss = 0
+        for i in range(0, len(self.pred)):
+            y_p = self.pred[i]
+            y_p = self.softmax(y_p)
+            Z = -np.zeros(y_p.shape).astype(int)
+            Z[:,i%2] = 1
+            for i in range(0,y_p.shape[0]):
+                cpt = 0
+                for j in range(0,y_p.shape[1]):
+                    cpt = cpt + Z[i][j]*np.log(y_p[i][j])
+                loss = loss - cpt
+        #print("Donc on retourne : ",cpt)
+        return loss
 
     def getHinge(self):
         cpt = 0
