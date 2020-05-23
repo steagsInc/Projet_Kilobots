@@ -168,15 +168,15 @@ def countTuringSpotsWithVoronoi(show=False, colorTresh=2, periTresh=100):
     
     image = cv2.imread("forContour.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = cv2.Canny(gray, 30, 200)
+    edged = gray #cv2.Canny(gray, 30, 200)
 
     # Finding Contours
     # Use a copy of the image e.g. edged.copy()
     # since findContours alters the image
     contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)  # , offset = (100, 10))
-    if show:
-        cv2.imshow('Canny Edges After Contouring', edged)
-        cv2.waitKey(0)
+    #if show:
+        #cv2.imshow('Canny Edges After Contouring', edged)
+        #cv2.waitKey(0)
 
     print("Number of Contours found = " + str(len(contours)))
 
@@ -267,15 +267,15 @@ def countTuringSpotsAnDonutsWithVoronoi(show=False, colorTresh=2, periTresh=100)
     
     image = cv2.imread("forContour.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = cv2.Canny(gray, 30, 200)
+    edged = gray #cv2.Canny(gray, 30, 200)
 
     # Finding Contours
     # Use a copy of the image e.g. edged.copy()
     # since findContours alters the image
     contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)  # , offset = (100, 10))
-    if show:
-        cv2.imshow('Canny Edges After Contouring', edged)
-        cv2.waitKey(0)
+    #if show:
+    #    cv2.imshow('Canny Edges After Contouring', edged)
+    #    cv2.waitKey(0)
 
     print("Number of Contours found = " + str(len(contours)))
 
@@ -358,7 +358,7 @@ def multiClusterShapeIndex(show=False, periTreshold=100, colorTreshold=0, distVo
     erosion = cv2.morphologyEx(thresh, cv2.MORPH_ERODE, kernel, iterations=2)
 
     if show:
-        cv2.imshow('Canny Edges After Contouring', erosion)
+        cv2.imshow('Image after erosion', erosion)
         cv2.waitKey(0)
 
     # Finding Contours
@@ -506,7 +506,7 @@ def angle(u, v):
     return math.acos(cos)
 
 
-def shapeCharacterizingPoints(angleTreshold, show=False):
+def shapeCharacterizingPoints(angleTreshold, show=False, valueTresh = 0):
     nodes = []
 
     with open(fp) as json_file:
@@ -518,6 +518,14 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
             u = state['state'].get('u')
             v = state['state'].get('v')
             nodes.append([x, y, u, v])
+           
+    nodes2 = []
+
+    for node in range(len(nodes)):
+        if nodes[node][2] >= valueTresh:
+            nodes2.append(nodes[node])
+
+    nodes = nodes2
 
     fig, ax = plt.subplots()
     # en noir
@@ -533,9 +541,9 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
     image = cv2.imread("forContour.png")
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = cv2.Canny(gray, 30, 200)
+    edged = gray #cv2.Canny(gray, 30, 200)
     if show:
-        cv2.imshow('Canny Edges After Contouring', edged)
+        cv2.imshow('image :', edged)
         cv2.waitKey(0)
 
     # Finding Contours
