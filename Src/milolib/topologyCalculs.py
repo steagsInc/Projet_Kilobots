@@ -168,15 +168,15 @@ def countTuringSpotsWithVoronoi(show=False, colorTresh=2, periTresh=100):
     
     image = cv2.imread("forContour.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = gray #cv2.Canny(gray, 30, 200)
+    edged = cv2.Canny(gray, 30, 200)
 
     # Finding Contours
     # Use a copy of the image e.g. edged.copy()
     # since findContours alters the image
     contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)  # , offset = (100, 10))
-    #if show:
-        #cv2.imshow('Canny Edges After Contouring', edged)
-        #cv2.waitKey(0)
+    if show:
+        cv2.imshow('Canny Edges After Contouring', edged)
+        cv2.waitKey(0)
 
     print("Number of Contours found = " + str(len(contours)))
 
@@ -267,15 +267,15 @@ def countTuringSpotsAnDonutsWithVoronoi(show=False, colorTresh=2, periTresh=100)
     
     image = cv2.imread("forContour.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = gray #cv2.Canny(gray, 30, 200)
+    edged = cv2.Canny(gray, 30, 200)
 
     # Finding Contours
     # Use a copy of the image e.g. edged.copy()
     # since findContours alters the image
     contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)  # , offset = (100, 10))
-    #if show:
-    #    cv2.imshow('Canny Edges After Contouring', edged)
-    #    cv2.waitKey(0)
+    if show:
+        cv2.imshow('Canny Edges After Contouring', edged)
+        cv2.waitKey(0)
 
     print("Number of Contours found = " + str(len(contours)))
 
@@ -541,9 +541,9 @@ def shapeCharacterizingPoints(angleTreshold, show=False, valueTresh = 0):
     image = cv2.imread("forContour.png")
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    edged = gray #cv2.Canny(gray, 30, 200)
+    edged = cv2.Canny(gray, 30, 200)
     if show:
-        cv2.imshow('image :', edged)
+        cv2.imshow('Canny Edges After Contouring', edged)
         cv2.waitKey(0)
 
     # Finding Contours
