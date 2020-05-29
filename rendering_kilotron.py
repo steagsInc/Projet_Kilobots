@@ -166,6 +166,9 @@ def fitnessCrossEntropy(w):
     P = S.getPrecision()
     x_precisions.append(nb_exec)
     historique_fitness.append(P)
+    if(L < meilleur_fitness):
+        meilleur_fitness = L
+        print("Loss : ", L)
     if (P > meilleur_precision):
         meilleur_precision = P
         print("Nouvelle meilleure Precision : ", P)
@@ -246,9 +249,14 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
     plt.show()
 
 if(__name__=="__main__"):
+    shape1 = dict(
+        NEURONES=50,
+        HIDDEN=1
+    )
     shape = dict(
-        NEURONES=110,
+        NEURONES=57,
         HIDDEN=3
     )
     #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(10, 0.01, fitnessCrossEntropy, shape)
+    optimizeNeuralNetwork(1000, 0.1, fitnessCrossEntropy, shape)
+    #optimizeNeuralNetwork(10, 0.001, fitnessCrossEntropy, shape)
