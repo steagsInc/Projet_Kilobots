@@ -10,6 +10,14 @@ def changeShape(template,NN):
     with open(template+'/'+template+'.c', 'w') as file:
         file.writelines(data)
 
+def changeShapeFile(template,NN):
+    with open(template+'/perceptron/NN.txt', 'r') as file:
+        data = file.readlines()
+        data[4] = str(NN) + "\n"
+
+    with open(template+'/perceptron/NN.txt', 'w') as file:
+        file.writelines(data)
+
 def run(template):
 
     os.chdir(template)
@@ -30,7 +38,7 @@ def mesure(max,step):
         changeShape("kilotron",i)
         t.append(run("kilotron"))
 
-        changeShape("kilotron_cuda", i)
+        changeShapeFile("kilotron_cuda", i)
         t_cuda.append(run("kilotron_cuda"))
         print(i)
 

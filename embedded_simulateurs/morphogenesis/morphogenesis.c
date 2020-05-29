@@ -25,7 +25,7 @@ REGISTER_USERDATA(USERDATA)
 #define POLAR_TH 4.0            // Threshold to become polarized
 #define EDGE_TH 0.8             // Ratio between the average number of neighbors of the robot and the average number of neighbors' neighbors for edge detection
 #define WAIT_BEFORE_MOVE 27000  // kilo_ticks to wait before moving. 75000 for simulation, 27000 for real robots (about 10 minutes)
-#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area 
+#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area
 #define DIST_CRIT 45            // Distance that a robot is considered to be close
 #define R2 120                  // For probabilistic purposes
 
@@ -34,19 +34,11 @@ REGISTER_USERDATA(USERDATA)
 #define B_VAL -0.09165592803
 #define C_VAL 0.00401875745
 #define D_VAL 0.02874577257
-<<<<<<< HEAD
 #define E_VAL 0.09425742955
 #define F_VAL 0.11037425137
 #define G_VAL 0.05169872421
 #define D_u 0.50265321031
 #define D_v 9.99905213227
-=======
-#define E_VAL 0.09425742954
-#define F_VAL 0.11037425136
-#define G_VAL 0.05169872420
-#define D_u -1.41297108786
-#define D_v 13.29043631374
->>>>>>> f35d4499634152c6420faf0e18ea69202d2bdb55
 #define LINEAR_R 160.00000000000
 #define SYNTH_U_MAX 0.23000000000
 #define SYNTH_V_MAX 0.50000000000
@@ -346,7 +338,7 @@ float calc_apprx_running_avg(float old_avg, float num, float alpha){
 
 
 /*
- * Concentration of U and V is updated based on the linear model for reaction-diffusion 
+ * Concentration of U and V is updated based on the linear model for reaction-diffusion
  */
 void regulation_linear_model(){
 
@@ -382,7 +374,7 @@ void regulation_linear_model(){
 
 
 	float synth_u_max = SYNTH_U_MAX;
-	float synth_v_max = SYNTH_V_MAX; 
+	float synth_v_max = SYNTH_V_MAX;
 
     // These variables will have f(u,v) and g(u,v) eventually
 	float synth_rate_u;
@@ -405,8 +397,8 @@ void regulation_linear_model(){
 	dG[0] = linear_R * synth_rate_u + D[0] * lap[0];
 	dG[1] = linear_R * synth_rate_v + D[1] * lap[1];
 
-	// Update of the concentration 
-	float dt = DT; 
+	// Update of the concentration
+	float dt = DT;
 	mydata->molecules_concentration[0] += dt * dG[0];
 	mydata->molecules_concentration[1] += dt * dG[1];
 }
@@ -556,7 +548,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 
 		if(mydata->neighbors[i].molecules_concentration[0] > POLAR_TH){
 			count++;
-			
+
 		}
 
 		if(count == n){
@@ -571,7 +563,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 }
 
 
-/* 
+/*
  * It processes a received message at the front of the ring buffer.
  * It goes through the list of neighbors. If the message is from a bot
  * already in the list, it updates the information, otherwise
@@ -675,7 +667,7 @@ void process_message()
 void receive_inputs()
 {
 
-    // Processes al messages received since the last time the bot read them (removed after reading)    
+    // Processes al messages received since the last time the bot read them (removed after reading)
     while (!RB_empty()) {
         process_message();
         RB_popfront();
@@ -693,7 +685,7 @@ void receive_inputs()
 }
 
 
-/* 
+/*
  * Goes through the list of neighbors and removes entries older than a threshold, currently 2 seconds.
  */
 void purgeNeighbors(void)
@@ -734,7 +726,7 @@ void setup_message(void)
   int exp_real;
   long fl;
 
-   
+
   for (i = 0; i < 2; i++){
 
 	  fl = *(long*)&mydata->molecules_concentration[i];
@@ -780,12 +772,12 @@ uint8_t wait_to_orbit(){
 	uint8_t flag;
 
 	if(
-	    test_edge() 
-	    && check_wait_state() 
-	    && (!polarized() || !has_at_least_n_polarized_N(1) || (has_at_least_n_polarized_N(1) && get_dist_to_nearest_polarized() > (DIST_CRIT))) 
-	    && mydata->counter == 0 
-	    && (get_dist_to_nearest_polarized() > (DIST_CRIT) || !has_at_least_n_polarized_N(2)) 
-	    && mydata->N_Neighbors != 0 
+	    test_edge()
+	    && check_wait_state()
+	    && (!polarized() || !has_at_least_n_polarized_N(1) || (has_at_least_n_polarized_N(1) && get_dist_to_nearest_polarized() > (DIST_CRIT)))
+	    && mydata->counter == 0
+	    && (get_dist_to_nearest_polarized() > (DIST_CRIT) || !has_at_least_n_polarized_N(2))
+	    && mydata->N_Neighbors != 0
 	) flag = 1;
 	else flag = 0;
 
@@ -794,7 +786,7 @@ uint8_t wait_to_orbit(){
 
 
 /*
- * Returns whether the robot should transit from ORBIT state to WAIT state. Transits if: 
+ * Returns whether the robot should transit from ORBIT state to WAIT state. Transits if:
  *   - the nearest neighbor is orbiting, OR
  *   - the nearest neighbor is too far and cannot be reached by orbiting, OR
  *   - it is no longer on the edge, OR
@@ -809,10 +801,10 @@ uint8_t orbit_to_wait(){
 	uint8_t dist_nearest = get_dist_by_id(id_nearest);
 
 	if(
-		get_state_by_id(id_nearest) != WAIT 
+		get_state_by_id(id_nearest) != WAIT
 		|| dist_nearest > DIST_CRIT + 15
-		|| !test_edge() 
-		|| (get_dist_to_nearest_polarized() < (DIST_CRIT - 1) && has_at_least_n_polarized_N(2)) 
+		|| !test_edge()
+		|| (get_dist_to_nearest_polarized() < (DIST_CRIT - 1) && has_at_least_n_polarized_N(2))
 		|| mydata->N_Neighbors == 0
     ) flag = 1;
 	else flag = 0;
@@ -822,7 +814,7 @@ uint8_t orbit_to_wait(){
 
 
 /*
- * Returns whether the robot should transit from WAIT state to FOLLOW state. Transits if: 
+ * Returns whether the robot should transit from WAIT state to FOLLOW state. Transits if:
  *   - the robot is on the edge, AND
  *   - the nearest neighbor is in WAIT state, AND
  *   - the nearest neighbor is too far and cannot be reached by orbiting, AND
@@ -848,7 +840,7 @@ uint8_t wait_to_follow(){
 
 
 /*
- * Returns whether the robot should transit from FOLLOW state to WAIT state. Transits if: 
+ * Returns whether the robot should transit from FOLLOW state to WAIT state. Transits if:
  *   - the nearest neighbor isn't in WAIT state, OR
  *   - it has no neighbors, OR
  *   - there is a neighbor nearby
@@ -908,7 +900,7 @@ void edge_flow(){
 					set_motors(125,125);
 					delay(150);
 
-				}	
+				}
 
                 // The robot orbits around its nearest neighbor
 				uint16_t id = find_nearest_N_id();
@@ -1042,7 +1034,7 @@ void setup() {
 
 
 /*
- * Loop function that the kilobots execute continuously. 
+ * Loop function that the kilobots execute continuously.
  *   - It processes messages, and updates neighbors tables and N, NN running averages
  *   - If robot not in state ORBIT or FOLLOW and has neighbors, run Turing patterning
  */
@@ -1055,7 +1047,7 @@ void loop(){
     if(get_bot_state() != ORBIT && get_bot_state() != FOLLOW && mydata->N_Neighbors > 0){
 
         regulation_linear_model();
-       
+
     }
 
 
@@ -1065,7 +1057,7 @@ void loop(){
 		mydata->running_avg_NNs = calc_avg_NNs();
 	}
 
-    
+
     // The morphogenesis will start after these kilo_ticks
 	if(kilo_ticks > WAIT_BEFORE_MOVE){
 		edge_flow();
@@ -1076,7 +1068,7 @@ void loop(){
     // White
 	if(get_bot_state() == ORBIT) set_color(RGB(3,3,3));
 
-    // Red 
+    // Red
 	else if(get_bot_state() == FOLLOW) set_color(RGB(3,0,0));
 
     // Green
