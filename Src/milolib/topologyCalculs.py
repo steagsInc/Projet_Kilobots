@@ -219,6 +219,101 @@ def countTuringSpotsWithVoronoi(show=False, colorTresh=2, periTresh=100):
     return len(turingSpots)
 
 
+
+
+
+def countTuringSpotsAnDonutsWithVoronoi(show=False, colorTresh=2, periTresh=100):
+    nodes = []
+    with open(fp) as json_file:
+        data = json.load(json_file)
+
+        # print(data)
+        for state in data['bot_states']:  # ['bot_states']['state']:
+            x = state['x_position']
+            y = state['y_position']
+            u = state['state'].get('u')
+            v = state['state'].get('v')
+            nodes.append([x, y, u, v])
+
+    points = [(i[0], i[1]) for i in nodes]
+
+    # generate data values
+    val = [i[2] for i in nodes]
+
+    # generate Voronoi tessellation
+    vor = Voronoi(points)
+
+    fig, ax = plt.subplots()
+
+    # plot Voronoi diagram, and fill finite regions with color mapped from speed value
+    fig = voronoi_plot_2d(vor, show_points=False, show_vertices=False, s=1, line_width=0)
+    for r in range(len(vor.point_region)):
+        region = vor.regions[vor.point_region[r]]
+        if not -1 in region:
+            polygon = [vor.vertices[i] for i in region]
+
+            # en nuances de gris :
+            # plt.fill(*zip(*polygon), color= (1-val[r]/6, 1-val[r]/6, 1-val[r]/6))
+            # en noir et blanc pour trouver les turing spots:
+            plt.fill(*zip(*polygon), color="white" if val[r] < colorTresh else "black")
+            # en jolies couleurs qui marche pas :
+            # plt.fill(*zip(*polygon), color= val[r])
+
+    plt.axis('equal')
+    plt.axis([-800, 800, -800, 800])
+    plt.axis('off')
+    fig.savefig("forContour.png")
+    plt.close()
+    
+    image = cv2.imread("forContour.png")
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    edged = cv2.Canny(gray, 30, 200)
+
+    # Finding Contours
+    # Use a copy of the image e.g. edged.copy()
+    # since findContours alters the image
+    contours, hierarchy = cv2.findContours(edged, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)  # , offset = (100, 10))
+    if show:
+        cv2.imshow('Canny Edges After Contouring', edged)
+        cv2.waitKey(0)
+
+    print("Number of Contours found = " + str(len(contours)))
+
+    if show:
+        cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
+
+        cv2.imshow('Contours', image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+    turingSpots = []
+    for i in range(len(contours)):
+        perimeter = cv2.arcLength(contours[i], True)
+
+        # pour compter compter un donut de Turing comme deux spots
+
+        if perimeter > periTresh :
+            turingSpots.append(contours[i])
+
+    print("Number of Turing Spots found = " + str(len(turingSpots)))
+
+    # Draw all contours
+    # -1 signifies drawing all contours
+    if show:
+        for i in range(len(turingSpots)):
+            image = cv2.imread("forContour.png")
+            cv2.drawContours(image, [turingSpots[i]], -1, (0, 255, 0), 3)
+
+            cv2.imshow('Turing Spots', image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+
+    return len(turingSpots)
+
+
+
+
+
 def multiClusterShapeIndex(show=False, periTreshold=100, colorTreshold=0, distVoisin=50):
     """
     retourne les shape index de tous les cluster dans une liste, pas seulement le shape index du cluster au plus grand périmètre
@@ -263,7 +358,7 @@ def multiClusterShapeIndex(show=False, periTreshold=100, colorTreshold=0, distVo
     erosion = cv2.morphologyEx(thresh, cv2.MORPH_ERODE, kernel, iterations=2)
 
     if show:
-        cv2.imshow('Canny Edges After Contouring', erosion)
+        cv2.imshow('Image after erosion', erosion)
         cv2.waitKey(0)
 
     # Finding Contours
@@ -411,7 +506,7 @@ def angle(u, v):
     return math.acos(cos)
 
 
-def shapeCharacterizingPoints(angleTreshold, show=False):
+def shapeCharacterizingPoints(angleTreshold, show=False, valueTresh = 0):
     nodes = []
 
     with open(fp) as json_file:
@@ -423,6 +518,14 @@ def shapeCharacterizingPoints(angleTreshold, show=False):
             u = state['state'].get('u')
             v = state['state'].get('v')
             nodes.append([x, y, u, v])
+           
+    nodes2 = []
+
+    for node in range(len(nodes)):
+        if nodes[node][2] >= valueTresh:
+            nodes2.append(nodes[node])
+
+    nodes = nodes2
 
     fig, ax = plt.subplots()
     # en noir
