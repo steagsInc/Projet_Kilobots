@@ -12,9 +12,8 @@ RUN	apt-get install -y  python && \
 	cd kilolib && \
 	make && \
 	apt-get install -y python3-pip && \
-	pip3 install cma deap matplotlib scipy opencv-python scikit-learn pandas && \
-	apt-get install -y libxrender1 && \
-	apt-get install -y jupyter-notebook
+	pip3 install cma deap matplotlib scipy opencv-python && \
+	apt-get install libxrender1 
 RUN cd
 RUN mkdir Project
 RUN git clone https://github.com/steagsInc/Projet_Kilobots.git

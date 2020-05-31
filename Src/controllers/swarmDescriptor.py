@@ -185,6 +185,25 @@ class swarmDescriptor:
         plt.ylabel("y")
         plt.show()
 
+
+    def genererRenduFolder(self,folder):
+        self.readDatas()
+        pos = self.positions
+        U = self.concentrations[:, 0]
+        pos_vert = pos[np.where(U >= self.seuillage_turing_spots)]
+        pos_bleu = pos[np.where(U >= self.seuillage_turing_spots - 1)]
+        pos_rose = pos[np.where(U >= self.seuillage_turing_spots - 2)]
+        pos_cyan = pos[np.where(U >= self.seuillage_turing_spots - 3)]
+        pos_noir = pos[np.where(U < self.seuillage_turing_spots - 3)]
+        plt.scatter(pos_noir[:, 0], pos_noir[:, 1], c="black")
+        plt.scatter(pos_bleu[:, 0], pos_bleu[:, 1], c="blue")
+        plt.scatter(pos_cyan[:, 0], pos_cyan[:, 1], c="cyan")
+        plt.scatter(pos_rose[:, 0], pos_rose[:, 1], c="pink")
+        plt.scatter(pos_vert[:, 0], pos_vert[:, 1], c="green")
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.savefig(folder)
+
     def renduTuringSpot(self,restedespoints = True):
         T = self.turing_spots
         pos = self.positions
@@ -196,6 +215,17 @@ class swarmDescriptor:
             plt.scatter(X,Y,c=np.random.rand(3,).reshape((1,3)))
         plt.show()
 
+
+    def genererRenduTSFolder(self,folder,restedespoints = True):
+        T = self.turing_spots
+        pos = self.positions
+        if (restedespoints):
+            plt.scatter(pos[:, 0], pos[:, 1], c="black")
+        for s in T:
+            X = pos[s, 0]
+            Y = pos[s, 1]
+            plt.scatter(X, Y, c=np.random.rand(3, ).reshape((1, 3)))
+        plt.savefig(folder)
 
 
 

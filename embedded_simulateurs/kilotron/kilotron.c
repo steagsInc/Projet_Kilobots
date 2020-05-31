@@ -48,7 +48,7 @@ REGISTER_USERDATA(USERDATA)
 
 
 
-#define NN 100
+#define NN 20
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */

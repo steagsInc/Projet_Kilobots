@@ -48,7 +48,6 @@ REGISTER_USERDATA(USERDATA)
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
-
 void rxbuffer_push(message_t *msg, distance_measurement_t *dist) {
     received_message_t *rmsg = &RB_back();
     rmsg->msg = *msg;
@@ -482,21 +481,7 @@ void process_perceptron(){
 
     }
 
-    if (mydata->N_Neighbors!=0){
-      for(j=0;j<COMMUNICATION;j++){
-        x[j+2]=x[j+2]/mydata->N_Neighbors;
-      }
-    }
-
     float *prediction = predict(mydata->perceptron, x);
-
-    /*
-    for (i = 0; i<6;i++){
-      printf("%f ",prediction[i]);
-    }
-    printf("\n ");
-    */
-
     //printf("Prédiction 01 : %f \n",prediction[0]);
     //printf("Prédiction 02 : %f \n",prediction[1]);
     mydata->prediction1 = prediction[0];

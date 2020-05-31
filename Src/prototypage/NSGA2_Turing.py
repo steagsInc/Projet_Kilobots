@@ -63,7 +63,7 @@ def NSGA(funcs_l, weights, var, sigma, MU=12, NGEN=50,wide_search=1.5):
     toolbox.register("evaluate", eval_funcs)
     S.model = var
     c = S.extract_genotype()
-    print("c = ",c)
+
     init_func = lambda c, sigma, size: np.random.normal(c, sigma, size)
     bound_max = list(wide_search*c)
     bound_min = list(-wide_search*c)

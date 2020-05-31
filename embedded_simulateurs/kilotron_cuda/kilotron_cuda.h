@@ -23,7 +23,7 @@
                     // 8 works too, but complains in the simulator
                     // when the bots are very dense
 
-#define COMMUNICATION 10
+#define COMMUNICATION 4
 
 
 // States of the robots

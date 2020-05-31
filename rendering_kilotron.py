@@ -4,11 +4,10 @@ import cma
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-import tensorflow as tf
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
-S = simulator(nb=100)
+S = simulator(nb=30)
 
 S.Swarm.setTime(100)
 
@@ -150,30 +149,7 @@ def fitnessPrecision(w):
     # print("tps ecoule : ",time.time()-timeStart)
     return -P
 
-def fitnessCrossEntropy(w):
-    timeStart = time.time()
-    global meilleur_precision
-    global meilleur_fitness
-    global historique_precisions
-    global historique_fitness
-    global nb_exec
-    global x_precisions
-    nb_exec = nb_exec + 1
-    print("Iteration ", nb_exec, " : ")
-    S.Swarm.controller.write_Weights(w)
-    S.computeSimulation()
-    L = S.getCrossEntropy()
-    P = S.getPrecision()
-    x_precisions.append(nb_exec)
-    historique_fitness.append(P)
-    if(L < meilleur_fitness):
-        meilleur_fitness = L
-        print("Loss : ", L)
-    if (P > meilleur_precision):
-        meilleur_precision = P
-        print("Nouvelle meilleure Precision : ", P)
-    # print("tps ecoule : ",time.time()-timeStart)
-    return L
+
 
 
 
@@ -250,9 +226,8 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=125,
-        HIDDEN=1
+        NEURONES=110,
+        HIDDEN=3
     )
-    #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(10, 0.8, fitnessPrecision, shape)
-    #optimizeNeuralNetwork(10, 0.001, fitnessCrossEntropy, shape)
+    #plot_variance_neuronnes(10,200,3,30)
+    optimizeNeuralNetwork(10, 0.01, fitnessPrecision, shape)

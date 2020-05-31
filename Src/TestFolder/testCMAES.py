@@ -20,7 +20,6 @@ historique_precisions = []
 x_precisions = []
 historique_fitness = []
 best_w = None
-
 def fitness(w):
     timeStart = time.time()
     global meilleur_precision

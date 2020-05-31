@@ -12,11 +12,11 @@ best_fitness = np.inf
 
 
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
-S = topologyOptimisation("random",nb=200,visible=False,time=2500)
+S = topologyOptimisation("pile",nb=300,visible=False,time=2500)
 #S.computeSimulation()
 
 
-def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
+def renduFitness(nom_fitness,nb_iterations,sigma=0.2,folder=None):
     S.Swarm.setTime(1500)
     S.Swarm.controller.rez_params()
     if(nom_fitness == "Turing Spot"):
@@ -28,15 +28,17 @@ def renduFitness(nom_fitness,nb_iterations,sigma=0.2):
     elif (nom_fitness == "Rectanglitude"):
         computeOptization(fitnessRectanglitude, nb_iterations)
     S.Swarm.readDatas()
-    S.Swarm.calculerTuringSpots()
+    S.Swarm.calculerTuringSpots(seuil=4)
     S.Swarm.shapeIndex()
     f = plt.figure()
     f.clear()
     plt.close(f)
     S.Swarm.renduTuringSpot()
+    if(folder):
+        S.Swarm.genererRenduTSFolder(folder)
 
 
-def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
+def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None,folder=None):
     S.Swarm.setTime(1500)
     S.Swarm.controller.rez_params()
     if(Model):
@@ -52,11 +54,14 @@ def renduModel(nom_fitness,nb_iterations,sigma=0.2,Model=None):
     elif (nom_fitness == "Rectanglitude"):
         computeOptization(fitnessRectanglitudeMaxSTS, nb_iterations)
     S.Swarm.readDatas()
-    S.Swarm.calculerTuringSpots()
+    S.Swarm.calculerTuringSpots(seuil=4)
     S.Swarm.shapeIndex()
     f = plt.figure()
     f.clear()
     plt.close(f)
+
+    if (folder):
+        S.Swarm.genererRenduTSFolder(folder)
     S.Swarm.renduTuringSpot()
 
 

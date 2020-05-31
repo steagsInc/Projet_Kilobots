@@ -7,9 +7,6 @@
 extern "C" {
 #include "matmul.h"
 }
-
-#define threadSize 32
-
 /*******************************************
  * Helper routines for matrix manipulation *
  *******************************************/
@@ -143,8 +140,8 @@ float *mat_mul_cuda(float **computeCuda,int n_a_rows, int n_a_cols, float **a, f
   cudaMemcpy(computeCuda[4], b, n_a_rows*n_a_cols*sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(computeCuda[5], computeCuda[6], n_a_rows*sizeof(float), cudaMemcpyHostToDevice);
 
-  dim3 threadsPerBlock (min(n_a_rows,threadSize), min(n_a_cols,threadSize));
-  dim3 blocksPerGrid((n_a_rows+threadSize-1)/threadSize, (n_a_cols+threadSize-1)/threadSize);
+  dim3 threadsPerBlock (min(n_a_rows,1024), min(n_a_cols,1024));
+  dim3 blocksPerGrid((n_a_rows+1023)/1024, (n_a_cols+1023)/1024);
 
   matrixMultiplicationKernel<<<blocksPerGrid, threadsPerBlock>>>(computeCuda[3], computeCuda[4], computeCuda[5], n_a_rows,n_a_cols);
 
