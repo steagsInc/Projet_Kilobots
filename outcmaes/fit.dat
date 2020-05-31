@@ -1,2 +1,2 @@
-% # columns="iteration, evaluation, sigma, axis ratio, bestever, best, median, worst objective function value, further objective values of best", seed=663580, Sat May 16 05:48:04 2020, <python>{}</python>
-1 33 0.099930691580759 1.0000499980942934 -0.5 -5.0000000000000000e-01 -0.5 -0.5   
+% # columns="iteration, evaluation, sigma, axis ratio, bestever, best, median, worst objective function value, further objective values of best", seed=1018628, Sun May 31 19:49:22 2020, <python>{}</python>
+1 28 0.7976533364079085 1.000049985310429 -0.5 -5.0000000000000000e-01 -0.5 -0.5   

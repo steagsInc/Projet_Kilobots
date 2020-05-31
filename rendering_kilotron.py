@@ -8,7 +8,7 @@ import tensorflow as tf
 from Src.simulationController.predictionAccuracyMeasurement import simulator
 
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
-S = simulator(nb=30)
+S = simulator(nb=100)
 
 S.Swarm.setTime(100)
 
@@ -250,9 +250,9 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=120,
+        NEURONES=125,
         HIDDEN=1
     )
     #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(100, 0.1, fitnessCrossEntropy, shape)
+    optimizeNeuralNetwork(10, 0.8, fitnessPrecision, shape)
     #optimizeNeuralNetwork(10, 0.001, fitnessCrossEntropy, shape)

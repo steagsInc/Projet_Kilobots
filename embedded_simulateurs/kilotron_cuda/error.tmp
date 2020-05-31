@@ -36,9 +36,9 @@ ALSA lib pulse.c:243:(pulse_connect) PulseAudio: Unable to connect: Access denie
 Requested parameter: colorscheme is not a string
 Reading simulator parameters from kilombo.json
 Size of kilobot structure : 248
-Size of USERDATA structure: 416
-Running 30 bots with timestep 0.041667 for total time 100.000000
-     0 s -      0 steps -      1 kilo_ticks    0.005 s.
-    42 s -   1000 steps -   1292 kilo_ticks    4.022 s.
-    83 s -   2000 steps -   2584 kilo_ticks    4.021 s.
+Size of USERDATA structure: 464
+Running 100 bots with timestep 0.041667 for total time 100.000000
+     0 s -      0 steps -      1 kilo_ticks    0.008 s.
+    42 s -   1000 steps -   1292 kilo_ticks    7.250 s.
+    83 s -   2000 steps -   2584 kilo_ticks    7.230 s.
 Simulation finished
