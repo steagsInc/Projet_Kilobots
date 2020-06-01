@@ -1,0 +1,57 @@
+/home/mohamed/anaconda3/bin/python3.7 /home/mohamed/PycharmProjects/Projet_Kilobots/Src/prototypage/NSGA2_ArrayPredicton.py
+Début du test de l'extracteur des propriétés de l'essaim sur le chemin :  /home/mohamed/PycharmProjects/Projet_Kilobots/Src/prototypage
+/home/mohamed/PycharmProjects/Projet_Kilobots
+record =  {'Precision01': {'avg': 0.875, 'max': 9.0}, 'precision2': {'avg': 29.0, 'max': 30.0}, 'loss': {'avg': 18.388203717204007, 'max': 20.579540364469004}}
+[(9.0, 27.0, 20.544347997227018)]
+record =  {'Precision01': {'avg': 3.6666666666666665, 'max': 12.0}, 'precision2': {'avg': 28.833333333333332, 'max': 30.0}, 'loss': {'avg': 18.115117781620956, 'max': 21.060747987708275}}
+[(12.0, 26.0, 21.060747987708275)]
+record =  {'Precision01': {'avg': 6.833333333333333, 'max': 13.0}, 'precision2': {'avg': 24.333333333333332, 'max': 30.0}, 'loss': {'avg': 17.65533161977686, 'max': 20.550876923367905}}
+[(13.0, 19.0, 17.156254873625127)]
+record =  {'Precision01': {'avg': 5.0, 'max': 13.0}, 'precision2': {'avg': 26.5, 'max': 30.0}, 'loss': {'avg': 18.091223699063292, 'max': 21.062125633679944}}
+[(13.0, 20.0, 18.036048609899733)]
+record =  {'Precision01': {'avg': 4.833333333333333, 'max': 14.0}, 'precision2': {'avg': 27.833333333333332, 'max': 30.0}, 'loss': {'avg': 18.701656172763453, 'max': 24.44077697334563}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 8.5, 'max': 14.0}, 'precision2': {'avg': 21.666666666666668, 'max': 30.0}, 'loss': {'avg': 17.413035529320613, 'max': 18.394927625038306}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 4.333333333333333, 'max': 13.0}, 'precision2': {'avg': 25.666666666666668, 'max': 30.0}, 'loss': {'avg': 17.410827591104894, 'max': 19.193937223625255}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 6.0, 'max': 12.0}, 'precision2': {'avg': 23.333333333333332, 'max': 30.0}, 'loss': {'avg': 16.72535633975913, 'max': 19.45340523193774}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 5.0, 'max': 13.0}, 'precision2': {'avg': 24.5, 'max': 30.0}, 'loss': {'avg': 17.133453559650636, 'max': 21.297194613595522}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 4.0, 'max': 13.0}, 'precision2': {'avg': 21.0, 'max': 30.0}, 'loss': {'avg': 14.386804414802095, 'max': 18.946229774943415}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 2.3333333333333335, 'max': 10.0}, 'precision2': {'avg': 26.833333333333332, 'max': 30.0}, 'loss': {'avg': 16.01007546045708, 'max': 17.803364230960096}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 3.5, 'max': 11.0}, 'precision2': {'avg': 25.833333333333332, 'max': 30.0}, 'loss': {'avg': 17.325079436355892, 'max': 19.647110164908586}}
+[(14.0, 30.0, 24.44077697334563)]
+record =  {'Precision01': {'avg': 9.5, 'max': 18.0}, 'precision2': {'avg': 21.166666666666668, 'max': 30.0}, 'loss': {'avg': 16.628490776495653, 'max': 19.272891759587484}}
+[(18.0, 18.0, 19.272891759587484)]
+record =  {'Precision01': {'avg': 3.3333333333333335, 'max': 13.0}, 'precision2': {'avg': 27.333333333333332, 'max': 30.0}, 'loss': {'avg': 17.236722803864996, 'max': 19.583377046775034}}
+[(18.0, 18.0, 19.272891759587484)]
+record =  {'Precision01': {'avg': 7.833333333333333, 'max': 23.0}, 'precision2': {'avg': 27.166666666666668, 'max': 30.0}, 'loss': {'avg': 18.89800307372352, 'max': 25.320647898971185}}
+[(23.0, 25.0, 25.320647898971185)]
+record =  {'Precision01': {'avg': 6.0, 'max': 23.0}, 'precision2': {'avg': 26.333333333333332, 'max': 30.0}, 'loss': {'avg': 17.91199876436229, 'max': 29.766360849950043}}
+[(23.0, 30.0, 29.766360849950043)]
+record =  {'Precision01': {'avg': 2.0, 'max': 10.0}, 'precision2': {'avg': 26.5, 'max': 30.0}, 'loss': {'avg': 15.65077069104625, 'max': 17.51089432582454}}
+[(23.0, 30.0, 29.766360849950043)]
+record =  {'Precision01': {'avg': 9.833333333333334, 'max': 23.0}, 'precision2': {'avg': 24.833333333333332, 'max': 30.0}, 'loss': {'avg': 19.37447560149338, 'max': 24.85783536790221}}
+[(23.0, 30.0, 29.766360849950043)]
+record =  {'Precision01': {'avg': 12.666666666666666, 'max': 28.0}, 'precision2': {'avg': 26.833333333333332, 'max': 30.0}, 'loss': {'avg': 22.037356393159808, 'max': 33.507828927819986}}
+[(28.0, 30.0, 33.507828927819986)]
+record =  {'Precision01': {'avg': 5.166666666666667, 'max': 13.0}, 'precision2': {'avg': 24.166666666666668, 'max': 30.0}, 'loss': {'avg': 16.544909387344926, 'max': 23.587614317612275}}
+[(28.0, 30.0, 33.507828927819986)]
+record =  {'Precision01': {'avg': 8.0, 'max': 14.0}, 'precision2': {'avg': 22.0, 'max': 30.0}, 'loss': {'avg': 17.21420046010457, 'max': 22.75445193406004}}
+[(28.0, 30.0, 33.507828927819986)]
+/home/mohamed/.local/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3335: RuntimeWarning: Mean of empty slice.
+  out=out, **kwargs)
+/home/mohamed/.local/lib/python3.7/site-packages/numpy/core/_methods.py:161: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+record =  {'Precision01': {'avg': 8.166666666666666, 'max': 18.0}, 'precision2': {'avg': 20.833333333333332, 'max': 30.0}, 'loss': {'avg': 16.387895812553833, 'max': 20.76671419057497}}
+[(28.0, 30.0, 33.507828927819986)]
+record =  {'Precision01': {'avg': 3.6666666666666665, 'max': 13.0}, 'precision2': {'avg': 24.666666666666668, 'max': 30.0}, 'loss': {'avg': 16.545967222297914, 'max': 18.59134232020122}}
+[(28.0, 30.0, 33.507828927819986)]
+record =  {'Precision01': {'avg': 6.833333333333333, 'max': 15.0}, 'precision2': {'avg': 20.166666666666668, 'max': 30.0}, 'loss': {'avg': 15.493356660514968, 'max': 19.8520022941467}}
+[(28.0, 30.0, 33.507828927819986)]
+record =  {'Precision01': {'avg': 2.0, 'max': 9.0}, 'precision2': {'avg': 26.0, 'max': 30.0}, 'loss': {'avg': 15.902325300913262, 'max': 19.916463099945663}}
+[(28.0, 30.0, 33.507828927819986)]
