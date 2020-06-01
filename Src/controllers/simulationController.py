@@ -17,6 +17,7 @@ class simulationController:
     def __init__(self,path):
         self.path_project = None
         self.path = path
+        print(os.getcwd())
         self.parametres = json.load(open("embedded_simulateurs/" + self.path + "/kilombo.json","r"))
         self.time = 500
         self.visibility = True

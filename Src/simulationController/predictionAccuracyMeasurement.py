@@ -16,7 +16,7 @@ class simulator():
         self.pred = []
 
     def computeSimulation(self):
-        self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(100).withNombre(self.nb_robots)
+        #self.Swarm.controller = self.Swarm.controller.withVisiblite(False).withTime(100).withNombre(self.nb_robots)
         self.pred.clear()
         for i in range(len(self.Topologies)):
             self.Swarm.setTopology(topology=self.Topologies[i])

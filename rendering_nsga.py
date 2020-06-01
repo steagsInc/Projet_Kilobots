@@ -1,19 +1,16 @@
 import os
 import random
-
+import matplotlib.pyplot as plt
 from deap import creator, tools, base, algorithms, cma
 import numpy as np
 
 from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-os.chdir("../..")
-S = topologyOptimisation("pile",nb=150,visible=False,time=1500)
-
+S = topologyOptimisation("pile",nb=200,visible=False,time=3000)
 
 best_fitness = 0
-
-
+best_rec = -1
 def fitnessShapeIndex(w):
     S.put_genotype(w)
     S.computeSimulation()
@@ -22,10 +19,14 @@ def fitnessShapeIndex(w):
     return S.Swarm.SumshapeIndex()
 
 def fitnessRectanglitude(w):
+    global best_rec
     S.put_genotype(w)
     S.computeSimulation()
     S.Swarm.setRange(80)
     S.Swarm.shapeIndex()
+    if(np.array(S.Swarm.rectanglitude()).mean() > best_rec):
+        S.Swarm.renduTuringSpot()
+        best_rec = np.array(S.Swarm.rectanglitude()).mean()
     return np.array(S.Swarm.rectanglitude()).mean()
 
 def fitnessAggregation(w):
@@ -47,7 +48,6 @@ def varianceUV(w):
 
 
 def fitnessTuringSpot(w):
-    print("appel")
     global best_fitness
     S.put_genotype(w)
     S.computeSimulation()
@@ -55,20 +55,23 @@ def fitnessTuringSpot(w):
     S.Swarm.calculerTuringSpots(seuil=4)
     if(-S.Swarm.nb_turing_spots < best_fitness and S.Swarm.nb_turing_spots > 0):
         print("Amelioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
-        S.Swarm.renduTuringSpot()
+        #S.Swarm.renduTuringSpot()
         best_fitness = -S.Swarm.nb_turing_spots
-    return -S.Swarm.nb_turing_spots
+    return S.Swarm.nb_turing_spots
 
-def NSGA(funcs_l, weights, var, sigma, MU=24, NGEN=20,wide_search=1.5):
+
+
+def NSGA(funcs_l, weights, var, sigma, MU=4, NGEN=50,wide_search=1.5):
     IND_SIZE = len(var)
     creator.create("MaFitness", base.Fitness, weights=weights)
     creator.create("Individual", list, fitness=creator.MaFitness)
     toolbox = base.Toolbox()
-
+    records = {}
     eval_funcs = lambda x: tuple([f(x) for f in funcs_l])
     toolbox.register("evaluate", eval_funcs)
     S.model = var
     c = S.extract_genotype()
+    print("c = ",c)
     init_func = lambda c, sigma, size: np.random.normal(c, sigma, size)
     bound_max = list(wide_search*c)
     bound_min = list(-wide_search*c)
@@ -82,27 +85,28 @@ def NSGA(funcs_l, weights, var, sigma, MU=24, NGEN=20,wide_search=1.5):
 
     toolbox.register("select", tools.selNSGA2)
     CXPB = 0.6
+    L = []
     turing_spot = tools.Statistics(lambda ind: ind.fitness.values[0])
     rectanglitude = tools.Statistics(lambda ind: ind.fitness.values[1])
 
-    mstats = tools.MultiStatistics(Rectanglitude=rectanglitude, Turing_Spot = turing_spot)
+    mstats = tools.MultiStatistics(Rectanglitude=rectanglitude ,Turing_Spot = turing_spot)
     mstats.register("avg", np.mean, axis=0)
     mstats.register("max", np.max, axis=0)
-    mstats.register("min", np.min, axis=0)
-
     logbook = tools.Logbook()
     pop = toolbox.population(n=MU)
+    # Evaluate the individuals with an invalid fitness
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
     fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
+    # This is just to assign the crowding distance to the individuals
+    # no actual selection is done
     pop = toolbox.select(pop, len(pop))
     record = mstats.compile(pop)
     #print("Record  =" ,record)
     logbook.record( **record)
     print(logbook.stream)
     # Begin the generational process
-    records = {}
     for gen in range(1, NGEN):
         # Vary the population
         if(gen%5==0):
@@ -127,6 +131,7 @@ def NSGA(funcs_l, weights, var, sigma, MU=24, NGEN=20,wide_search=1.5):
         records[gen] = record
         print(logbook.stream)
 
+
     return pop, paretofront,records
 
 
@@ -141,16 +146,10 @@ def cmaES(funcs_l , weights,lambd , mu, var, sigma,ngen):
     S.Swarm.controller.rez_params()
     S.model = var
     c = S.extract_genotype()
-    logbook = tools.Logbook()
-
     init_func = lambda  c,sigma,size : np.random.normal(c,sigma,size)
-
     toolbox.register("attr_float", init_func, c, sigma, len(var))
     toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-
-
     strategy = cma.Strategy(centroid=c * len(var), sigma=sigma, lambda_=lambd * len(var))
     toolbox.register("generate", strategy.generate, creator.Individual)
     toolbox.register("update", strategy.update)
@@ -239,29 +238,31 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = True, MAXITER = 100, STAGNATION
         i += 1
 
 
-def learning_curve_notebook(logbook,stat_name):
-    print("Debut du traitement : avec logbook : ")
-    X,Y = [],[]
-    for i in logbook:
-        print(i," : ",logbook[i][stat_name])
+def learning_curve(records,grandeur,statistique):
+    X = []
+    Y = []
+    for g in records:
+        X.append(g)
+        Y.append(records[g][grandeur][statistique])
+    plt.plot(X,Y)
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
-    #S.Swarm.controller.rez_params()
+    S.Swarm.controller.rez_params()
 
     #funcs_l = [lambda x:2*x ,lambda x:5*x+3]
     #eval_funcs = lambda x: tuple([f(x) for f in funcs_l])
     #print(eval_funcs(3))
     #cmaES([fitnessTuringSpot, fitnessRectanglitude] , (+2,+1) , 5 , 10,('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), 0.1,10)
-    #CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), (+1,-1), [fitnessRectanglitude,fitnessShapeIndex], 0.01, verbose = True, MAXITER = 10, STAGNATION_ITER =10)
-    #TRO BO : _ , _ , logbook = NSGA([fitnessTuringSpot,fitnessRectanglitude],(+10,+1,),('D_u', 'D_v'),sigma=2,NGEN=5)
-    _ , _ , logbook = NSGA([fitnessTuringSpot,fitnessRectanglitude],(+15,+1,),('D_u', 'D_v'),sigma=1,NGEN=2)
+    #CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), (+1,+1), [fitnessRectanglitude,fitnessTuringSpot], 0.01, verbose = True, MAXITER = 10, STAGNATION_ITER =10)
+    _ , _ , records = NSGA([fitnessTuringSpot,fitnessRectanglitude],(+5,+1),('D_u', 'D_v'),sigma=0.5,NGEN=20)
+    learning_curve(records,"Turing_Spot","avg")
+    plt.show()
+    learning_curve(records,"Rectanglitude","avg")
+    plt.show()
 
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)
-    #S.Swarm.controller.withNombre(200)
-    S.Swarm.controller.withNombre(25)
+    S.Swarm.controller.withNombre(200)
     S.Swarm.controller.withTopology("pile")
     S.Swarm.controller.run()
-    learning_curve_notebook(logbook)
-

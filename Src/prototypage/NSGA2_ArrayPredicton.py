@@ -9,7 +9,7 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = predictionTuring(nb=10)
+S = predictionTuring(nb=15)
 
 
 def fitnessPrecisionOnEach(w):
@@ -216,18 +216,18 @@ def fitnessPrecision(w):
 
 if(__name__=="__main__"):
     shape1 = dict(
-        NEURONES=60,
-        HIDDEN=2,
-        COMMUNICATION = 3,
+        NEURONES=130,
+        HIDDEN=1,
+        COMMUNICATION = 5,
     )
     S.Swarm.controller.rez_params()
     S.Swarm.controller.put_Random_Weights()
     S.computeSimulation()
     S.Swarm.controller.setShape(shape1)
-    S.model =('A_VAL', )
+    S.model =('D_u', 'D_v')
     #NSGA(fitnessPrecisionOnEach,(-1,+1,),( "D_u", "D_v"),sigma=1)
     #CMAES_MO(( "D_u", "D_v"),(+3,+3,-1),fitnessPrecisionOnEach,sigma=1)
-    CMAES_MO(('A_VAL',),(+3,+3,-15,),fitnessPrecisionOnEach,sigma=0.1)
+    CMAES_MO(('A_VAL','D_u', 'D_v',"B_VAL","E_VAL"),(+3,+3,-15,),fitnessPrecisionOnEach,sigma=0.01)
     #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)

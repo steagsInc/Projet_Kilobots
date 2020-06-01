@@ -10,8 +10,7 @@ from Src.simulationController.predictionAccuracyMeasurement import simulator
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = simulator(nb=50)
 
-S.Swarm.setTime(1000)
-
+S.Swarm.controller = S.Swarm.controller.withVisiblite(True).withTime(100).withNombre(10)
 meilleur_precision = 0
 meilleur_fitness = 1000
 nb_exec = 0
