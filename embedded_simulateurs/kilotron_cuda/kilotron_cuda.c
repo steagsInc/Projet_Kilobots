@@ -20,7 +20,6 @@ REGISTER_USERDATA(USERDATA)
 
 #endif
 
-
 #define COMM_R 85               // Communication range
 #define DIFF_R 85               // Diffusion range
 #define POLAR_TH 4.0            // Threshold to become polarized
@@ -489,14 +488,6 @@ void process_perceptron(){
     }
 
     float *prediction = predict(mydata->perceptron, x);
-
-    /*
-    for (i = 0; i<6;i++){
-      printf("%f ",prediction[i]);
-    }
-    printf("\n ");
-    */
-
     //printf("Prédiction 01 : %f \n",prediction[0]);
     //printf("Prédiction 02 : %f \n",prediction[1]);
     mydata->prediction1 = prediction[0];
