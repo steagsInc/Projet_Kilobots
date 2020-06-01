@@ -10,7 +10,7 @@ from Src.simulationController.predictionAccuracyMeasurement import simulator
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = simulator(nb=50)
 
-S.Swarm.controller = S.Swarm.controller.withVisiblite(False).withTime(1000).withNombre(30)
+S.Swarm.controller = S.Swarm.controller.withVisiblite(False).withTime(100).withNombre(50)
 meilleur_precision = 0
 meilleur_fitness = 1000
 nb_exec = 0
@@ -163,6 +163,7 @@ def fitnessCrossEntropy(w):
     S.computeSimulation()
     L = S.getCrossEntropy()
     P = S.getPrecision()
+    print(P)
     x_precisions.append(nb_exec)
     historique_fitness.append(P)
     if(L < meilleur_fitness):
@@ -188,7 +189,7 @@ def optimizeNeuralNetwork(iter,sigma,func,shape):
     nb_exec = 0
     S.Swarm.controller.put_Random_Weights()
     w = S.Swarm.controller.read_Weights()
-    res = cma.CMAEvolutionStrategy(w, sigma).optimize(func, maxfun=iter).result
+    res = cma.CMAEvolutionStrategy(w, sigma, {'seed':676432}).optimize(func, maxfun=iter).result
     plt.plot(x_precisions, historique_fitness, color='red')
     plt.show()
 
@@ -249,9 +250,9 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=100,
+        NEURONES=120,
         HIDDEN=1
     )
     #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(1, 0.8, fitnessPrecision, shape)
+    optimizeNeuralNetwork(200, 0.8, fitnessPrecision, shape)
     #optimizeNeuralNetwork(10, 0.001, fitnessCrossEntropy, shape)
