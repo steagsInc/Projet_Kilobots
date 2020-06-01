@@ -10,7 +10,7 @@ from Src.simulationController.predictionAccuracyMeasurement import simulator
 print("Debut du test de l'extracteur des proprietes de l'essaim sur le chemin : ", os.getcwd())
 S = simulator(nb=50)
 
-S.Swarm.controller = S.Swarm.controller.withVisiblite(True).withTime(100).withNombre(10)
+S.Swarm.controller = S.Swarm.controller.withVisiblite(False).withTime(1000).withNombre(30)
 meilleur_precision = 0
 meilleur_fitness = 1000
 nb_exec = 0
@@ -250,7 +250,7 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 if(__name__=="__main__"):
     shape = dict(
         NEURONES=100,
-        HIDDEN=2
+        HIDDEN=1
     )
     #plot_variance_neuronnes(10,150,3,50)
     optimizeNeuralNetwork(1, 0.8, fitnessPrecision, shape)
