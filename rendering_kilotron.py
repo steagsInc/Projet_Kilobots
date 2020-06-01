@@ -249,9 +249,10 @@ def plot_variance_neuronnes(min,max,hidden = 2,points = 20):
 
 if(__name__=="__main__"):
     shape = dict(
-        NEURONES=100,
-        HIDDEN=1
+        NEURONES=125,
+        HIDDEN=1,
+        COMMUNICATION = 1
     )
     #plot_variance_neuronnes(10,150,3,50)
-    optimizeNeuralNetwork(1, 0.8, fitnessPrecision, shape)
+    optimizeNeuralNetwork(1, 0.6, fitnessPrecision, shape)
     #optimizeNeuralNetwork(10, 0.001, fitnessCrossEntropy, shape)

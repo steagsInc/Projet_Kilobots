@@ -19,6 +19,7 @@ REGISTER_USERDATA(USERDATA)
 
 #endif
 
+
 #define COMM_R 85               // Communication range
 #define DIFF_R 85               // Diffusion range
 #define POLAR_TH 4.0            // Threshold to become polarized
@@ -29,15 +30,15 @@ REGISTER_USERDATA(USERDATA)
 #define R2 120                  // For probabilistic purposes
 
 //Model_Parameter
-#define A_VAL 0.09372095371
-#define B_VAL -0.08292353187
-#define C_VAL 0.02999999999
-#define D_VAL 0.02999999999
-#define E_VAL 0.10250232587
+#define A_VAL -0.04285850688
+#define B_VAL -0.19345831125
+#define C_VAL -0.23182996135
+#define D_VAL 0.07760019624
+#define E_VAL 0.10000000000
 #define F_VAL 0.11999999996
 #define G_VAL 0.05999999998
-#define D_u 0.51093977118
-#define D_v 10.00822306102
+#define D_u 0.25987359849
+#define D_v 10.14176699116
 #define LINEAR_R 160.00000000000
 #define SYNTH_U_MAX 0.23000000000
 #define SYNTH_V_MAX 0.50000000000
@@ -47,7 +48,6 @@ REGISTER_USERDATA(USERDATA)
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
-
 void rxbuffer_push(message_t *msg, distance_measurement_t *dist) {
     received_message_t *rmsg = &RB_back();
     rmsg->msg = *msg;
@@ -563,41 +563,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 }
 
 
-    uint8_t i,j = 0;
-
-    float *x = (float*)malloc(2+COMMUNICATION*sizeof(float));
-    x[0]=mydata->molecules_concentration[0];
-    x[1]=mydata->molecules_concentration[1];
-
-    for (i = 0;i<mydata->N_Neighbors; i++) {
-
-      for(j=0;j<COMMUNICATION;j++){
-        x[j+2]=x[j+2]+mydata->neighbors[i].communication_chanel[j];
-      }
-
-    }
-
-    if (mydata->N_Neighbors!=0){
-      for(j=0;j<COMMUNICATION;j++){
-        x[j+2]=x[j+2]/mydata->N_Neighbors;
-      }
-    }
-
-    float *prediction = predict(mydata->perceptron, x);
-    //printf("Prédiction 01 : %f \n",prediction[0]);
-    //printf("Prédiction 02 : %f \n",prediction[1]);
-    mydata->prediction1 = prediction[0];
-    mydata->prediction2 = prediction[1];
-    //printf("%f\n", mydata->prediction);
-    for (i = 0;i<COMMUNICATION;i++){
-      mydata->communication_chanel[i] = prediction[i+2];
-    }
-
-    free(x);
-
-}
-
-/*
+/* 
  * It processes a received message at the front of the ring buffer.
  * It goes through the list of neighbors. If the message is from a bot
  * already in the list, it updates the information, otherwise

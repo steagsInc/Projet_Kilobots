@@ -7,7 +7,7 @@ import numpy as np
 from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
-S = topologyOptimisation("pile",nb=200,visible=False,time=3000)
+S = topologyOptimisation("pile",nb=200,visible=False,time=10000)
 
 best_fitness = 0
 best_rec = -1
@@ -25,8 +25,23 @@ def fitnessRectanglitude(w):
     S.Swarm.setRange(80)
     S.Swarm.shapeIndex()
     if(np.array(S.Swarm.rectanglitude()).mean() > best_rec):
+        best_rec = np.array(S.Swarm.rectanglitude()).mean()
+        S.Swarm.readDatas()
+        S.Swarm.calculerTuringSpots(seuil=4)
+        tsp = S.Swarm.nb_turing_spots
+        rec = np.array(S.Swarm.rectanglitude()).mean()
+        ch = ""
+        for m,v in zip(S.model,w):
+            ch = ch + str(m) + " : " + str(np.round(v,2)) + " \n"
+        plt.text(-450, 400,ch,fontsize=8, color='black', backgroundcolor='white')
+        ch = ""
+        for m, v in zip(["Turing Spots","Rectangle Rate"], [tsp,rec]):
+            ch = ch + str(m) + " : " + str(np.round(v,2)) + " \n"
+        plt.text( 250, 400,ch,fontsize=8, color='black', backgroundcolor='white')
+        plt.axis('off')
         S.Swarm.renduTuringSpot()
         best_rec = np.array(S.Swarm.rectanglitude()).mean()
+
     return np.array(S.Swarm.rectanglitude()).mean()
 
 def fitnessAggregation(w):
@@ -55,7 +70,20 @@ def fitnessTuringSpot(w):
     S.Swarm.calculerTuringSpots(seuil=4)
     if(-S.Swarm.nb_turing_spots < best_fitness and S.Swarm.nb_turing_spots > 0):
         print("Amelioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
-        #S.Swarm.renduTuringSpot()
+        S.Swarm.readDatas()
+        S.Swarm.calculerTuringSpots(seuil=4)
+        tsp = S.Swarm.nb_turing_spots
+        rec = np.array(S.Swarm.rectanglitude()).mean()
+        ch = ""
+        for m,v in zip(S.model,w):
+            ch = ch + str(m) + " : " + str(np.round(v,2)) + " \n"
+        plt.text(-450, 400,ch,fontsize=8, color='black', backgroundcolor='white')
+        ch = ""
+        for m, v in zip(["Turing Spots","Rectangle Rate"], [tsp,rec]):
+            ch = ch + str(m) + " : " + str(np.round(v,2)) + " \n"
+        plt.text( 250, 400,ch,fontsize=8, color='black', backgroundcolor='white')
+        plt.axis('off')
+        S.Swarm.renduTuringSpot()
         best_fitness = -S.Swarm.nb_turing_spots
     return S.Swarm.nb_turing_spots
 
@@ -244,7 +272,54 @@ def learning_curve(records,grandeur,statistique):
     for g in records:
         X.append(g)
         Y.append(records[g][grandeur][statistique])
-    plt.plot(X,Y)
+    plt.plot(X,Y,label=grandeur+" "+statistique)
+    plt.xlabel("Generations")
+    plt.ylabel(grandeur+" "+statistique)
+
+def rendu():
+    S.model = ["D_u","D_v"]
+    S.computeSimulation()
+    S.Swarm.readDatas()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    print("Amelioration du nombre de turing Spot : ", S.Swarm.nb_turing_spots)
+    S.Swarm.readDatas()
+    S.Swarm.calculerTuringSpots(seuil=4)
+    tsp = S.Swarm.nb_turing_spots
+    rec = np.array(S.Swarm.rectanglitude()).mean()
+    ch = ""
+    for m, v in zip(S.model, w):
+        ch = ch + str(m) + " : " + str(np.round(v, 2)) + " \n"
+    plt.text(-450, 400, ch, fontsize=8, color='black', backgroundcolor='white')
+    ch = ""
+    for m, v in zip(["Turing Spots", "Rectangle Rate"], [tsp, rec]):
+        ch = ch + str(m) + " : " + str(np.round(v, 2)) + " \n"
+    plt.text(250, 400, ch, fontsize=8, color='black', backgroundcolor='white')
+    plt.axis('off')
+    S.Swarm.renduTuringSpot()
+
+
+def test_nsga():
+    rendu()
+    w = S.extract_genotype()
+    S.Swarm.controller.rez_params()
+
+    # funcs_l = [lambda x:2*x ,lambda x:5*x+3]
+    # eval_funcs = lambda x: tuple([f(x) for f in funcs_l])
+    # print(eval_funcs(3))
+    # cmaES([fitnessTuringSpot, fitnessRectanglitude] , (+2,+1) , 5 , 10,('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), 0.1,10)
+    # CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), (+1,+1), [fitnessRectanglitude,fitnessTuringSpot], 0.01, verbose = True, MAXITER = 10, STAGNATION_ITER =10)
+    _, _, records = NSGA([fitnessTuringSpot, fitnessRectanglitude], (+5, +1), ('D_u', 'D_v'), sigma=1, NGEN=20)
+    learning_curve(records, "Turing_Spot", "avg")
+    learning_curve(records, "Turing_Spot", "max")
+
+    plt.savefig("curves/Turing_Spot_NSGA_TS_R_DuDv")
+    plt.show()
+
+    learning_curve(records, "Rectanglitude", "avg")
+    learning_curve(records, "Rectanglitude", "max")
+    plt.savefig("curves/Rectanglitude_NSGA_TS_R_DuDv")
+
+
 
 if(__name__=="__main__"):
     w = S.extract_genotype()
@@ -255,11 +330,9 @@ if(__name__=="__main__"):
     #print(eval_funcs(3))
     #cmaES([fitnessTuringSpot, fitnessRectanglitude] , (+2,+1) , 5 , 10,('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), 0.1,10)
     #CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_u', 'D_v'), (+1,+1), [fitnessRectanglitude,fitnessTuringSpot], 0.01, verbose = True, MAXITER = 10, STAGNATION_ITER =10)
-    _ , _ , records = NSGA([fitnessTuringSpot,fitnessRectanglitude],(+5,+1),('D_u', 'D_v'),sigma=0.5,NGEN=20)
-    learning_curve(records,"Turing_Spot","avg")
-    plt.show()
-    learning_curve(records,"Rectanglitude","avg")
-    plt.show()
+
+    test_nsga()
+
 
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)

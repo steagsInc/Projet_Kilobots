@@ -31,6 +31,24 @@ Requested parameter: displayY is not a number.
  Using default value 0.000000.
 Requested parameter: useGrid is not an integer.
  Using default value 1.
-ALSA lib pulse.c:243:(pulse_connect) PulseAudio: Unable to connect: Access denied
-
+ALSA lib pcm_dmix.c:1108:(snd_pcm_dmix_open) unable to open slave
 Requested parameter: colorscheme is not a string
+Reading simulator parameters from kilombo.json
+Size of kilobot structure : 248
+Size of USERDATA structure: 416
+Running 10 bots with timestep 0.041667 for total time -1.000000
+     0 s -      0 steps -      1 kilo_ticks    0.002 s.
+    42 s -   1000 steps -   1292 kilo_ticks    1.033 s.
+    83 s -   2000 steps -   2584 kilo_ticks    0.996 s.
+   125 s -   3000 steps -   3876 kilo_ticks    1.002 s.
+   167 s -   4000 steps -   5167 kilo_ticks    1.080 s.
+   208 s -   5000 steps -   6459 kilo_ticks    1.095 s.
+   250 s -   6000 steps -   7751 kilo_ticks    1.052 s.
+   292 s -   7000 steps -   9042 kilo_ticks    0.952 s.
+   333 s -   8000 steps -  10334 kilo_ticks    0.992 s.
+   375 s -   9000 steps -  11626 kilo_ticks    0.956 s.
+   417 s -  10000 steps -  12917 kilo_ticks    0.950 s.
+   458 s -  11000 steps -  14209 kilo_ticks    0.985 s.
+   500 s -  12000 steps -  15501 kilo_ticks    0.978 s.
+   542 s -  13000 steps -  16792 kilo_ticks    0.940 s.
+Simulation finished

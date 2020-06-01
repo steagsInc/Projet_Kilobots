@@ -9,13 +9,13 @@ from Src.simulationController.topologyOptimizer import topologyOptimisation
 
 print("Début du test de l'extracteur des propriétés de l'essaim sur le chemin : ", os.getcwd())
 os.chdir("../..")
-S = predictionTuring(nb=15)
+S = predictionTuring(nb=30)
 
 
 def fitnessPrecisionOnEach(w):
     S.put_genotype(w)
     S.computeSimulation()
-    return S.minHinge(),S.maxHinge(),S.getCrossEntropy()
+    return S.minHinge(),S.maxHinge(),S.getLeastSquare()
 
 def NSGA(funcs_l, weights, var, sigma, MU=16, NGEN=50,wide_search=1.2):
     IND_SIZE = len(var)
@@ -123,8 +123,8 @@ def cmaES(funcs_l , weights,lambd , mu, var, sigma,ngen):
     return stats, hof
 
 
-def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 100, STAGNATION_ITER =10, lambda_=3, mu =5):
-    NRESTARTS = 10  # Initialization + 9 I-POP restarts
+def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 150, STAGNATION_ITER =20, lambda_=6, mu =10):
+    NRESTARTS = 100  # Initialization + 9 I-POP restarts
 
     creator.create("MaFitness", base.Fitness, weights=weights)
     creator.create("Individual", list, fitness=creator.MaFitness)
@@ -157,6 +157,7 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 100, STAGNATIO
     medianvalues = list()
     i = 0
     t=0
+    Best = []
     while i < (NRESTARTS):
         pop = toolbox.population(n=mu)
         strategy = cma.StrategyMultiObjective(centroid=c, sigma=sigma, lambda_=lambda_,population=pop)
@@ -184,6 +185,7 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 100, STAGNATIO
             record = mstats.compile(population)
             print('record = ',record)
             print([sol.fitness.values for sol in halloffame])
+            Best.append([sol.fitness.values for sol in halloffame])
             logbooks[-1].record(gen=t, restart = i, **record)
             if verbose:
                 print(logbooks[-1].stream)
@@ -206,6 +208,7 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 100, STAGNATIO
         stop_causes = [k for k, v in conditions.items() if v]
         print( "Stopped because of condition%s %s" % ((":" if len(stop_causes) == 1 else "s:"), ",".join(stop_causes)))
         i += 1
+        return Best
 
 def fitnessPrecision(w):
     S.put_genotype(w)
@@ -214,23 +217,91 @@ def fitnessPrecision(w):
     return -S.getPrecision()
 
 
-if(__name__=="__main__"):
+def test1():
     shape1 = dict(
-        NEURONES=130,
-        HIDDEN=1,
-        COMMUNICATION = 5,
+        NEURONES=75,
+        HIDDEN=2,
+        COMMUNICATION=5,
     )
     S.Swarm.controller.rez_params()
     S.Swarm.controller.put_Random_Weights()
     S.computeSimulation()
     S.Swarm.controller.setShape(shape1)
-    S.model =('D_u', 'D_v')
-    #NSGA(fitnessPrecisionOnEach,(-1,+1,),( "D_u", "D_v"),sigma=1)
-    #CMAES_MO(( "D_u", "D_v"),(+3,+3,-1),fitnessPrecisionOnEach,sigma=1)
-    CMAES_MO(('A_VAL','D_u', 'D_v',"B_VAL","E_VAL"),(+3,+3,-15,),fitnessPrecisionOnEach,sigma=0.01)
-    #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
+    S.Swarm.controller = S.Swarm.controller.withTime(100)
+    S.model = ('D_u', 'D_v')
+    CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -15,), fitnessPrecisionOnEach, sigma=0.1)
+    #Ce test fait 71.2%
+
+
+def test2():
+    shape1 = dict(
+        NEURONES=75,
+        HIDDEN=2,
+        COMMUNICATION=5,
+    )
+    S.Swarm.controller.rez_params()
+    S.Swarm.controller.put_Random_Weights()
+    S.computeSimulation()
+    S.Swarm.controller.setShape(shape1)
+    S.Swarm.controller = S.Swarm.controller.withTime(200)
+    S.model = ('D_u', 'D_v')
+
+    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1,MAXITER = 1)
+    # natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)
     S.Swarm.controller.withNombre(10)
     S.Swarm.controller.withTopology("pile")
     S.Swarm.controller.run()
+    #Ce test fait 96%
+    return B
+
+def display_test_curve():
+    B = test2()
+    X1 = []
+    X2 = []
+    X3 = []
+    GEN = []
+    cpt = 1
+    for i in B:
+        X1.append(i[0])
+        X2.append(i[1])
+        X3.append(i[2])
+        GEN.append(cpt)
+        cpt = cpt + 1
+    import matplotlib.pyplot as plt
+    plt.plot(GEN,X1,label = "MIN HINGE")
+    plt.plot(GEN,X2,label = "MAX HINGE")
+    plt.plot(GEN,X2,label = "Least Square Error")
+    plt.show()
+
+#Le test historique qui a fait 28  et 30
+#if(__name__=="__main__"):
+#    shape1 = dict(
+#        NEURONES=75,
+#        HIDDEN=2,
+#        COMMUNICATION = 5,
+#    )
+#    S.Swarm.controller.rez_params()
+#    S.Swarm.controller.put_Random_Weights()
+#    S.computeSimulation()
+#    S.Swarm.controller.setShape(shape1)
+#    S.Swarm.controller = S.Swarm.controller.withTime(200)
+#    S.model =('D_u', 'D_v')
+#
+#    CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1)
+#    #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
+#    S.Swarm.controller.withVisiblite(True)
+#    S.Swarm.controller.withTime(-1)
+#    S.Swarm.controller.withNombre(10)
+#    S.Swarm.controller.withTopology("pile")
+#    S.Swarm.controller.run()
+
+
+if(__name__=="__main__"):
+    shape1 = dict(
+        NEURONES=75,
+        HIDDEN=2,
+        COMMUNICATION = 5,
+    )
+    display_test_curve()
