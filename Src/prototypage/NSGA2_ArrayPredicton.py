@@ -246,7 +246,7 @@ def test2():
     S.Swarm.controller = S.Swarm.controller.withTime(200)
     S.model = ('D_u', 'D_v')
 
-    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1,MAXITER = 1)
+    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1,MAXITER = 100)
     # natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)
