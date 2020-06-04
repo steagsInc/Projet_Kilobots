@@ -30,15 +30,15 @@ REGISTER_USERDATA(USERDATA)
 #define R2 120                  // For probabilistic purposes
 
 //Model_Parameter
-#define A_VAL -0.04285850688
-#define B_VAL -0.19345831125
-#define C_VAL -0.23182996135
-#define D_VAL 0.07760019624
+#define A_VAL 0.08685432326
+#define B_VAL -0.06338306573
+#define C_VAL 0.01716244298
+#define D_VAL 0.05456154863
 #define E_VAL 0.10000000000
 #define F_VAL 0.11999999996
 #define G_VAL 0.05999999998
-#define D_u 0.25987359849
-#define D_v 10.14176699116
+#define D_u 0.48567558837
+#define D_v 9.98643730076
 #define LINEAR_R 160.00000000000
 #define SYNTH_U_MAX 0.23000000000
 #define SYNTH_V_MAX 0.50000000000

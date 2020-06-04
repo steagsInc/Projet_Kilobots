@@ -35,7 +35,7 @@ S.seuillage_turing_spots = 2
 changed = False
 polar_th = 4
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+params = S.controller.parametres_model
 position_robots = cyto.Cytoscape(
         id='robots-positions',
         layout={'name': 'preset'},
@@ -128,10 +128,115 @@ app.layout = html.Div([
     html.P(id="placeholder_changement"),
     html.P(id="placeholder_topology"),
     html.P(id="placeholder_taille"),
-    html.P(id="placeholder_render")
+    html.P(id="placeholder_render"),
+    html.P(id="placeholder_U"),
+    html.P(id="placeholder_V"),
+    html.P(id="placeholder_A"),
+    html.P(id="placeholder_B"),
+    html.P(id="placeholder_C"),
+    html.P(id="placeholder_D"),
+    html.P(id="placeholder_E"),
+    html.P(id="placeholder_F"),
+    html.Button("Remettre les paramètres d'origine", id="rez_params", n_clicks=0),
+    html.H4("A : "),
+    dcc.Input(id="input3", type="number", placeholder="", debounce=True),
+    html.H4("B : "),
+    dcc.Input(id="input4", type="number", placeholder="", debounce=True),
+    html.H4("C : "),
+    dcc.Input(id="input5", type="number", placeholder="", debounce=True),
+    html.H4("D : "),
+    dcc.Input(id="input6", type="number", placeholder="", debounce=True),
+    html.H4("E : "),
+    dcc.Input(id="input7", type="number", placeholder=""),
+    html.H4("F : "),
+    dcc.Input(id="input8", type="number", placeholder="", debounce=True),
+    html.H4("U : "),
+    dcc.Input(id="input1", type="number", placeholder=""),
+    html.H4("V : "),
+    dcc.Input(id="input2", type="number", placeholder="", debounce=True),
 
 ]
 )
+
+
+
+
+A_VAL =  0.08
+B_VAL = -0.08
+C_VAL = 0.03
+D_VAL = 0.03
+E_VAL = 0.1
+F_VAL = 0.12
+G_VAL = 0.06
+D_u = 0.5
+D_v = 10
+
+@app.callback(
+    [
+        Output("input1","value"),
+        Output("input2","value"),
+        Output("input3","value"),
+        Output("input4", "value"),
+        Output("input5", "value"),
+        Output("input6", "value"),
+        Output("input7", "value"),
+        Output("input8", "value"),
+    ],
+    [Input("rez_params","n_clicks")])
+def rez(valeur):
+    return D_u,D_v,A_VAL,B_VAL,C_VAL,D_VAL,E_VAL,F_VAL
+
+
+
+@app.callback(Output("placeholder_U","children"),[Input("input1","value")])
+def majU(valeur):
+    if(valeur):
+        S.controller.write_params({"D_u":valeur})
+
+
+@app.callback(Output("placeholder_V","children"),[Input("input2","value")])
+def majV(valeur):
+    if(valeur):
+        params.update({"D_v":valeur})
+        S.controller.write_params(params)
+
+
+@app.callback(Output("placeholder_A","children"),[Input("input3","value")])
+def majA(valeur):
+    if(valeur):
+        params.update({"A_VAL":valeur})
+        S.controller.write_params(params)
+
+@app.callback(Output("placeholder_B","children"),[Input("input4","value")])
+def majB(valeur):
+    if (valeur):
+        params.update({"B_VAL": valeur})
+        S.controller.write_params(params)
+
+
+@app.callback(Output("placeholder_C","children"),[Input("input5","value")])
+def majC(valeur):
+    if (valeur):
+        params.update({"C_VAL": valeur})
+        S.controller.write_params(params)
+
+@app.callback(Output("placeholder_D","children"),[Input("input6","value")])
+def majD(valeur):
+    if (valeur):
+        params.update({"D_VAL": valeur})
+        S.controller.write_params(params)
+
+@app.callback(Output("placeholder_E","children"),[Input("input7","value")])
+def majE(valeur):
+    if (valeur):
+        params.update({"E_VAL": valeur})
+        S.controller.write_params(params)
+
+@app.callback(Output("placeholder_F","children"),[Input("input8","value")])
+def majF(valeur):
+    if (valeur):
+        params.update({"F_VAL": valeur})
+        S.controller.write_params(params)
 
 @app.callback(Output("placeholder_time","children"),[Input("gestion_temps","value")])
 def maj_temps(valeur):
@@ -196,9 +301,7 @@ def executer_simulation(n):
 
 
 if __name__ == '__main__':
-    #pca = PCA(n_components=2, svd_solver='full')
-
-
+    #pca = PCA(n_components=2, svd_solver='full'
     print("Chemin avant lancement du serveur : ",os.getcwd())
     app.run_server(debug=True)
 

@@ -123,7 +123,29 @@ def cmaES(funcs_l , weights,lambd , mu, var, sigma,ngen):
     return stats, hof
 
 
-def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 150, STAGNATION_ITER =20, lambda_=6, mu =10):
+
+def display_test_curve(B):
+    X1 = []
+    X2 = []
+    X3 = []
+    GEN = []
+    cpt = 1
+    for j in B:
+        i = j[0]
+        X1.append(i[0])
+        X2.append(i[1])
+        X3.append(i[2])
+        GEN.append(cpt)
+        cpt = cpt + 1
+    import matplotlib.pyplot as plt
+    plt.plot(GEN,X1,label = "MIN HINGE")
+    plt.plot(GEN,X2,label = "MAX HINGE")
+    plt.plot(GEN,X3,label = "Least Square Error")
+    plt.show()
+
+
+
+def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 250, STAGNATION_ITER =20, lambda_=6, mu =10):
     NRESTARTS = 100  # Initialization + 9 I-POP restarts
 
     creator.create("MaFitness", base.Fitness, weights=weights)
@@ -141,7 +163,7 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 150, STAGNATIO
 
     mstats = tools.MultiStatistics(Precision01=precision1, precision2=precision2,loss=loss)
     mstats.register("avg", np.mean, axis=0)
-    mstats.register("max", np.max, axis=0)
+    mstats.register("min", np.min, axis=0)
 
     init_func = lambda c, sigma, size: np.random.normal(c, sigma, size)
 
@@ -170,10 +192,8 @@ def CMAES_MO(var,weights,funcs_l,sigma,verbose = False, MAXITER = 150, STAGNATIO
                       "TolX": False, "TolUpSigma": False, "Stagnation": False,
                       "ConditionCov": False, "NoEffectAxis": False, "NoEffectCoor": False}
         while not any(conditions.values()):
-            if(t%5 == 0):
-                S.Swarm.controller.visibility = True
-            else:
-                S.Swarm.controller.visibility = False
+            if(t%5 == 1):
+                display_test_curve(Best)
             t = t + 1
             # Generate a new population
             population = pop + toolbox.generate()
@@ -245,25 +265,24 @@ def test2():
     S.Swarm.controller.setShape(shape1)
     S.Swarm.controller = S.Swarm.controller.withTime(200)
     S.model = ('D_u', 'D_v')
-
-    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1,MAXITER = 100)
+    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1,MAXITER = 50)
     # natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)
-    S.Swarm.controller.withNombre(10)
+    S.Swarm.controller.withNombre(30)
     S.Swarm.controller.withTopology("pile")
     S.Swarm.controller.run()
     #Ce test fait 96%
     return B
 
-def display_test_curve():
-    B = test2()
+def display_test_curve(B):
     X1 = []
     X2 = []
     X3 = []
     GEN = []
     cpt = 1
-    for i in B:
+    for j in B:
+        i = j[0]
         X1.append(i[0])
         X2.append(i[1])
         X3.append(i[2])
@@ -272,36 +291,39 @@ def display_test_curve():
     import matplotlib.pyplot as plt
     plt.plot(GEN,X1,label = "MIN HINGE")
     plt.plot(GEN,X2,label = "MAX HINGE")
-    plt.plot(GEN,X2,label = "Least Square Error")
+    plt.plot(GEN,X3,label = "Least Square Error")
     plt.show()
 
 #Le test historique qui a fait 28  et 30
-#if(__name__=="__main__"):
-#    shape1 = dict(
-#        NEURONES=75,
-#        HIDDEN=2,
-#        COMMUNICATION = 5,
-#    )
-#    S.Swarm.controller.rez_params()
-#    S.Swarm.controller.put_Random_Weights()
-#    S.computeSimulation()
-#    S.Swarm.controller.setShape(shape1)
-#    S.Swarm.controller = S.Swarm.controller.withTime(200)
-#    S.model =('D_u', 'D_v')
-#
-#    CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (+3, +3, -3,), fitnessPrecisionOnEach, sigma=0.1)
-#    #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
-#    S.Swarm.controller.withVisiblite(True)
-#    S.Swarm.controller.withTime(-1)
-#    S.Swarm.controller.withNombre(10)
-#    S.Swarm.controller.withTopology("pile")
-#    S.Swarm.controller.run()
-
-
 if(__name__=="__main__"):
     shape1 = dict(
         NEURONES=75,
         HIDDEN=2,
         COMMUNICATION = 5,
     )
-    display_test_curve()
+    S.Swarm.controller.rez_params()
+    S.Swarm.controller.put_Random_Weights()
+    S.computeSimulation()
+    S.Swarm.controller.setShape(shape1)
+    S.Swarm.controller = S.Swarm.controller.withTime(500)
+    S.model =('D_u', 'D_v')
+
+    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (-3, -3, -9,), fitnessPrecisionOnEach, sigma=0.01)
+    #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
+    S.Swarm.controller.withVisiblite(True)
+    S.Swarm.controller.withTime(-1)
+    S.Swarm.controller.withNombre(10)
+    S.Swarm.controller.withTopology("pile")
+    S.Swarm.controller.run()
+    display_test_curve(B)
+
+
+
+
+#if(__name__=="__main__"):
+#    shape1 = dict(
+#        NEURONES=75,
+#        HIDDEN=2,
+#        COMMUNICATION = 5,
+#    )
+#    display_test_curve()
