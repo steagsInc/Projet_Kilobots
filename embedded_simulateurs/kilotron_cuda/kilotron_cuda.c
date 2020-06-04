@@ -2,8 +2,9 @@
 #include <stdint.h>   // for uint8_t and other types
 #include <kilombo.h>
 
-#include "morphogenesis.h"
+#include "kilotron_cuda.h"
 #include "util.h"
+#include "perceptron/matmul.h"
 
 REGISTER_USERDATA(USERDATA)
 
@@ -19,35 +20,34 @@ REGISTER_USERDATA(USERDATA)
 
 #endif
 
-
 #define COMM_R 85               // Communication range
 #define DIFF_R 85               // Diffusion range
 #define POLAR_TH 4.0            // Threshold to become polarized
 #define EDGE_TH 0.8             // Ratio between the average number of neighbors of the robot and the average number of neighbors' neighbors for edge detection
 #define WAIT_BEFORE_MOVE 27000  // kilo_ticks to wait before moving. 75000 for simulation, 27000 for real robots (about 10 minutes)
-#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area 
+#define COUNTER_WAIT 8000       // kilo_ticks to wait when the robot tries to orbit but there is another robot orbiting in the area
 #define DIST_CRIT 45            // Distance that a robot is considered to be close
 #define R2 120                  // For probabilistic purposes
 
 //Model_Parameter
-#define A_VAL 0.08685432326
-#define B_VAL -0.06338306573
-#define C_VAL 0.01716244298
-#define D_VAL 0.05456154863
-#define E_VAL 0.10000000000
-#define F_VAL 0.11999999996
-#define G_VAL 0.05999999998
-#define D_u 0.48567558837
-#define D_v 9.98643730076
-#define LINEAR_R 160.00000000000
-#define SYNTH_U_MAX 0.23000000000
-#define SYNTH_V_MAX 0.50000000000
-#define DT 0.00005000000
+#define A_VAL 0.08
+#define B_VAL -0.08
+#define C_VAL 0.03
+#define D_VAL 0.03
+#define E_VAL 0.1
+#define F_VAL 0.12
+#define G_VAL 0.06
+#define D_u 0.5
+#define D_v 10
+#define LINEAR_R 160
+#define SYNTH_U_MAX 0.23
+#define SYNTH_V_MAX 0.5
+#define DT 0.00005
 //End_Parameters
-
 /*
  * Message rx callback function. It pushes message to ring buffer.
  */
+
 void rxbuffer_push(message_t *msg, distance_measurement_t *dist) {
     received_message_t *rmsg = &RB_back();
     rmsg->msg = *msg;
@@ -85,27 +85,6 @@ int get_bot_state(void){
 	return mydata->bot_state;
 
 }
-
-
-/*
- * Changes the type of motion that the robot performs
- */
-void set_move_type(int type){
-
-	mydata->move_type = type;
-
-}
-
-
-/*
- * Returns the type of motion the robot is performing
- */
-int get_move_type(void){
-
-	return mydata->move_type;
-
-}
-
 
 /*
  * Returns whether the robot has any neighbor with the specified ID
@@ -338,7 +317,7 @@ float calc_apprx_running_avg(float old_avg, float num, float alpha){
 
 
 /*
- * Concentration of U and V is updated based on the linear model for reaction-diffusion 
+ * Concentration of U and V is updated based on the linear model for reaction-diffusion
  */
 void regulation_linear_model(){
 
@@ -374,7 +353,7 @@ void regulation_linear_model(){
 
 
 	float synth_u_max = SYNTH_U_MAX;
-	float synth_v_max = SYNTH_V_MAX; 
+	float synth_v_max = SYNTH_V_MAX;
 
     // These variables will have f(u,v) and g(u,v) eventually
 	float synth_rate_u;
@@ -397,12 +376,18 @@ void regulation_linear_model(){
 	dG[0] = linear_R * synth_rate_u + D[0] * lap[0];
 	dG[1] = linear_R * synth_rate_v + D[1] * lap[1];
 
-	// Update of the concentration 
-	float dt = DT; 
+	// Update of the concentration
+	float dt = DT;
 	mydata->molecules_concentration[0] += dt * dG[0];
 	mydata->molecules_concentration[1] += dt * dG[1];
 }
 
+void prediction_color() {
+
+    //printf("%f\n", mydata->prediction);
+    set_color(RGB((int)(255*(mydata->prediction1)),0,(int)(255*(mydata->prediction2))));
+
+}
 
 /*
  * Returns whether the robot is on the edge based on the ratio of its neighbors and its neighbors' neighbors
@@ -428,89 +413,6 @@ uint8_t test_edge(){
 	return edge_prob_running_avg_ratio_NNs();
 
 }
-
-
-/*
- * The robot does nothing at the moment while waiting
- */
-void wait(){
-
-}
-
-
-/*
- * The robot rotates in one direction until it starts being further apart from the nearest robot, then switches direction.
- */
-void move_by_turning(int gradient){
-
-	if(mydata->move_switch_flag == 0){
-
-        // If getting closer, perhaps change direction of rotation
-		if(gradient < 0) mydata->move_switch_flag = 1;
-
-        // Getting further, keep rotating in the same direction
-		if(gradient > 0) return;
-
-	}
-
-
-    // Getting closer with the current direction
-	else{
-
-        // If getting further, change direction of rotation
-		if(gradient > 0) {
-
-			mydata->move_switch_flag = 0;
-
-			switch (get_move_type()) {
-				case RIGHT:
-					motion(LEFT);
-					set_move_type(LEFT);
-					break;
-				case LEFT:
-					motion(RIGHT);
-					set_move_type(RIGHT);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-}
-
-
-/*
- * The robot orbits around its neighbors trying to maintain a constant distance defined by dist_th by switching between left and right motion
- */
-void orbit2(uint8_t dist, uint8_t dist_th){
-
-	if(dist <= dist_th - 1){
-
-		if(mydata->last_turn == RIGHT){
-			motion(LEFT);
-			set_move_type(LEFT);
-		}
-		else{
-			motion(RIGHT);
-			set_move_type(RIGHT);
-		}
-
-	}
-
-	if(dist >= dist_th){
-
-		if(mydata->last_turn == RIGHT){
-			motion(RIGHT);
-			set_move_type(RIGHT);
-		}
-		else{
-			motion(LEFT);
-			set_move_type(LEFT);
-		}
-	}
-
-}
-
 
 /*
  * A random byte is generated
@@ -548,7 +450,7 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 
 		if(mydata->neighbors[i].molecules_concentration[0] > POLAR_TH){
 			count++;
-			
+
 		}
 
 		if(count == n){
@@ -562,8 +464,44 @@ uint8_t has_at_least_n_polarized_N(uint8_t n){
 
 }
 
+//PERCEPTRON
+void process_perceptron(){
 
-/* 
+    uint8_t i,j = 0;
+
+    float *x = (float*)malloc(2+COMMUNICATION*sizeof(float));
+    x[0]=mydata->molecules_concentration[0];
+    x[1]=mydata->molecules_concentration[1];
+
+    for (i = 0;i<mydata->N_Neighbors; i++) {
+
+      for(j=0;j<COMMUNICATION;j++){
+        x[j+2]=x[j+2]+mydata->neighbors[i].communication_chanel[j];
+      }
+
+    }
+
+    if (mydata->N_Neighbors!=0){
+      for(j=0;j<COMMUNICATION;j++){
+        x[j+2]=x[j+2]/mydata->N_Neighbors;
+      }
+    }
+
+    float *prediction = predict(mydata->perceptron, x);
+    //printf("Prédiction 01 : %f \n",prediction[0]);
+    //printf("Prédiction 02 : %f \n",prediction[1]);
+    mydata->prediction1 = prediction[0];
+    mydata->prediction2 = prediction[1];
+    //printf("%f\n", mydata->prediction);
+    for (i = 0;i<COMMUNICATION;i++){
+      mydata->communication_chanel[i] = prediction[i+2];
+    }
+
+    free(x);
+
+}
+
+/*
  * It processes a received message at the front of the ring buffer.
  * It goes through the list of neighbors. If the message is from a bot
  * already in the list, it updates the information, otherwise
@@ -585,78 +523,85 @@ void process_message()
 
   // search the neighbor list by ID
   for (i = 0; i < mydata->N_Neighbors; i++)
-    if (mydata->neighbors[i].ID == ID){ // found it
-    	mydata->neighbors[i].delta_dist = d - mydata->neighbors[i].dist;
-    	break;
-    }
+      if (mydata->neighbors[i].ID == ID) { // found it
+          mydata->neighbors[i].delta_dist = d - mydata->neighbors[i].dist;
+          break;
+      }
 
-  if (i == mydata->N_Neighbors)
-      {  // this neighbor is not in list
-        if (mydata->N_Neighbors < MAXN-1) // neighbor list is not full
-     	   mydata->N_Neighbors++;
-        else
-            i = find_most_distant_N_id(); // overwrite the most distant neighbor
+      if (i == mydata->N_Neighbors) {  // this neighbor is not in list
+          if (mydata->N_Neighbors < MAXN - 1) // neighbor list is not full
+              mydata->N_Neighbors++;
+          else
+              i = find_most_distant_N_id(); // overwrite the most distant neighbor
 
-        mydata->neighbors[i].delta_dist = 0;
+          mydata->neighbors[i].delta_dist = 0;
 
       }
 
-  // i now points to where this message should be stored
-  mydata->neighbors[i].ID = ID;
-  mydata->neighbors[i].timestamp = kilo_ticks;
-  mydata->neighbors[i].dist = d;
-  mydata->neighbors[i].N_Neighbors = data[2];
-  mydata->neighbors[i].n_bot_state = data[7];
+      // i now points to where this message should be stored
+      mydata->neighbors[i].ID = ID;
+      mydata->neighbors[i].timestamp = kilo_ticks;
+      mydata->neighbors[i].dist = d;
+      mydata->neighbors[i].N_Neighbors = data[2];
+      mydata->neighbors[i].n_bot_state = data[7];
 
-  uint8_t signo_rec;
-  uint8_t exp_rec;
-  uint16_t mant_rec;
-  uint16_t bit1;
-  float mant_fl;
+      int c;
 
-  signo_rec=0;
-  exp_rec=0;
-  mant_rec=0;
-  bit1=0;
+      for (c=0;c<COMMUNICATION;c++){
+        mydata->neighbors[i].communication_chanel[c] = data[8+c];
+      }
 
+      uint8_t signo_rec;
+      uint8_t exp_rec;
+      uint16_t mant_rec;
+      uint16_t bit1;
+      float mant_fl;
 
-  int jj;
-
-
-  for (j = 0; j < 2; j++){
-
-	// recover from "half" precision
-	signo_rec = data[3+j] >> 7;
-	exp_rec = (data[3+j] >> 2) & 0x1F;
-	mant_rec = ((data[3+j] & 0x3) << 8) | data[3+2+j];
-
-	mant_fl=0;
-	for (jj=9; jj>=0; jj--){
-
-	  bit1 = mant_rec>>jj;
-
-	  mant_fl = mant_fl + bit1*pow(2,jj-10);
-
-	  mant_rec = mant_rec - bit1*pow(2,jj);
-
-	}
+      signo_rec = 0;
+      exp_rec = 0;
+      mant_rec = 0;
+      bit1 = 0;
 
 
+      int jj;
 
-	if(exp_rec==31 && signo_rec==0)  mydata->neighbors[i].molecules_concentration[j]= 65504;
 
-	else if (exp_rec==31 && signo_rec==1) mydata->neighbors[i].molecules_concentration[j]= -65504;
+      for (j = 0; j < 2; j++) {
 
-	else if (exp_rec==-15 && mant_rec==0) mydata->neighbors[i].molecules_concentration[j] = 0;
+          // recover from "half" precision
+          signo_rec = data[3 + j] >> 7;
+          exp_rec = (data[3 + j] >> 2) & 0x1F;
+          mant_rec = ((data[3 + j] & 0x3) << 8) | data[3 + 2 + j];
 
-	else if (exp_rec==-15 && mant_rec!=0) mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1,signo_rec)*pow(2,exp_rec-15+1)*(0+mant_fl);
+          mant_fl = 0;
+          for (jj = 9; jj >= 0; jj--) {
 
-	else mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1,signo_rec)*pow(2,exp_rec-15)*(1+mant_fl);
+              bit1 = mant_rec >> jj;
 
-  }
+              mant_fl = mant_fl + bit1 * pow(2, jj - 10);
+
+              mant_rec = mant_rec - bit1 * pow(2, jj);
+
+          }
+
+
+          if (exp_rec == 31 && signo_rec == 0) mydata->neighbors[i].molecules_concentration[j] = 65504;
+
+          else if (exp_rec == 31 && signo_rec == 1) mydata->neighbors[i].molecules_concentration[j] = -65504;
+
+          else if (exp_rec == -15 && mant_rec == 0) mydata->neighbors[i].molecules_concentration[j] = 0;
+
+          else if (exp_rec == -15 && mant_rec != 0)
+              mydata->neighbors[i].molecules_concentration[j] = (float) pow(-1, signo_rec) * pow(2, exp_rec - 15 + 1) *
+                                                                (0 + mant_fl);
+
+          else
+              mydata->neighbors[i].molecules_concentration[j] =
+                      (float) pow(-1, signo_rec) * pow(2, exp_rec - 15) * (1 + mant_fl);
+
+      }
 
 }
-
 
 /*
  * This function:
@@ -667,7 +612,7 @@ void process_message()
 void receive_inputs()
 {
 
-    // Processes al messages received since the last time the bot read them (removed after reading)    
+    // Processes al messages received since the last time the bot read them (removed after reading)
     while (!RB_empty()) {
         process_message();
         RB_popfront();
@@ -685,7 +630,7 @@ void receive_inputs()
 }
 
 
-/* 
+/*
  * Goes through the list of neighbors and removes entries older than a threshold, currently 2 seconds.
  */
 void purgeNeighbors(void)
@@ -714,6 +659,12 @@ void setup_message(void)
   mydata->transmit_msg.data[2] = mydata->N_Neighbors; //2: number of neighbors
   mydata->transmit_msg.data[7] = get_bot_state(); // 7: state of the robot
 
+  int c;
+
+  for (c=0;c<COMMUNICATION;c++){
+    mydata->transmit_msg.data[8+c] = mydata->communication_chanel[c];
+  }
+
   int i;
 
   uint8_t signo;
@@ -726,7 +677,7 @@ void setup_message(void)
   int exp_real;
   long fl;
 
-   
+
   for (i = 0; i < 2; i++){
 
 	  fl = *(long*)&mydata->molecules_concentration[i];
@@ -756,225 +707,6 @@ void setup_message(void)
   mydata->transmit_msg.crc = message_crc(&mydata->transmit_msg);
   mydata->message_lock = 0;
 }
-
-
-/*
- * Returns whether the robot should transit from WAIT state to ORBIT state. Transits if:
- *   - the robot is on the edge, AND
- *   - all its neighbors are in WAIT state, AND
- *   - it isn't polarized OR it is polarized but has no polarized neighbors OR it is polarized and has at least one polarized neighbor but the nearest is further than the critical distance, AND
- *   - it is allowed to orbit, AND
- *   - the distance to the nearest polarized neighbor is higher than the critical distance OR the robot is near to a polarized neighbor but there is only one of them, AND
- *   - it has at least one neighbor to orbit around
- */
-uint8_t wait_to_orbit(){
-
-	uint8_t flag;
-
-	if(
-	    test_edge() 
-	    && check_wait_state() 
-	    && (!polarized() || !has_at_least_n_polarized_N(1) || (has_at_least_n_polarized_N(1) && get_dist_to_nearest_polarized() > (DIST_CRIT))) 
-	    && mydata->counter == 0 
-	    && (get_dist_to_nearest_polarized() > (DIST_CRIT) || !has_at_least_n_polarized_N(2)) 
-	    && mydata->N_Neighbors != 0 
-	) flag = 1;
-	else flag = 0;
-
-	return flag;
-}
-
-
-/*
- * Returns whether the robot should transit from ORBIT state to WAIT state. Transits if: 
- *   - the nearest neighbor is orbiting, OR
- *   - the nearest neighbor is too far and cannot be reached by orbiting, OR
- *   - it is no longer on the edge, OR
- *   - it is near to a polarized neighbor AND there are at least two polarized neighbors, OR
- *   - it has no neighbors
- */
-uint8_t orbit_to_wait(){
-
-	uint8_t flag;
-
-	uint16_t id_nearest = find_nearest_N_id();
-	uint8_t dist_nearest = get_dist_by_id(id_nearest);
-
-	if(
-		get_state_by_id(id_nearest) != WAIT 
-		|| dist_nearest > DIST_CRIT + 15
-		|| !test_edge() 
-		|| (get_dist_to_nearest_polarized() < (DIST_CRIT - 1) && has_at_least_n_polarized_N(2)) 
-		|| mydata->N_Neighbors == 0
-    ) flag = 1;
-	else flag = 0;
-
-	return flag;
-}
-
-
-/*
- * Returns whether the robot should transit from WAIT state to FOLLOW state. Transits if: 
- *   - the robot is on the edge, AND
- *   - the nearest neighbor is in WAIT state, AND
- *   - the nearest neighbor is too far and cannot be reached by orbiting, AND
- *   - it has at least one neighbor to move to
- */
-uint8_t wait_to_follow(){
-
-	uint8_t flag;
-
-	uint16_t id_nearest = find_nearest_N_id();
-	uint8_t dist_nearest = get_dist_by_id(id_nearest);
-
-	if(
-	    test_edge()
-	    && get_state_by_id(id_nearest) == WAIT
-	    && dist_nearest > DIST_CRIT + 15
-	    && mydata->N_Neighbors > 0
-	) flag = 1;
-	else flag = 0;
-
-	return flag;
-}
-
-
-/*
- * Returns whether the robot should transit from FOLLOW state to WAIT state. Transits if: 
- *   - the nearest neighbor isn't in WAIT state, OR
- *   - it has no neighbors, OR
- *   - there is a neighbor nearby
- */
-uint8_t follow_to_wait(){
-
-	uint8_t flag;
-
-	uint16_t id_nearest = find_nearest_N_id();
-	uint8_t dist_nearest = get_dist_by_id(id_nearest);
-
-
-	if(
-		get_state_by_id(id_nearest) != WAIT
-		|| mydata->N_Neighbors == 0
-		|| dist_nearest <= DIST_CRIT
-	) flag = 1;
-	else flag = 0;
-
-	return flag;
-}
-
-
-/*
- * Manages the transitions between states
- */
-void edge_flow(){
-
-	switch (get_bot_state()) {
-
-		case ORBIT:
-
-			if(orbit_to_wait()){
-
-                // The robot stops moving
-				set_motors(0,0);
-
-				set_move_type(STOP);
-				set_bot_state(WAIT);
-				return;
-			}
-
-			else if(mydata->N_Neighbors > 0){
-
-				uint8_t r1;
-				r1 = rand_byte();
-				uint8_t r2;
-				r2 = rand_byte();
-
-
-                // If too close to the nearest robot, it vibrates with a certain probability to try to escape
-				if(get_dist_by_id(find_nearest_N_id()) <= DIST_CRIT - 6
-					&& r1 == 125
-					&& r2 > R2
-				){
-
-					set_motors(125,125);
-					delay(150);
-
-				}	
-
-                // The robot orbits around its nearest neighbor
-				uint16_t id = find_nearest_N_id();
-				orbit2(get_dist_by_id(id), DIST_CRIT);
-
-			}
-
-			break;
-
-		case FOLLOW:
-
-			if(follow_to_wait()){
-
-				set_motors(0,0);
-				set_move_type(STOP);
-				set_bot_state(WAIT);
-				return;
-			}
-
-			else{
-
-                // It rotates in one direction until it starts being further apart from the nearest robot, then switches direction.
-				uint16_t id = find_nearest_N_id();
-				move_by_turning(get_diff_dist_by_id(id));
-			}
-
-			break;
-
-		case WAIT:
-
-			if(wait_to_orbit()){
-
-				spinup_motors();
-
-                // If the nearest neighbor is too close, it vibrates a bit randomly
-				if(get_dist_by_id(find_nearest_N_id()) < DIST_CRIT){
-					uint8_t r = rand_byte();
-					if(r < 127) set_motors(125, 0);
-					else set_motors(0,125);
-					delay(500);
-
-				}
-
-                // It starts orbiting clockwise
-				set_motors(0, kilo_turn_right);
-				set_move_type(RIGHT);
-				mydata->last_turn = RIGHT;
-				set_bot_state(ORBIT);
-			}
-
-			if(wait_to_follow()){
-
-                // It starts turning clockwise
-				set_bot_state(FOLLOW);
-				set_move_type(RIGHT);
-				motion(RIGHT);
-				mydata->move_switch_flag = 1;
-			}
-			else wait();
-
-            // If not all the neighbors are in WAIT state, the counter is reset
-			if(!check_wait_state()) mydata->counter = COUNTER_WAIT;
-
-            // The robot waits COUNTER_WAIT kilo_ticks after all its neighbots are in WAIT state to be able to transit to ORBIT state, if the other conditions are met
-			else if (mydata->counter > 0) mydata->counter--;
-
-			break;
-
-		default:
-			break;
-	}
-}
-
-
 /*
  * In this function:
  *   - Random initialisation of concentration of molecules U and V
@@ -1003,6 +735,8 @@ void setup() {
     // Random ID
     kilo_uid = rand_byte();
 
+    set_bot_state(WAIT);
+
     // Lock unblocked
     mydata->message_lock = 0;
 
@@ -1015,12 +749,6 @@ void setup() {
     // Initialisation
     mydata->N_Neighbors = 0;
 
-    // Not moving
-    set_move_type(STOP);
-
-    // In WAIT state
-    set_bot_state(WAIT);
-
     // Allowed to orbit the first time
     mydata->counter = 0;
 
@@ -1028,13 +756,23 @@ void setup() {
     mydata->running_avg_NNs = 0;
     mydata->running_avg_Ns = 0;
 
+    //PERCEPTRON
+    mydata->perceptron = new_perceptron_config("perceptron/NN.txt");
+    load_weights(mydata->perceptron,"weights.txt");
+
+    mydata->communication_chanel=(float*)malloc(COMMUNICATION * sizeof(float));
+    int i;
+    for (i = 0;i<COMMUNICATION;i++){
+      mydata->communication_chanel[i] = 1;
+    }
+
     // The message is initialized
     setup_message();
 }
 
 
 /*
- * Loop function that the kilobots execute continuously. 
+ * Loop function that the kilobots execute continuously.
  *   - It processes messages, and updates neighbors tables and N, NN running averages
  *   - If robot not in state ORBIT or FOLLOW and has neighbors, run Turing patterning
  */
@@ -1043,49 +781,16 @@ void loop(){
     // Processes messages, and updates neighbors tables and N, NN running averages
 	receive_inputs();
 
-    // If bot not in state ORBIT or FOLLOW and with neighbors, run Turing patterning
-    if(get_bot_state() != ORBIT && get_bot_state() != FOLLOW && mydata->N_Neighbors > 0){
+    regulation_linear_model();
 
-        regulation_linear_model();
-       
-    }
+    process_perceptron();
 
-
+    prediction_color();
     // Allows some time to start with the running averages
 	if(kilo_ticks == 250){
 		mydata->running_avg_Ns = mydata->N_Neighbors;
 		mydata->running_avg_NNs = calc_avg_NNs();
 	}
-
-    
-    // The morphogenesis will start after these kilo_ticks
-	if(kilo_ticks > WAIT_BEFORE_MOVE){
-		edge_flow();
-	}
-
-
-    /* GRADIENT-BASED COLOURS DISPLAYING CONCENTRATION OF MOLECULE U */
-    // White
-	if(get_bot_state() == ORBIT) set_color(RGB(3,3,3));
-
-    // Red 
-	else if(get_bot_state() == FOLLOW) set_color(RGB(3,0,0));
-
-    // Green
-    else if(polarized()) set_color(RGB(0,3,0));
-
-    // Cyan
-	else if (mydata->molecules_concentration[0] > POLAR_TH - 1 && mydata->molecules_concentration[0] <= POLAR_TH) set_color(RGB(0,3,3));
-
-    // Blue
-	else if (mydata->molecules_concentration[0] > POLAR_TH - 2 && mydata->molecules_concentration[0] <= POLAR_TH - 1) set_color(RGB(0,0,3));
-
-    // Pink
-	else if (mydata->molecules_concentration[0] > POLAR_TH - 3 && mydata->molecules_concentration[0] <= POLAR_TH - 2) set_color(RGB(3,0,3));
-
-    // No colour
-	else set_color(RGB(0,0,0));
-
 
     // Unique, local ID
 	if(has_neighbor_with_id(kilo_uid)) {
@@ -1098,6 +803,12 @@ void loop(){
 
     // Message is updated
 	setup_message();
+
+}
+
+void kilofree(){
+
+    free_perceptron(mydata->perceptron);
 
 }
 

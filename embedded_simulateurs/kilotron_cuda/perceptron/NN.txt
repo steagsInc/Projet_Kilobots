@@ -1,8 +1,14 @@
 2
 2
+<<<<<<< HEAD
+4
+1
+120
+=======
 5
 2
 75
+>>>>>>> f2984f68dc86bd07578ccbec64b08027cb7d0803
 MOLECULE
 PREDICTION
 COMMUNICATION
