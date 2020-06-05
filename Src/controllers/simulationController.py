@@ -61,7 +61,7 @@ class simulationController:
         return self
 
     def rez_params(self):
-        if(self.path == "kilotron"):
+        if(self.path == "kilotron" or self.path=="kilotron_cuda"):
             return self
         with open("embedded_simulateurs/natif/morphogenesis.c", "r") as file1:
             content = file1.read()
