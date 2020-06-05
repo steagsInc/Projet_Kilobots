@@ -168,8 +168,8 @@ class simulationController:
             os.chdir("embedded_simulateurs/" + self.path)
         json.dump(self.parametres,open("kilombo.json","w"))
         os.system("make >error.tmp 2>&1")
-        #os.system("./"+self.path+" >error.tmp 2>&1")
-        os.system("./"+self.path+" >error.tmp ")
+        os.system("./"+self.path+" >error.tmp 2>&1")
+        #os.system("./"+self.path+" >error.tmp ")
 
         if (self.path == os.getcwd().split("/")[-1]):
             os.chdir("../..")

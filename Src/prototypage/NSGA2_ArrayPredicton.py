@@ -15,7 +15,7 @@ S = predictionTuring(nb=30)
 def fitnessPrecisionOnEach(w):
     S.put_genotype(w)
     S.computeSimulation()
-    return S.minHinge(),S.maxHinge(),S.getLeastSquare()
+    return S.minHinge(),S.getPrecision(),S.getLeastSquare()
 
 def NSGA(funcs_l, weights, var, sigma, MU=16, NGEN=50,wide_search=1.2):
     IND_SIZE = len(var)
@@ -308,7 +308,7 @@ if(__name__=="__main__"):
     S.Swarm.controller = S.Swarm.controller.withTime(500)
     S.model =('D_u', 'D_v')
 
-    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (-3, -3, -9,), fitnessPrecisionOnEach, sigma=0.01)
+    B = CMAES_MO(('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'), (-3, +1, -9,), fitnessPrecisionOnEach, sigma=0.01)
     #natifCMAES(fitnessPrecision,0.01,('A_VAL', 'B_VAL', 'C_VAL', 'D_VAL', 'D_u', 'D_v'),S.get_genotype())
     S.Swarm.controller.withVisiblite(True)
     S.Swarm.controller.withTime(-1)
