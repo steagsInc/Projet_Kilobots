@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# ! /usr/bin/env python3
+
 import json
 import os
 import numpy as np
@@ -22,7 +24,7 @@ from Src.controllers.swarmDescriptor import swarmDescriptor
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-#os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots")
+# os.chdir("/home/mohamed/PycharmProjects/Projet_Kilobots")
 if (os.getcwd().split("/")[-1] == "Dashboard"):
     os.chdir("../..")
 print("Chemin avant lancement du serveur : ", os.getcwd())
@@ -37,10 +39,10 @@ polar_th = 4
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 params = S.controller.parametres_model
 position_robots = cyto.Cytoscape(
-        id='robots-positions',
-        layout={'name': 'preset'},
-        style={'width': '100%', 'height': '500px'},
-        elements=[],
+    id='robots-positions',
+    layout={'name': 'preset'},
+    style={'width': '100%', 'height': '500px'},
+    elements=[],
     stylesheet=[
         {
             'selector': 'node',
@@ -50,43 +52,39 @@ position_robots = cyto.Cytoscape(
             }
         },
         {
-                    'selector': '[U>'+str(polar_th-3)+']',
-                    'style': {
-                        'background-color': 'CYAN'
-                    }
-                },
+            'selector': '[U>' + str(polar_th - 3) + ']',
+            'style': {
+                'background-color': 'CYAN'
+            }
+        },
         {
-                    'selector': '[U>'+str(polar_th-2)+']',
-                    'style': {
-                        'background-color': 'BLUE'
-                    }
-                },
-                {
-                    'selector': '[U>'+str(polar_th-1)+']',
-                    'style': {
-                        'background-color': 'PINK'
-                    }
-                },
-                {
-                            'selector': '[U>='+str(polar_th)+']',
-                            'style': {
-                                'background-color': 'GREEN'
-                            }
-                        }
-
+            'selector': '[U>' + str(polar_th - 2) + ']',
+            'style': {
+                'background-color': 'BLUE'
+            }
+        },
+        {
+            'selector': '[U>' + str(polar_th - 1) + ']',
+            'style': {
+                'background-color': 'PINK'
+            }
+        },
+        {
+            'selector': '[U>=' + str(polar_th) + ']',
+            'style': {
+                'background-color': 'GREEN'
+            }
+        }
 
     ]
 )
-
-
-
 
 app.layout = html.Div([
     html.H1("Visualisation des simulations"),
     position_robots,
     html.Center(
         [
-            html.Button("Executer Simulation",id="Lancer",n_clicks=0),
+            html.Button("Executer Simulation", id="Lancer", n_clicks=0),
             daq.Indicator(
                 id='fin_simulation',
                 value=False,
@@ -94,26 +92,26 @@ app.layout = html.Div([
             )
         ]
     ),
-    html.Button("Rendu Visuel",id="render",n_clicks=0),
+    html.Button("Rendu Visuel", id="render", n_clicks=0),
     html.H3("Temps de simulation : "),
     dcc.Slider(
-                    id="gestion_temps",
-                    min=0,
-                    max=15000,
-                    marks={i: '{} s'.format(i) for i in range(0,15000,1000)},
-                    value=5,
-                ),
+        id="gestion_temps",
+        min=0,
+        max=15000,
+        marks={i: '{} s'.format(i) for i in range(0, 15000, 1000)},
+        value=5,
+    ),
     html.H3("Taille de l'essaim : "),
-        dcc.Slider(
-                        id="taille_essaim",
-                        min=0,
-                        max=500,
-                        marks={i: '{} robots'.format(i) for i in range(0,500,25)},
-                        value=5,
-                    ),
+    dcc.Slider(
+        id="taille_essaim",
+        min=0,
+        max=500,
+        marks={i: '{} robots'.format(i) for i in range(0, 500, 25)},
+        value=5,
+    ),
     html.H3("Topology de départ : "),
     dcc.Dropdown(
-        id = "topology_depart",
+        id="topology_depart",
         options=[
             {'label': 'Cercle', 'value': 'circle'},
             {'label': 'Ligne', 'value': 'line'},
@@ -158,10 +156,7 @@ app.layout = html.Div([
 ]
 )
 
-
-
-
-A_VAL =  0.08
+A_VAL = 0.08
 B_VAL = -0.08
 C_VAL = 0.03
 D_VAL = 0.03
@@ -171,81 +166,87 @@ G_VAL = 0.06
 D_u = 0.5
 D_v = 10
 
+
 @app.callback(
     [
-        Output("input1","value"),
-        Output("input2","value"),
-        Output("input3","value"),
+        Output("input1", "value"),
+        Output("input2", "value"),
+        Output("input3", "value"),
         Output("input4", "value"),
         Output("input5", "value"),
         Output("input6", "value"),
         Output("input7", "value"),
         Output("input8", "value"),
     ],
-    [Input("rez_params","n_clicks")])
+    [Input("rez_params", "n_clicks")])
 def rez(valeur):
-    return D_u,D_v,A_VAL,B_VAL,C_VAL,D_VAL,E_VAL,F_VAL
+    return D_u, D_v, A_VAL, B_VAL, C_VAL, D_VAL, E_VAL, F_VAL
 
 
-
-@app.callback(Output("placeholder_U","children"),[Input("input1","value")])
+@app.callback(Output("placeholder_U", "children"), [Input("input1", "value")])
 def majU(valeur):
-    if(valeur):
-        S.controller.write_params({"D_u":valeur})
+    if (valeur):
+        S.controller.write_params({"D_u": valeur})
 
 
-@app.callback(Output("placeholder_V","children"),[Input("input2","value")])
+@app.callback(Output("placeholder_V", "children"), [Input("input2", "value")])
 def majV(valeur):
-    if(valeur):
-        params.update({"D_v":valeur})
+    if (valeur):
+        params.update({"D_v": valeur})
         S.controller.write_params(params)
 
 
-@app.callback(Output("placeholder_A","children"),[Input("input3","value")])
+@app.callback(Output("placeholder_A", "children"), [Input("input3", "value")])
 def majA(valeur):
-    if(valeur):
-        params.update({"A_VAL":valeur})
+    if (valeur):
+        params.update({"A_VAL": valeur})
         S.controller.write_params(params)
 
-@app.callback(Output("placeholder_B","children"),[Input("input4","value")])
+
+@app.callback(Output("placeholder_B", "children"), [Input("input4", "value")])
 def majB(valeur):
     if (valeur):
         params.update({"B_VAL": valeur})
         S.controller.write_params(params)
 
 
-@app.callback(Output("placeholder_C","children"),[Input("input5","value")])
+@app.callback(Output("placeholder_C", "children"), [Input("input5", "value")])
 def majC(valeur):
     if (valeur):
         params.update({"C_VAL": valeur})
         S.controller.write_params(params)
 
-@app.callback(Output("placeholder_D","children"),[Input("input6","value")])
+
+@app.callback(Output("placeholder_D", "children"), [Input("input6", "value")])
 def majD(valeur):
     if (valeur):
         params.update({"D_VAL": valeur})
         S.controller.write_params(params)
 
-@app.callback(Output("placeholder_E","children"),[Input("input7","value")])
+
+@app.callback(Output("placeholder_E", "children"), [Input("input7", "value")])
 def majE(valeur):
     if (valeur):
         params.update({"E_VAL": valeur})
         S.controller.write_params(params)
 
-@app.callback(Output("placeholder_F","children"),[Input("input8","value")])
+
+@app.callback(Output("placeholder_F", "children"), [Input("input8", "value")])
 def majF(valeur):
     if (valeur):
         params.update({"F_VAL": valeur})
         S.controller.write_params(params)
 
-@app.callback(Output("placeholder_time","children"),[Input("gestion_temps","value")])
+
+@app.callback(Output("placeholder_time", "children"), [Input("gestion_temps", "value")])
 def maj_temps(valeur):
     global changed
     S.setTime(valeur)
     changed = True
     return []
 
-@app.callback(Output("placeholder_topology","children"),[Input("topology_depart","value")])
+
+@app.callback(Output("placeholder_topology", "children"), [Input("topology_depart", "value")])
 def maj_topology(valeur):
     global changed
     S.setTopology(valeur)
@@ -253,8 +254,7 @@ def maj_topology(valeur):
     return []
 
 
-
-@app.callback(Output("placeholder_taille","children"),[Input("taille_essaim","value")])
+@app.callback(Output("placeholder_taille", "children"), [Input("taille_essaim", "value")])
 def maj_taille(valeur):
     global changed
     S.setNb_robots(valeur)
@@ -262,23 +262,24 @@ def maj_taille(valeur):
     return []
 
 
-@app.callback(Output("fin_simulation","color"),[Input("placeholder_time","children"),Input('robots-positions',"elements"),Input("placeholder_topology","children"),Input("placeholder_taille","children")])
-def changeColor(a1,a2,a3,a4):
+@app.callback(Output("fin_simulation", "color"),
+              [Input("placeholder_time", "children"), Input('robots-positions', "elements"),
+               Input("placeholder_topology", "children"), Input("placeholder_taille", "children")])
+def changeColor(a1, a2, a3, a4):
     if changed:
         return "red"
     else:
         return "green"
 
 
-@app.callback(Output('placeholder_render',"children"),[Input("render","n_clicks")])
+@app.callback(Output('placeholder_render', "children"), [Input("render", "n_clicks")])
 def render(n):
     S.controller.withVisiblite(True)
     S.executeSimulation()
     S.controller.withVisiblite(False)
 
 
-
-@app.callback(Output('robots-positions',"elements"),[Input("Lancer","n_clicks")])
+@app.callback(Output('robots-positions', "elements"), [Input("Lancer", "n_clicks")])
 def executer_simulation(n):
     global changed
     S.executeSimulation()
@@ -301,8 +302,6 @@ def executer_simulation(n):
 
 
 if __name__ == '__main__':
-    #pca = PCA(n_components=2, svd_solver='full'
-    print("Chemin avant lancement du serveur : ",os.getcwd())
+    # pca = PCA(n_components=2, svd_solver='full'
+    print("Chemin avant lancement du serveur : ", os.getcwd())
     app.run_server(debug=True)
-
-

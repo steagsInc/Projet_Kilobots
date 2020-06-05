@@ -18,6 +18,10 @@ def changeShapeFile(template,NN):
     with open(template+'/perceptron/NN.txt', 'w') as file:
         file.writelines(data)
 
+    os.chdir(template + "/perceptron")
+    os.system('./refreshWeights')
+    os.chdir("../..")
+
 def run(template):
 
     os.chdir(template)

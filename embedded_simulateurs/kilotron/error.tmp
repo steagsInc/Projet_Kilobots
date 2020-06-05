@@ -36,31 +36,9 @@ ALSA lib pulse.c:243:(pulse_connect) PulseAudio: Unable to connect: Access denie
 Requested parameter: colorscheme is not a string
 Reading simulator parameters from kilombo.json
 Size of kilobot structure : 248
-Size of USERDATA structure: 416
-Running 30 bots with timestep 0.041667 for total time 1000.000000
-     0 s -      0 steps -      1 kilo_ticks    0.095 s.
-    42 s -   1000 steps -   1292 kilo_ticks   38.940 s.
-    83 s -   2000 steps -   2584 kilo_ticks   38.762 s.
-   125 s -   3000 steps -   3876 kilo_ticks   38.646 s.
-   167 s -   4000 steps -   5167 kilo_ticks   38.646 s.
-   208 s -   5000 steps -   6459 kilo_ticks   38.648 s.
-   250 s -   6000 steps -   7751 kilo_ticks   38.648 s.
-   292 s -   7000 steps -   9042 kilo_ticks   38.647 s.
-   333 s -   8000 steps -  10334 kilo_ticks   38.649 s.
-   375 s -   9000 steps -  11626 kilo_ticks   38.648 s.
-   417 s -  10000 steps -  12917 kilo_ticks   38.646 s.
-   458 s -  11000 steps -  14209 kilo_ticks   38.645 s.
-   500 s -  12000 steps -  15501 kilo_ticks   38.710 s.
-   542 s -  13000 steps -  16792 kilo_ticks   38.676 s.
-   583 s -  14000 steps -  18084 kilo_ticks   38.648 s.
-   625 s -  15000 steps -  19376 kilo_ticks   38.654 s.
-   667 s -  16000 steps -  20667 kilo_ticks   38.645 s.
-   708 s -  17000 steps -  21959 kilo_ticks   38.643 s.
-   750 s -  18000 steps -  23251 kilo_ticks   38.648 s.
-   792 s -  19000 steps -  24542 kilo_ticks   38.646 s.
-   833 s -  20000 steps -  25834 kilo_ticks   38.646 s.
-   875 s -  21000 steps -  27126 kilo_ticks   38.650 s.
-   917 s -  22000 steps -  28417 kilo_ticks   38.653 s.
-   958 s -  23000 steps -  29709 kilo_ticks   38.646 s.
-  1000 s -  24000 steps -  31001 kilo_ticks   38.685 s.
+Size of USERDATA structure: 424
+Running 30 bots with timestep 0.041667 for total time 100.000000
+     0 s -      0 steps -      1 kilo_ticks    0.207 s.
+    42 s -   1000 steps -   1292 kilo_ticks   39.230 s.
+    83 s -   2000 steps -   2584 kilo_ticks   39.162 s.
 Simulation finished
