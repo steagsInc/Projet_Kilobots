@@ -1,4 +1,4 @@
-# KEAP | Kilobot's Evolutionnary Algorithms in Python
+# KEAP | Kilobot's Evolutionary Algorithms in Python
 ## Introduction
 The work present in this repository is part of a project made for the master A.N.D.R.O.I.D at Sorbonne Université. It uses the kilombo simulator available here : https://github.com/JIC-CSB/kilombo 
 and from the kilobot code from the paper *Morphogenesis in robot swarm" available here : https://github.com/Danixk/Turing_morphogenesis
