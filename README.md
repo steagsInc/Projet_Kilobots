@@ -17,7 +17,7 @@ You can the scripts needed to run the project from docker with this line : -
 ```python
 docker pull ouagueounimohamed/kilotron_project:lates
 ```
-# KEAP | Kilobot's Evolutionnary Algorithms in Python
+# KEAP | Kilobot's Evolutionary Algorithms in Python
 ## Introduction
 Le contenu de ce repository a été réalisé dans la cadre du projet du master du master agents distribués, recherche opérationnelle, robotique, interaction et decision de l'université de la Sorbonne ex-upmc.
 Ce travail se base en grande partie sur celui réalisé dans ce repo : https://github.com/Danixk/Turing_morphogenesis
